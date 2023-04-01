@@ -841,7 +841,7 @@ border-style: outset;</string>
              <property name="styleSheet">
               <string notr="true"/>
              </property>
-             <layout class="QVBoxLayout" name="verticalLayout_5" stretch="1,49,1,49">
+             <layout class="QVBoxLayout" name="verticalLayout_5" stretch="1,40,1,58">
               <item>
                <widget class="QLabel" name="label">
                 <property name="font">
@@ -859,7 +859,7 @@ border-style: outset;</string>
               </item>
               <item>
                <widget class="QWidget" name="widget_16" native="true">
-                <layout class="QHBoxLayout" name="horizontalLayout_9" stretch="1,8,1">
+                <layout class="QHBoxLayout" name="horizontalLayout_9" stretch="2,6,2">
                  <item>
                   <widget class="QLabel" name="label_2">
                    <property name="text">
@@ -870,7 +870,7 @@ border-style: outset;</string>
                  <item>
                   <widget class="QLabel" name="agv_camera">
                    <property name="styleSheet">
-                    <string notr="true">background-color: rgb(231, 231, 231);</string>
+                    <string notr="true"/>
                    </property>
                    <property name="text">
                     <string/>
@@ -915,7 +915,7 @@ border-style: outset;</string>
                  <item>
                   <widget class="QWebEngineView" name="robot_camera">
                    <property name="styleSheet">
-                    <string notr="true">background-color: rgb(231, 231, 231);</string>
+                    <string notr="true">background-color: rgb(236, 240, 241);</string>
                    </property>
                    <property name="text">
                     <string/>

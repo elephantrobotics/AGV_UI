@@ -18,7 +18,7 @@ from PyQt5.QtWidgets import QMainWindow, QApplication, QInputDialog, QWidget, QM
 from pymycobot.mycobot import MyCobot
 from pymycobot.mypalletizer import MyPalletizer
 from pymycobot.ultraArm import ultraArm
-from agv_UI import Ui_AGV_UI as AGV_Window
+from libraries.pyqtfile.agv_UI import Ui_AGV_UI as AGV_Window
 from PyQt5.QtWebEngineWidgets import QWebEngineView
 from PyQt5.QtCore import QUrl
 
@@ -47,7 +47,6 @@ class AGV_APP(AGV_Window, QMainWindow, QWidget):
         self.cap = cv2.VideoCapture()
         self.camera_status = False
         self.rbt_camera_status = False
-        pass
 
     # initialization status
     def _init_status(self):
@@ -63,22 +62,22 @@ class AGV_APP(AGV_Window, QMainWindow, QWidget):
         # Set software icon
         w = self.logo_lab.width()
         h = self.logo_lab.height()
-        self.pix = QPixmap(libraries_path + '/logo.png')  # the path to the icon
+        self.pix = QPixmap(libraries_path + '/images/logo.png')  # the path to the icon
         self.logo_lab.setPixmap(self.pix)
         self.logo_lab.setScaledContents(True)
 
         w = self.logo_pic_lab.width()
         h = self.logo_pic_lab.height()
-        self.pix = QPixmap(libraries_path + '/logo_pic.png')  # the path to the icon
+        self.pix = QPixmap(libraries_path + '/images/logo_pic.png')  # the path to the icon
         self.logo_pic_lab.setPixmap(self.pix)
         self.logo_pic_lab.setScaledContents(True)
 
 
     # Close, minimize button display text
     def _close_max_min_icon(self):
-        self.min_btn.setStyleSheet("border-image: url({}/min.ico);".format(libraries_path))
-        self.max_btn.setStyleSheet("border-image: url({}/max.ico);".format(libraries_path))
-        self.close_btn.setStyleSheet("border-image: url({}/close.ico);".format(libraries_path))
+        self.min_btn.setStyleSheet("border-image: url({}/images/min.ico);".format(libraries_path))
+        self.max_btn.setStyleSheet("border-image: url({}/images/max.ico);".format(libraries_path))
+        self.close_btn.setStyleSheet("border-image: url({}/images/close.ico);".format(libraries_path))
 
     @pyqtSlot()
     def min_clicked(self):
@@ -92,7 +91,7 @@ class AGV_APP(AGV_Window, QMainWindow, QWidget):
             self.showNormal()
             # self.max_btn.setStyleSheet("border-image: url({}/AiKit_UI_img/max.png);".format(libraries_path))
             icon_max = QtGui.QIcon()
-            icon_max.addPixmap(QtGui.QPixmap("./max.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+            icon_max.addPixmap(QtGui.QPixmap(f"{libraries_path}/images/max.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
             self.max_btn.setIcon(icon_max)
             self.max_btn.setIconSize(QtCore.QSize(30, 30))
             self.max_btn.setToolTip("<html><head/><body><p>maximize</p></body></html>")
@@ -100,7 +99,7 @@ class AGV_APP(AGV_Window, QMainWindow, QWidget):
             self.showMaximized()
             # self.max_btn.setStyleSheet("border-image: url({}/AiKit_UI_img/nomel.png);".format(libraries_path))
             icon_nomel = QtGui.QIcon()
-            icon_nomel.addPixmap(QtGui.QPixmap("./nomel.ico"), QtGui.QIcon.Normal,
+            icon_nomel.addPixmap(QtGui.QPixmap(f"{libraries_path}/images/nomel.ico"), QtGui.QIcon.Normal,
                                  QtGui.QIcon.Off)
             self.max_btn.setIcon(icon_nomel)
             self.max_btn.setIconSize(QtCore.QSize(30, 30))
@@ -250,16 +249,18 @@ class AGV_APP(AGV_Window, QMainWindow, QWidget):
 
     def robot_camera_status(self):
         try:
-            t = threading.Thread(target=self.show_feed_camera())
-            t.start()
-            # if not self.rbt_camera_status:
-            #     print(1)
-            # else:
-            #     print(2)
-            #     # self.robot_camera.setPixmap(None)
-            #     self.web_view.load(QUrl('about:blank'))
-            #     # t.join()
-            self.rbt_camera_status=False
+            if not self.rbt_camera_status:
+                t = threading.Thread(target=self.show_feed_camera())
+                print(self.rbt_camera_status)
+                t.start()
+                print(1)
+            else:
+                print(2)
+                # self.robot_camera.setPixmap(None)
+                self.robot_camera.load(QUrl('about:blank'))
+                self.robot_camera.setZoomFactor(0.5)
+                # t.join()
+                self.rbt_camera_status=False
         except Exception as e:
             print(str(e))
 
@@ -278,6 +279,7 @@ class AGV_APP(AGV_Window, QMainWindow, QWidget):
         try:
             while self.camera_status:
                 _, frame = self.cap.read()
+                frame = cv2.resize(frame, (510, 360))
                 # deal img
                 QApplication.processEvents()
                 show = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
@@ -346,7 +348,7 @@ def resource_path(relative_path):
 
 if __name__ == '__main__':
     try:
-        libraries_path = resource_path('')
+        libraries_path = resource_path('libraries')
         libraries_path = libraries_path.replace("\\", "/")
         print(libraries_path)
         app = QApplication(sys.argv)
