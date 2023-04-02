@@ -441,6 +441,7 @@ border-radius: 15px;</string>
                    </property>
                    <property name="styleSheet">
                     <string notr="true">background-color:rgb(41, 128, 185);
+background-color: rgb(218, 218, 218);
 color: rgb(255, 255, 255);
 border-radius: 10px;
 border: 2px groove gray;
@@ -477,7 +478,8 @@ border-style: outset;</string>
 color: rgb(255, 255, 255);
 border-radius: 10px;
 border: 2px groove gray;
-border-style: outset;</string>
+border-style: outset;
+</string>
                    </property>
                    <property name="text">
                     <string>暂停</string>

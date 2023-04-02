@@ -5,6 +5,7 @@ import os
 import sys
 import threading
 import time
+import traceback
 
 import cv2
 import numpy as np
@@ -21,6 +22,8 @@ from pymycobot.ultraArm import ultraArm
 from libraries.pyqtfile.agv_UI import Ui_AGV_UI as AGV_Window
 from PyQt5.QtWebEngineWidgets import QWebEngineView
 from PyQt5.QtCore import QUrl
+from scripts.end import *
+from scripts import test_auto_charing
 
 
 class AGV_APP(AGV_Window, QMainWindow, QWidget):
@@ -41,12 +44,108 @@ class AGV_APP(AGV_Window, QMainWindow, QWidget):
         self.feed_camera.clicked.connect(self.robot_camera_status)
         self.agv_camera.mousePressEvent = self.show_camera_popup
 
+        self.start_btn.clicked.connect(self.start_run)
+        self.puase_btn.clicked.connect(self.pause_run)
+        self.feed_position_ben.clicked.connect(self.feed_position)
+        self.down_position_btn.clicked.connect(self.down_position)
+        self.start_btn.setEnabled(False)
+
+    def btn_color(self, btn, color):
+        if color == 'red':
+            btn.setStyleSheet("background-color: rgb(231, 76, 60);\n"
+                              "color: rgb(255, 255, 255);\n"
+                              "border-radius: 10px;\n"
+                              "border: 2px groove gray;\n"
+                              "border-style: outset;")
+        elif color == 'green':
+            btn.setStyleSheet("background-color: rgb(39, 174, 96);\n"
+                              "color: rgb(255, 255, 255);\n"
+                              "border-radius: 10px;\n"
+                              "border: 2px groove gray;\n"
+                              "border-style: outset;")
+        elif color == 'blue':
+            btn.setStyleSheet("background-color: rgb(41, 128, 185);\n"
+                              "color: rgb(255, 255, 255);\n"
+                              "border-radius: 10px;\n"
+                              "border: 2px groove gray;\n"
+                              "border-style: outset;")
+
+    def start_run(self):
+        """
+        开始
+        :return:
+        """
+        print('start run')
+        self.pause_clicked = False
+        self.btn_color(self.start_btn, 'red')
+        self.start_btn.setEnabled(False)
+        self.btn_color(self.puase_btn, 'blue')
+        self.puase_btn.setEnabled(True)
+
+    def pause_run(self):
+        """
+        暂停
+        :return:
+        """
+        print('pause run')
+        self.pause_clicked = True
+        self.btn_color(self.start_btn, 'blue')
+        self.start_btn.setEnabled(True)
+        self.btn_color(self.puase_btn, 'red')
+        self.puase_btn.setEnabled(False)
+
+    def down_position(self):
+        """
+        下料区
+        :return:
+        """
+        print('down-position-btn')
+        try:
+            set_robot_pose = SetRobotPose()
+            set_robot_pose.set_pose()
+            map_navigation = MapNavigation1()
+            map_navigation.navigate()
+            map_navigation = MapNavigation2()
+            map_navigation.navigate()
+            test_auto_charing.init()
+            test_auto_charing.main()
+        except Exception as e:
+            print(e)
+            e = traceback.format_exc()
+            with open('./error.log', 'a+') as f:
+                f.write(e)
+
+    def feed_position(self):
+        """
+        上料区
+        :return:
+        """
+        print('feed-position-btn')
+        try:
+            map_navigation = MapNavigation3()
+            map_navigation.navigate()
+            map_navigation = MapNavigation4()
+            map_navigation.navigate()
+            test_auto_charing.init()
+            while self.pause_clicked:
+                self.stop_wait(0.2)
+            test_auto_charing.main()
+            while self.pause_clicked:
+                self.stop_wait(0.2)
+            set_robot_pose = SetRobotPose()
+            set_robot_pose.set_pose()
+        except Exception as e:
+            print(e)
+            e = traceback.format_exc()
+            with open('./error.log', 'a+') as f:
+                f.write(e)
 
     # Initialize variables
     def _init_variable(self):
         self.cap = cv2.VideoCapture()
         self.camera_status = False
         self.rbt_camera_status = False
+        self.pause_clicked = False
 
     # initialization status
     def _init_status(self):
@@ -71,7 +170,6 @@ class AGV_APP(AGV_Window, QMainWindow, QWidget):
         self.pix = QPixmap(libraries_path + '/images/logo_pic.png')  # the path to the icon
         self.logo_pic_lab.setPixmap(self.pix)
         self.logo_pic_lab.setScaledContents(True)
-
 
     # Close, minimize button display text
     def _close_max_min_icon(self):
@@ -118,7 +216,6 @@ class AGV_APP(AGV_Window, QMainWindow, QWidget):
         self._corner_drag = False
         self._bottom_drag = False
         self._right_drag = False
-
 
     def _initDrag(self):
         # Set the mouse tracking judgment trigger default value
@@ -260,7 +357,7 @@ class AGV_APP(AGV_Window, QMainWindow, QWidget):
                 self.robot_camera.load(QUrl('about:blank'))
                 self.robot_camera.setZoomFactor(0.5)
                 # t.join()
-                self.rbt_camera_status=False
+                self.rbt_camera_status = False
         except Exception as e:
             print(str(e))
 
@@ -270,8 +367,7 @@ class AGV_APP(AGV_Window, QMainWindow, QWidget):
         self.robot_camera.setZoomFactor(1.0)
         # 将QWebEngineView控件的内容设置为QLabel控件的背景图片
         # self.robot_camera.setPixmap(self.web_view.grab().scaled(self.robot_camera.width(), self.robot_camera.height()))
-        self.rbt_camera_status=True
-
+        self.rbt_camera_status = True
 
     def show_agv_camera(self):
         if not self.camera_status:
@@ -334,6 +430,7 @@ class AGV_APP(AGV_Window, QMainWindow, QWidget):
             QApplication.processEvents()
             time.sleep(0.1)
 
+
 # visit resource lib
 def resource_path(relative_path):
     # check if Bundle Resource
@@ -342,8 +439,6 @@ def resource_path(relative_path):
     else:
         base_path = os.path.abspath(".")
     return os.path.join(base_path, relative_path)
-
-
 
 
 if __name__ == '__main__':
@@ -355,5 +450,5 @@ if __name__ == '__main__':
         AGV_window = AGV_APP()
         AGV_window.show()
     except Exception as e:
-            print(str(e))
+        print(str(e))
     sys.exit(app.exec_())
