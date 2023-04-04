@@ -54,7 +54,7 @@ class AGV_APP(AGV_Window, QMainWindow, QWidget):
         self.mc = None
         self.mycobot_ip = '192.168.123.23'
         self.mycobot_port = 9000
-        self.mc = MyCobotSocket(self.mycobot_ip, self.mycobot_port)
+        # self.mc = MyCobotSocket(self.mycobot_ip, self.mycobot_port)
         
         self.agv_ip = ''
         self.agv_port = 9002
@@ -73,9 +73,9 @@ class AGV_APP(AGV_Window, QMainWindow, QWidget):
         # 开始监听客户端请求
         self.server_socket.listen()
 
-        self.t_agv = threading.Thread(target=self.myagv_loop_run)
-        self.t_agv.daemon = True
-        self.t_agv.start()
+        # self.t_agv = threading.Thread(target=self.myagv_loop_run)
+        # self.t_agv.daemon = True
+        # self.t_agv.start()
             
     def socket_connect(self, x, y=0):
         import socket

@@ -4,7 +4,7 @@
 import socket
 import struct
 
-from end import *
+# from end import *
 import test_auto_charing
 import traceback
 
@@ -238,13 +238,13 @@ def stop_wait(t):
 
 def down_position():
     try:
-        set_robot_pose = SetRobotPose()
-        set_robot_pose.set_pose()
-        map_navigation = MapNavigation1()
-        map_navigation.navigate()
-        map_navigation = MapNavigation2()
-        map_navigation.navigate()
-        test_auto_charing.init()
+        # set_robot_pose = SetRobotPose()
+        # set_robot_pose.set_pose()
+        # map_navigation = MapNavigation1()
+        # map_navigation.navigate()
+        # map_navigation = MapNavigation2()
+        # map_navigation.navigate()
+        # test_auto_charing.init()
         while pause_clicked:
             stop_wait(0.2)
 
@@ -263,11 +263,11 @@ def down_position():
 def feed_position():
     global feed_place
     try:
-        map_navigation = MapNavigation3()
-        map_navigation.navigate()
-        map_navigation = MapNavigation4()
-        map_navigation.navigate()
-        test_auto_charing.init()
+        # map_navigation = MapNavigation3()
+        # map_navigation.navigate()
+        # map_navigation = MapNavigation4()
+        # map_navigation.navigate()
+        # test_auto_charing.init()
    
         while pause_clicked:
             stop_wait(0.2)
@@ -277,8 +277,8 @@ def feed_position():
             responsed()
         while pause_clicked:
             stop_wait(0.2)
-        set_robot_pose = SetRobotPose()
-        set_robot_pose.set_pose()
+        # set_robot_pose = SetRobotPose()
+        # set_robot_pose.set_pose()
     except Exception as e:
         print(e)
         e = traceback.format_exc()
@@ -330,33 +330,27 @@ def run():
 
         # 接收来自客户端的数据
         data = client_socket.recv(1024)
-        x, y = struct.unpack('ff', data)
-        # print(f"Received data from client: {data.decode()}")
-        print("Received data from client: {}, {}".format(x, y))
-        # 向客户端发送响应
     
 
         # 关闭客户端套接字
-        client_socket.close()
-        if x == 'down':
+        if data.encode() == 'down':
             # down_position()
             pass
-        elif x == 'feed':
+        elif data.encode() == 'feed':
             # feed_position()
             pass
-        elif x == 'start':
+        elif data.encode() == 'start':
             pause_clicked = False
             # down_position()
-        elif x == 'pause':
+        elif data.encode() == 'pause':
             pause_clicked = True
             
         else:
             pass
             
-        x = None
-        y = None
         response = "Running end!"
         client_socket.sendall(response.encode())
+        client_socket.close()
         
 def myagv_loop_run():
     try:

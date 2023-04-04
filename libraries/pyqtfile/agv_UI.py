@@ -477,7 +477,7 @@ class Ui_AGV_UI(object):
         self.horizontalLayout_10.addWidget(self.label_5)
         self.robot_camera = QtWebEngineWidgets.QWebEngineView(self.widget_17)
         self.robot_camera.setStyleSheet("background-color: rgb(236, 240, 241);")
-        self.robot_camera.setText("")
+        #self.robot_camera.setText("")
         self.robot_camera.setObjectName("robot_camera")
         self.horizontalLayout_10.addWidget(self.robot_camera)
         self.label_7 = QtWidgets.QLabel(self.widget_17)
