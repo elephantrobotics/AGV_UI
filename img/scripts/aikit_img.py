@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-import struct
 from multiprocessing import Process, Pipe
 import cv2
 import numpy as np
@@ -16,7 +14,7 @@ __version__ = "1.0"  # Adaptive seeed
 class Object_detect():
 
     def __init__(self, camera_x = -13, camera_y = 335):
-        # inherit the parent classpythom
+        # inherit the parent class
         super(Object_detect, self).__init__()
 
         # declare mecharm 270pi
@@ -75,26 +73,26 @@ class Object_detect():
         self.robot_raspi = os.popen("ls /dev/ttyAMA*").readline()[:-1]
         self.robot_jes = os.popen("ls /dev/ttyTHS1").readline()[:-1]
         self.raspi = False
-        # if "dev" in self.robot_m5:
-        #     self.Pin = [2, 5]
-        # elif "dev" in self.robot_wio:
-        #     # self.Pin = [20, 21]
-        #     self.Pin = [2, 5]
+        if "dev" in self.robot_m5:
+            self.Pin = [2, 5]
+        elif "dev" in self.robot_wio:
+            # self.Pin = [20, 21]
+            self.Pin = [2, 5]
 
             # for i in self.move_coords:
             #     i[2] -= 20
-        # elif "dev" in self.robot_raspi or "dev" in self.robot_jes:
-        #     import RPi.GPIO as GPIO
-        #     GPIO.setwarnings(False)
-        #     self.GPIO = GPIO
-        #     GPIO.setmode(GPIO.BCM)
-        #     GPIO.setup(20, GPIO.OUT)
-        #     GPIO.setup(21, GPIO.OUT)
-        #     GPIO.output(20, 1)
-        #     GPIO.output(21, 1)
-        #     self.raspi = True
-        # if self.raspi:
-        #     self.gpio_status(False)
+        elif "dev" in self.robot_raspi or "dev" in self.robot_jes:
+            import RPi.GPIO as GPIO
+            GPIO.setwarnings(False)
+            self.GPIO = GPIO
+            GPIO.setmode(GPIO.BCM)
+            GPIO.setup(20, GPIO.OUT)
+            GPIO.setup(21, GPIO.OUT)
+            GPIO.output(20, 1)
+            GPIO.output(21, 1)
+            self.raspi = True
+        if self.raspi:
+            self.gpio_status(False)
    
         # choose place to set cube
         self.color = 0
@@ -142,120 +140,100 @@ class Object_detect():
     # Grasping motion
     def move(self, x, y, color):
         print('x, y',x,y)
-        import socket
-
-        # 创建一个客户端套接字
-        client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-        # 连接服务器
-        server_address = ('192.168.11.164', 8000)
-        client_socket.connect(server_address)
-
-        data = struct.pack('ff', x, y)
-
-        # 向服务器发送数据
-        client_socket.sendall(data)
-
-        # 接收来自服务器的响应
-        response = client_socket.recv(1024)
-        print(f"Received response from server: {response.decode()}")
-
-        # 关闭客户端套接字
-        client_socket.close()
         
         
         
-         # send Angle to move mecharm 270
-        # self.mc.send_angles(self.move_angles[0], 50)
-        # time.sleep(2)
-        #
-        # #[x, y, 185.5, -157.73, 22.08, -140.19]
-        # # send coordinates to move mycobot
-        # if x <= 180:
-        #     print(1)
-        #     self.mc.send_coords([x, y, 150, -176.1, 2.4, -125.1], 30, 0) # usb :rx,ry,rz -173.3, -5.48, -57.9
-        #     time.sleep(4)
-        #
-        #     # self.mc.send_coords([x, y, 150, 179.87, -3.78, -62.75], 25, 0)
-        #     # time.sleep(3)
-        #
-        #     # self.mc.send_coords([x, y, 105, 179.87, -3.78, -62.75], 25, 0)
-        #     self.mc.send_coords([x, y, 140, -176.1, 2.4, -125.1], 30, 0)
-        # else:
-        #     if x > 188:
-        #         x = 174
-        #     else:
-        #         x = x -20
-        #     print(2)
-        #     self.mc.send_coords([x, y, 175, -164.99, 11.33, -125.91], 30, 0) # [174.6, -3.5, 175.8, -164.99, 11.33, -125.91]
-        #     time.sleep(4)
-        #
-        #     # self.mc.send_coords([x, y, 150, 179.87, -3.78, -62.75], 25, 0)
-        #     # time.sleep(3)
-        #
-        #     # self.mc.send_coords([x, y, 105, 179.87, -3.78, -62.75], 25, 0)
-        #     self.mc.send_coords([x, y, 148, -164.99, 11.33, -125.91], 30, 0)
-        # time.sleep(4)
-        #
-        # # open pump
-        # if "dev" in self.robot_m5 or "dev" in self.robot_wio:
-        #     self.pump_on()
-        # elif "dev" in self.robot_raspi or "dev" in self.robot_jes:
-        #     self.gpio_status(True)
-        # time.sleep(1.5)
-        # if self.pump_times < 6:
-        #     self.pump_times += 1
-        # else:
-        #     self.pump_times = 1
-        #
-        # tmp = []
-        # while True:
-        #     if not tmp:
-        #         tmp = self.mc.get_angles()
-        #     else:
-        #         break
-        # time.sleep(0.5)
-        #
-        # print('tmp:', tmp)
-        # self.mc.send_angles([tmp[0], 17.22, -32.51, tmp[3], 80, tmp[5]],40) # [18.8, -7.91, -54.49, -23.02, -0.79, -14.76]
-        # time.sleep(1)
-        # self.mc.send_angles([-70, 17.22, -32.51, tmp[3], 80, tmp[5]],40) # [18.8, -7.91, -54.49, -23.02, -0.79, -14.76]
-        # time.sleep(2.5)
-        # self.mc.send_angles([-70, 14.67, -177.36, 0.87, -88.24, -7.73], 40)
-        # time.sleep(3.5)
-        # self.mc.send_angles(self.avg_angles[0], 40)
-        # time.sleep(2.5)
-        # #temp_ang=self.avg_angles[self.pump_times][1]
-        # #self.avg_angles[self.pump_times][1] = -10
-        # #self.mc.send_angles(self.avg_angles[self.pump_times], 40)
-        # #time.sleep(2.5)
-        # #self.avg_angles[self.pump_times][1] = temp_ang
-        # print(self.pump_times)
-        # print(self.avg_angles[self.pump_times])
-        # if self.pump_times > 3:
-        #     self.mc.send_angles([-4.92, -10.81, -151.43, 2.54, -80.15, -10.28],40)
-        #     time.sleep(1.5)
-        # self.mc.send_angles(self.avg_angles[self.pump_times], 40)
-        # time.sleep(3)
-        #
-        # # close pump
-        # if "dev" in self.robot_m5 or "dev" in self.robot_wio:
-        #     self.pump_off()
-        # elif "dev" in self.robot_raspi or "dev" in self.robot_jes:
-        #     self.gpio_status(False)
-        # time.sleep(3)
-        # self.mc.send_angles([-70, 14.67, -177.36, 0.87, -88.24, -7.73], 40)
-        # time.sleep(1.5)
-        #
-        # self.mc.send_angles([-70, 17.22, -32.51, tmp[3], 97, tmp[5]],40) # [18.8, -7.91, -54.49, -23.02, -0.79, -14.76]
-        # time.sleep(3.5)
-        # self.mc.send_angles(self.move_angles[1], 50)
-        # time.sleep(3)
+        # send Angle to move mecharm 270
+        self.mc.send_angles(self.move_angles[0], 50)
+        time.sleep(2)
+
+        #[x, y, 185.5, -157.73, 22.08, -140.19]
+        # send coordinates to move mycobot
+        if x <= 180:
+            print(1)
+            self.mc.send_coords([x, y, 150, -176.1, 2.4, -125.1], 30, 0) # usb :rx,ry,rz -173.3, -5.48, -57.9
+            time.sleep(4)
+            
+            # self.mc.send_coords([x, y, 150, 179.87, -3.78, -62.75], 25, 0)
+            # time.sleep(3)
+
+            # self.mc.send_coords([x, y, 105, 179.87, -3.78, -62.75], 25, 0)
+            self.mc.send_coords([x, y, 140, -176.1, 2.4, -125.1], 30, 0)
+        else:
+            if x > 188:
+                x = 174
+            else:
+                x = x -20
+            print(2)
+            self.mc.send_coords([x, y, 175, -164.99, 11.33, -125.91], 30, 0) # [174.6, -3.5, 175.8, -164.99, 11.33, -125.91]
+            time.sleep(4)
+            
+            # self.mc.send_coords([x, y, 150, 179.87, -3.78, -62.75], 25, 0)
+            # time.sleep(3)
+
+            # self.mc.send_coords([x, y, 105, 179.87, -3.78, -62.75], 25, 0)
+            self.mc.send_coords([x, y, 148, -164.99, 11.33, -125.91], 30, 0)
+        time.sleep(4)
+
+        # open pump
+        if "dev" in self.robot_m5 or "dev" in self.robot_wio:
+            self.pump_on()
+        elif "dev" in self.robot_raspi or "dev" in self.robot_jes:
+            self.gpio_status(True)
+        time.sleep(1.5)
+        if self.pump_times < 6:
+            self.pump_times += 1
+        else:
+            self.pump_times = 1
+
+        tmp = []
+        while True:
+            if not tmp: 
+                tmp = self.mc.get_angles()    
+            else:
+                break
+        time.sleep(0.5)
+
+        print('tmp:', tmp)
+        self.mc.send_angles([tmp[0], 17.22, -32.51, tmp[3], 80, tmp[5]],40) # [18.8, -7.91, -54.49, -23.02, -0.79, -14.76]
+        time.sleep(1)
+        self.mc.send_angles([-70, 17.22, -32.51, tmp[3], 80, tmp[5]],40) # [18.8, -7.91, -54.49, -23.02, -0.79, -14.76]
+        time.sleep(2.5)
+        self.mc.send_angles([-70, 14.67, -177.36, 0.87, -88.24, -7.73], 40)
+        time.sleep(3.5)
+        self.mc.send_angles(self.avg_angles[0], 40)
+        time.sleep(2.5)
+        #temp_ang=self.avg_angles[self.pump_times][1]
+        #self.avg_angles[self.pump_times][1] = -10
+        #self.mc.send_angles(self.avg_angles[self.pump_times], 40)
+        #time.sleep(2.5)
+        #self.avg_angles[self.pump_times][1] = temp_ang
+        print(self.pump_times)
+        print(self.avg_angles[self.pump_times])
+        if self.pump_times > 3:
+            self.mc.send_angles([-4.92, -10.81, -151.43, 2.54, -80.15, -10.28],40)
+            time.sleep(1.5)
+        self.mc.send_angles(self.avg_angles[self.pump_times], 40)
+        time.sleep(3)
+
+        # close pump
+        if "dev" in self.robot_m5 or "dev" in self.robot_wio:
+            self.pump_off()
+        elif "dev" in self.robot_raspi or "dev" in self.robot_jes:
+            self.gpio_status(False)
+        time.sleep(3)
+        self.mc.send_angles([-70, 14.67, -177.36, 0.87, -88.24, -7.73], 40)
+        time.sleep(1.5)
+
+        self.mc.send_angles([-70, 17.22, -32.51, tmp[3], 97, tmp[5]],40) # [18.8, -7.91, -54.49, -23.02, -0.79, -14.76]
+        time.sleep(3.5)
+        self.mc.send_angles(self.move_angles[1], 50)
+        time.sleep(3)
         
 
     # decide whether grab cube
     def decide_move(self, x, y, color):
-        # print(x, y, self.cache_x, self.cache_y)
+        print(x, y, self.cache_x, self.cache_y)
         # detect the cube status move or run
         if (abs(x - self.cache_x) + abs(y - self.cache_y)) / 2 > 5:  # mm
             self.cache_x, self.cache_y = x, y
@@ -343,7 +321,7 @@ class Object_detect():
         self.y1 = int(y1)
         self.x2 = int(x2)
         self.y2 = int(y2)
-        # print(self.x1, self.y1, self.x2, self.y2)
+        print(self.x1, self.y1, self.x2, self.y2)
 
     # set parameters to calculate the coords between cube and mycobot
     def set_params(self, c_x, c_y, ratio):
@@ -446,7 +424,7 @@ class Object_detect():
                     # cv2.putText(img, "{}".format(coord), (50, 60),
                     #         fontFace=None, fontScale=1,
                     #         color=(0, 255, 0), lineType=1)
-                    # print(format(dst[0][0][0]))
+                    print(format(dst[0][0][0]))
                     x = (dst[0][0][0] + dst[1][0][0] + dst[2][0][0] +
                          dst[3][0][0]) / 4.0
                     y = (dst[0][0][1] + dst[1][0][1] + dst[2][0][1] +
@@ -526,7 +504,7 @@ def parse_folder(folder):
     path1 = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
     path = path1 + '/' + folder
-    # print(path)
+    print(path)
 
     for i, j, k in os.walk(path):
         for l in k:
@@ -582,18 +560,18 @@ def process_display_frame(connection):
     y1 = 0
     x2 = 0
     y2 = 0
-    # if platform.system() == "Windows":
-    #     cap_num = 0
-    #     cap = cv2.VideoCapture(cap_num, cv2.CAP_V4L)
-    #     # cap = cv2.VideoCapture(cap_num, cv2.CAP_DSHOW)
-    #     if not cap.isOpened():
-    #         cap.open(1)
-    # elif platform.system() == "Linux":
-    cap_num = 0
-    cap = cv2.VideoCapture(cap_num, cv2.CAP_V4L)
-    # cap = cv2.VideoCapture(cap_num, cv2.CAP_DSHOW)
-    if not cap.isOpened():
-        cap.open(0)
+    if platform.system() == "Windows":
+        cap_num = 1
+        cap = cv2.VideoCapture(cap_num, cv2.CAP_V4L)
+        # cap = cv2.VideoCapture(cap_num, cv2.CAP_DSHOW)
+        if not cap.isOpened():
+            cap.open(1)
+    elif platform.system() == "Linux":
+        cap_num = 0
+        cap = cv2.VideoCapture(cap_num, cv2.CAP_V4L)
+        # cap = cv2.VideoCapture(cap_num, cv2.CAP_DSHOW)
+        if not cap.isOpened():
+            cap.open()
             
     while cv2.waitKey(1) < 0:
         _, frame = cap.read()
@@ -642,7 +620,7 @@ def run():
     res_queue[1] = parse_folder('res/C')
     res_queue[2] = parse_folder('res/A')
     res_queue[3] = parse_folder('res/B')
-    # print(res_queue)
+    print(res_queue)
 
     #sift = cv2.xfeatures2d.SIFT_create()
     sift = cv2.SIFT_create()
@@ -652,7 +630,7 @@ def run():
     detect = Object_detect()
 
     # init mycobot
-    # detect.run()
+    detect.run()
 
     # _init_ = 20  #
     init_num = 0
@@ -660,115 +638,115 @@ def run():
     # num = 0
     # real_sx = real_sy = 0
     while True:
-        # is not detect:
-        start_time = time.time()
-        if parent_conn.poll():
-            data = parent_conn.recv()
-            if data == STOP_PROCESSING:
-                break
-        # read camera
-        frame = get_frame(parent_conn)
-        # deal img
-        #frame = detect.transform_frame(frame)
+        is not is_ick:
+            start_time = time.time()
+            if parent_conn.poll():
+                data = parent_conn.recv()
+                if data == STOP_PROCESSING:
+                    break
+            # read camera
+            frame = get_frame(parent_conn)
+            # deal img
+            #frame = detect.transform_frame(frame)
 
-        # if _init_ > 0:
-        #     _init_ -= 1
-        #     continue
-        # calculate the parameters of camera clipping
-        if init_num < 20:
-            if detect.get_calculate_params(frame) is None:
-                # cv2.imshow("figure", frame)
-                continue
-            else:
-                x1, x2, y1, y2 = detect.get_calculate_params(frame)
-                detect.draw_marker(frame, x1, y1)
-                detect.draw_marker(frame, x2, y2)
-                detect.sum_x1 += x1
-                detect.sum_x2 += x2
-                detect.sum_y1 += y1
-                detect.sum_y2 += y2
+            # if _init_ > 0:
+            #     _init_ -= 1
+            #     continue
+            # calculate the parameters of camera clipping
+            if init_num < 20:
+                if detect.get_calculate_params(frame) is None:
+                    # cv2.imshow("figure", frame)
+                    continue
+                else:
+                    x1, x2, y1, y2 = detect.get_calculate_params(frame)
+                    detect.draw_marker(frame, x1, y1)
+                    detect.draw_marker(frame, x2, y2)
+                    detect.sum_x1 += x1
+                    detect.sum_x2 += x2
+                    detect.sum_y1 += y1
+                    detect.sum_y2 += y2
+                    init_num += 1
+                    continue
+            elif init_num == 20:
+                detect.set_cut_params(
+                    (detect.sum_x1) / 20.0,
+                    (detect.sum_y1) / 20.0,
+                    (detect.sum_x2) / 20.0,
+                    (detect.sum_y2) / 20.0,
+                )
+                parent_conn.send((CROP_FRAME,
+                    (detect.sum_x1) / 20.0,
+                    (detect.sum_y1) / 20.0,
+                    (detect.sum_x2) / 20.0,
+                    (detect.sum_y2) / 20.0))
+                detect.sum_x1 = detect.sum_x2 = detect.sum_y1 = detect.sum_y2 = 0
                 init_num += 1
                 continue
-        elif init_num == 20:
-            detect.set_cut_params(
-                (detect.sum_x1) / 20.0,
-                (detect.sum_y1) / 20.0,
-                (detect.sum_x2) / 20.0,
-                (detect.sum_y2) / 20.0,
-            )
-            parent_conn.send((CROP_FRAME,
-                (detect.sum_x1) / 20.0,
-                (detect.sum_y1) / 20.0,
-                (detect.sum_x2) / 20.0,
-                (detect.sum_y2) / 20.0))
-            detect.sum_x1 = detect.sum_x2 = detect.sum_y1 = detect.sum_y2 = 0
-            init_num += 1
-            continue
 
-        # calculate params of the coords between cube and mycobot
-        if nparams < 10:
-            if detect.get_calculate_params(frame) is None:
-                # cv2.imshow("figure", frame)
-                continue
-            else:
-                x1, x2, y1, y2 = detect.get_calculate_params(frame)
-                detect.draw_marker(frame, x1, y1)
-                detect.draw_marker(frame, x2, y2)
-                detect.sum_x1 += x1
-                detect.sum_x2 += x2
-                detect.sum_y1 += y1
-                detect.sum_y2 += y2
+            # calculate params of the coords between cube and mycobot
+            if nparams < 10:
+                if detect.get_calculate_params(frame) is None:
+                    # cv2.imshow("figure", frame)
+                    continue
+                else:
+                    x1, x2, y1, y2 = detect.get_calculate_params(frame)
+                    detect.draw_marker(frame, x1, y1)
+                    detect.draw_marker(frame, x2, y2)
+                    detect.sum_x1 += x1
+                    detect.sum_x2 += x2
+                    detect.sum_y1 += y1
+                    detect.sum_y2 += y2
+                    nparams += 1
+                    print ("ok")
+                    continue
+            elif nparams == 10:
                 nparams += 1
-                # print ("ok")
+                # calculate and set params of calculating real coord between cube and mycobot
+                detect.set_params((detect.sum_x1 + detect.sum_x2) / 20.0,
+                                  (detect.sum_y1 + detect.sum_y2) / 20.0,
+                                  abs(detect.sum_x1 - detect.sum_x2) / 10.0 +
+                                  abs(detect.sum_y1 - detect.sum_y2) / 10.0)
+                print("ok")
                 continue
-        elif nparams == 10:
-            nparams += 1
-            # calculate and set params of calculating real coord between cube and mycobot
-            detect.set_params((detect.sum_x1 + detect.sum_x2) / 20.0,
-                              (detect.sum_y1 + detect.sum_y2) / 20.0,
-                              abs(detect.sum_x1 - detect.sum_x2) / 10.0 +
-                              abs(detect.sum_y1 - detect.sum_y2) / 10.0)
-            # print("ok")
-            continue
 
-        # get detect result
-        kp_img, desc_img = sift.detectAndCompute(frame, None)
-        frame = get_frame(parent_conn)
-        for i, v in enumerate(res_queue):
-            # HACK: to update frame every time
-            detect_result = detect.obj_detect(frame, v, kp_img, desc_img, kp_list[i], desc_list[i], parent_conn)
-            if detect_result:
-                x, y = detect_result
-                # calculate real coord between cube and mycobot
-                real_x, real_y = detect.get_position(x, y)
-                detect.color = i
-                # detect.pub_marker(real_x / 1000.0, real_y / 1000.0)
-                detect.decide_move(real_x, real_y, detect.color)
-                # if num == 5:
-                #     detect.color = i
-                #     detect.pub_marker(real_sx / 5.0 / 1000.0,
-                #                       real_sy / 5.0 / 1000.0)
-                #     detect.decide_move(real_sx / 5.0, real_sy / 5.0,
-                #                        detect.color)
-                #     num = real_sx = real_sy = 0
-                # else:
-                #     num += 1
-                #     real_sy += real_y
-                #     real_sx += real_x
-                parent_conn.send(CLEAR_DRAW)
+            # get detect result
+            kp_img, desc_img = sift.detectAndCompute(frame, None)
+            frame = get_frame(parent_conn)
+            for i, v in enumerate(res_queue):
+                # HACK: to update frame every time
+                detect_result = detect.obj_detect(frame, v, kp_img, desc_img, kp_list[i], desc_list[i], parent_conn)
+                if detect_result:
+                    x, y = detect_result
+                    # calculate real coord between cube and mycobot
+                    real_x, real_y = detect.get_position(x, y)
+                    detect.color = i
+                    # detect.pub_marker(real_x / 1000.0, real_y / 1000.0)
+                    detect.decide_move(real_x, real_y, detect.color)
+                    # if num == 5:
+                    #     detect.color = i
+                    #     detect.pub_marker(real_sx / 5.0 / 1000.0,
+                    #                       real_sy / 5.0 / 1000.0)
+                    #     detect.decide_move(real_sx / 5.0, real_sy / 5.0,
+                    #                        detect.color)
+                    #     num = real_sx = real_sy = 0
+                    # else:
+                    #     num += 1
+                    #     real_sy += real_y
+                    #     real_sx += real_x
+                    parent_conn.send(CLEAR_DRAW)
 
-        # cv2.imshow("figure", frame)
-        time.sleep(0.05)
-        end_time = time.time()
-        # print("loop_time = ", end_time - start_time)
+            # cv2.imshow("figure", frame)
+            time.sleep(0.05)
+            end_time = time.time()
+            # print("loop_time = ", end_time - start_time)
 
-        # close the window
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            # cap.release()
-            cv2.destroyAllWindows()
-            sys.exit()
-    # elif is_pick:
-    #     place()
+            # close the window
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                # cap.release()
+                cv2.destroyAllWindows()
+                sys.exit()
+        elif is_pick:
+            place()
 
     child.join()
     
