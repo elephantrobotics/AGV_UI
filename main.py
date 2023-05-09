@@ -1,10 +1,13 @@
-#! /usr/bin/env pyhton3
+#!/usr/bin/env python3
 # encoding:utf-8
 import math
 import os
+import socket
+import struct
 import sys
 import threading
 import time
+import traceback
 
 import cv2
 import numpy as np
@@ -16,8 +19,7 @@ from PyQt5.QtCore import pyqtSlot, Qt, QCoreApplication
 from PyQt5.QtGui import QEnterEvent, QPixmap, QImage
 from PyQt5.QtWidgets import QMainWindow, QApplication, QInputDialog, QWidget, QMessageBox, QDialog, QLabel
 from pymycobot.mycobot import MyCobot
-from pymycobot.mypalletizer import MyPalletizer
-from pymycobot.ultraArm import ultraArm
+from pymycobot.mycobotsocket import MyCobotSocket
 from libraries.pyqtfile.agv_UI import Ui_AGV_UI as AGV_Window
 from PyQt5.QtWebEngineWidgets import QWebEngineView
 from PyQt5.QtCore import QUrl
@@ -41,12 +43,178 @@ class AGV_APP(AGV_Window, QMainWindow, QWidget):
         self.feed_camera.clicked.connect(self.robot_camera_status)
         self.agv_camera.mousePressEvent = self.show_camera_popup
 
+        self.start_btn.clicked.connect(self.start_run)
+        self.puase_btn.clicked.connect(self.pause_run)
+        self.feed_position_ben.clicked.connect(self.feed_position)
+        self.down_position_btn.clicked.connect(self.down_position)
+        self.start_btn.setEnabled(False)
+
+        self.pc_ip = ''
+        self.pc_port = 9001
+        self.mc = None
+        self.mycobot_ip = '192.168.123.23'
+        self.mycobot_port = 9000
+        # self.mc = MyCobotSocket(self.mycobot_ip, self.mycobot_port)
+        
+        self.agv_ip = ''
+        self.agv_port = 9002
+
+        # 上料区是否有新木块放置
+        self.feed_place = True
+        # 上料区吸取次数
+        self.pump_times = 0
+
+        # 创建一个服务器套接字
+        self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+        # 绑定服务器地址和端口
+        self.server_socket.bind((self.pc_ip, self.pc_port))
+
+        # 开始监听客户端请求
+        self.server_socket.listen()
+
+        # self.t_agv = threading.Thread(target=self.myagv_loop_run)
+        # self.t_agv.daemon = True
+        # self.t_agv.start()
+            
+    def socket_connect(self, x, y=0):
+        import socket
+
+        # 创建一个客户端套接字
+        client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+        # 连接服务器
+        server_address = (self.agv_ip, self.agv_port)
+        client_socket.connect(server_address)
+
+        data = struct.pack('ff', x, y)
+
+        # 向服务器发送数据
+        client_socket.sendall(data)
+
+        # 接收来自服务器的响应
+        response = client_socket.recv(1024)
+        print(f"Received response from server: {response.decode()}")
+
+        # 关闭客户端套接字
+        client_socket.close()
+    def moved(self, x, y):
+        print('x, y', x, y)
+        
+        self.socket_connect(x, y)
+
+
+    def btn_color(self, btn, color):
+        if color == 'red':
+            btn.setStyleSheet("background-color: rgb(231, 76, 60);\n"
+                              "color: rgb(255, 255, 255);\n"
+                              "border-radius: 10px;\n"
+                              "border: 2px groove gray;\n"
+                              "border-style: outset;")
+        elif color == 'green':
+            btn.setStyleSheet("background-color: rgb(39, 174, 96);\n"
+                              "color: rgb(255, 255, 255);\n"
+                              "border-radius: 10px;\n"
+                              "border: 2px groove gray;\n"
+                              "border-style: outset;")
+        elif color == 'blue':
+            btn.setStyleSheet("background-color: rgb(41, 128, 185);\n"
+                              "color: rgb(255, 255, 255);\n"
+                              "border-radius: 10px;\n"
+                              "border: 2px groove gray;\n"
+                              "border-style: outset;")
+
+    def start_run(self):
+        """
+        开始
+        :return:
+        """
+        print('start run')
+        self.pause_clicked = False
+        self.btn_color(self.start_btn, 'red')
+        self.start_btn.setEnabled(False)
+        self.btn_color(self.puase_btn, 'blue')
+        self.puase_btn.setEnabled(True)
+        self.socket_connect('start')
+
+    def pause_run(self):
+        """
+        暂停
+        :return:
+        """
+        print('pause run')
+        self.pause_clicked = True
+        self.btn_color(self.start_btn, 'blue')
+        self.start_btn.setEnabled(True)
+        self.btn_color(self.puase_btn, 'red')
+        self.puase_btn.setEnabled(False)
+        self.socket_connect('pause')
+
+    def down_position(self):
+        """
+        下料区
+        :return:
+        """
+        print('down-position-btn')
+        self.socket_connect('down')
+        # import socket
+
+        # # 创建一个客户端套接字
+        # client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+        # # 连接服务器
+        # server_address = (self.agv_ip, self.agv_port)
+        # client_socket.connect(server_address)
+        # x = 0
+        # y = 0
+        # data = struct.pack('ff', x, y)
+
+        # # 向服务器发送数据
+        # client_socket.sendall(data)
+
+        # # 接收来自服务器的响应
+        # response = client_socket.recv(1024)
+        # print(f"Received response from server: {response.decode()}")
+
+        # # 关闭客户端套接字
+        # client_socket.close()
+
+    def feed_position(self):
+        """
+        上料区
+        :return:
+        """
+        print('feed-position-btn')
+        self.socket_connect('feed')
+        # import socket
+
+        # # 创建一个客户端套接字
+        # client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+        # # 连接服务器
+        # server_address = (self.agv_ip, self.agv_port)
+        # client_socket.connect(server_address)
+        # x = -1
+        # y = -1
+        # data = struct.pack('ff', x, y)
+
+        # # 向服务器发送数据
+        # client_socket.sendall(data)
+
+        # # 接收来自服务器的响应
+        # response = client_socket.recv(1024)
+        # print(f"Received response from server: {response.decode()}")
+
+        # # 关闭客户端套接字
+        # client_socket.close()
+        
 
     # Initialize variables
     def _init_variable(self):
         self.cap = cv2.VideoCapture()
         self.camera_status = False
         self.rbt_camera_status = False
+        self.pause_clicked = False
 
     # initialization status
     def _init_status(self):
@@ -71,7 +239,6 @@ class AGV_APP(AGV_Window, QMainWindow, QWidget):
         self.pix = QPixmap(libraries_path + '/images/logo_pic.png')  # the path to the icon
         self.logo_pic_lab.setPixmap(self.pix)
         self.logo_pic_lab.setScaledContents(True)
-
 
     # Close, minimize button display text
     def _close_max_min_icon(self):
@@ -118,7 +285,6 @@ class AGV_APP(AGV_Window, QMainWindow, QWidget):
         self._corner_drag = False
         self._bottom_drag = False
         self._right_drag = False
-
 
     def _initDrag(self):
         # Set the mouse tracking judgment trigger default value
@@ -260,7 +426,7 @@ class AGV_APP(AGV_Window, QMainWindow, QWidget):
                 self.robot_camera.load(QUrl('about:blank'))
                 self.robot_camera.setZoomFactor(0.5)
                 # t.join()
-                self.rbt_camera_status=False
+                self.rbt_camera_status = False
         except Exception as e:
             print(str(e))
 
@@ -270,8 +436,7 @@ class AGV_APP(AGV_Window, QMainWindow, QWidget):
         self.robot_camera.setZoomFactor(1.0)
         # 将QWebEngineView控件的内容设置为QLabel控件的背景图片
         # self.robot_camera.setPixmap(self.web_view.grab().scaled(self.robot_camera.width(), self.robot_camera.height()))
-        self.rbt_camera_status=True
-
+        self.rbt_camera_status = True
 
     def show_agv_camera(self):
         if not self.camera_status:
@@ -334,6 +499,7 @@ class AGV_APP(AGV_Window, QMainWindow, QWidget):
             QApplication.processEvents()
             time.sleep(0.1)
 
+
 # visit resource lib
 def resource_path(relative_path):
     # check if Bundle Resource
@@ -342,8 +508,6 @@ def resource_path(relative_path):
     else:
         base_path = os.path.abspath(".")
     return os.path.join(base_path, relative_path)
-
-
 
 
 if __name__ == '__main__':
@@ -355,5 +519,5 @@ if __name__ == '__main__':
         AGV_window = AGV_APP()
         AGV_window.show()
     except Exception as e:
-            print(str(e))
+        print(str(e))
     sys.exit(app.exec_())
