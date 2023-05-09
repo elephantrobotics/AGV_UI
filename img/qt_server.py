@@ -30,10 +30,10 @@ while True:
     
     
 def move(self, x, y, color):
-        print('x, y',x,y)
-        
-        
-        
+    print('x, y',x,y)
+
+
+
         # send Angle to move mecharm 270
         self.mc.send_angles(self.move_angles[0], 50)
         time.sleep(2)
@@ -44,7 +44,7 @@ def move(self, x, y, color):
             print(1)
             self.mc.send_coords([x, y, 150, -176.1, 2.4, -125.1], 30, 0) # usb :rx,ry,rz -173.3, -5.48, -57.9
             time.sleep(4)
-            
+
             # self.mc.send_coords([x, y, 150, 179.87, -3.78, -62.75], 25, 0)
             # time.sleep(3)
 
@@ -58,7 +58,7 @@ def move(self, x, y, color):
             print(2)
             self.mc.send_coords([x, y, 175, -164.99, 11.33, -125.91], 30, 0) # [174.6, -3.5, 175.8, -164.99, 11.33, -125.91]
             time.sleep(4)
-            
+
             # self.mc.send_coords([x, y, 150, 179.87, -3.78, -62.75], 25, 0)
             # time.sleep(3)
 
@@ -79,8 +79,8 @@ def move(self, x, y, color):
 
         tmp = []
         while True:
-            if not tmp: 
-                tmp = self.mc.get_angles()    
+            if not tmp:
+                tmp = self.mc.get_angles()
             else:
                 break
         time.sleep(0.5)
