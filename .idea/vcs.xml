@@ -3,5 +3,6 @@
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/RaspberryPi" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/demo/Composite-robot-Kit" vcs="Git" />
   </component>
 </project>

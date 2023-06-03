@@ -1,0 +1,12 @@
+AGV去上料点：go_to_feed
+AGV到达上料点：arrive_feed
+robot采摘完成：picking_finished
+AGV去下料点：go_to_unload
+AGV到达下料点:arrive_unload
+robot放置完成：placed_finished
+
+UI按钮
+开始：go_to_feed
+停止：stop
+去上料点：go_to_feed
+去下料点：go_to_unload

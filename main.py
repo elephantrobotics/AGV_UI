@@ -8,7 +8,6 @@ import sys
 import threading
 import time
 import traceback
-
 import cv2
 import numpy as np
 import serial
@@ -23,6 +22,7 @@ from pymycobot.mycobotsocket import MyCobotSocket
 from libraries.pyqtfile.agv_UI import Ui_AGV_UI as AGV_Window
 from PyQt5.QtWebEngineWidgets import QWebEngineView
 from PyQt5.QtCore import QUrl
+from AGV_3D_Vision.main import main
 
 
 class AGV_APP(AGV_Window, QMainWindow, QWidget):
@@ -44,170 +44,15 @@ class AGV_APP(AGV_Window, QMainWindow, QWidget):
         self.agv_camera.mousePressEvent = self.show_camera_popup
 
         self.start_btn.clicked.connect(self.start_run)
-        self.puase_btn.clicked.connect(self.pause_run)
+        self.puase_btn.clicked.connect(self.stop_run)
         self.feed_position_ben.clicked.connect(self.feed_position)
         self.down_position_btn.clicked.connect(self.down_position)
+
+        self.agv_connect_btn.clicked.connect(self.connect)
         self.start_btn.setEnabled(False)
 
-        self.pc_ip = ''
-        self.pc_port = 9001
         self.mc = None
-        self.mycobot_ip = '192.168.123.23'
-        self.mycobot_port = 9000
-        # self.mc = MyCobotSocket(self.mycobot_ip, self.mycobot_port)
-        
-        self.agv_ip = ''
-        self.agv_port = 9002
-
-        # 上料区是否有新木块放置
-        self.feed_place = True
-        # 上料区吸取次数
-        self.pump_times = 0
-
-        # 创建一个服务器套接字
-        self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-        # 绑定服务器地址和端口
-        self.server_socket.bind((self.pc_ip, self.pc_port))
-
-        # 开始监听客户端请求
-        self.server_socket.listen()
-
-        # self.t_agv = threading.Thread(target=self.myagv_loop_run)
-        # self.t_agv.daemon = True
-        # self.t_agv.start()
-            
-    def socket_connect(self, x, y=0):
-        import socket
-
-        # 创建一个客户端套接字
-        client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-        # 连接服务器
-        server_address = (self.agv_ip, self.agv_port)
-        client_socket.connect(server_address)
-
-        data = struct.pack('ff', x, y)
-
-        # 向服务器发送数据
-        client_socket.sendall(data)
-
-        # 接收来自服务器的响应
-        response = client_socket.recv(1024)
-        print(f"Received response from server: {response.decode()}")
-
-        # 关闭客户端套接字
-        client_socket.close()
-    def moved(self, x, y):
-        print('x, y', x, y)
-        
-        self.socket_connect(x, y)
-
-
-    def btn_color(self, btn, color):
-        if color == 'red':
-            btn.setStyleSheet("background-color: rgb(231, 76, 60);\n"
-                              "color: rgb(255, 255, 255);\n"
-                              "border-radius: 10px;\n"
-                              "border: 2px groove gray;\n"
-                              "border-style: outset;")
-        elif color == 'green':
-            btn.setStyleSheet("background-color: rgb(39, 174, 96);\n"
-                              "color: rgb(255, 255, 255);\n"
-                              "border-radius: 10px;\n"
-                              "border: 2px groove gray;\n"
-                              "border-style: outset;")
-        elif color == 'blue':
-            btn.setStyleSheet("background-color: rgb(41, 128, 185);\n"
-                              "color: rgb(255, 255, 255);\n"
-                              "border-radius: 10px;\n"
-                              "border: 2px groove gray;\n"
-                              "border-style: outset;")
-
-    def start_run(self):
-        """
-        开始
-        :return:
-        """
-        print('start run')
-        self.pause_clicked = False
-        self.btn_color(self.start_btn, 'red')
-        self.start_btn.setEnabled(False)
-        self.btn_color(self.puase_btn, 'blue')
-        self.puase_btn.setEnabled(True)
-        self.socket_connect('start')
-
-    def pause_run(self):
-        """
-        暂停
-        :return:
-        """
-        print('pause run')
-        self.pause_clicked = True
-        self.btn_color(self.start_btn, 'blue')
-        self.start_btn.setEnabled(True)
-        self.btn_color(self.puase_btn, 'red')
-        self.puase_btn.setEnabled(False)
-        self.socket_connect('pause')
-
-    def down_position(self):
-        """
-        下料区
-        :return:
-        """
-        print('down-position-btn')
-        self.socket_connect('down')
-        # import socket
-
-        # # 创建一个客户端套接字
-        # client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-        # # 连接服务器
-        # server_address = (self.agv_ip, self.agv_port)
-        # client_socket.connect(server_address)
-        # x = 0
-        # y = 0
-        # data = struct.pack('ff', x, y)
-
-        # # 向服务器发送数据
-        # client_socket.sendall(data)
-
-        # # 接收来自服务器的响应
-        # response = client_socket.recv(1024)
-        # print(f"Received response from server: {response.decode()}")
-
-        # # 关闭客户端套接字
-        # client_socket.close()
-
-    def feed_position(self):
-        """
-        上料区
-        :return:
-        """
-        print('feed-position-btn')
-        self.socket_connect('feed')
-        # import socket
-
-        # # 创建一个客户端套接字
-        # client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-        # # 连接服务器
-        # server_address = (self.agv_ip, self.agv_port)
-        # client_socket.connect(server_address)
-        # x = -1
-        # y = -1
-        # data = struct.pack('ff', x, y)
-
-        # # 向服务器发送数据
-        # client_socket.sendall(data)
-
-        # # 接收来自服务器的响应
-        # response = client_socket.recv(1024)
-        # print(f"Received response from server: {response.decode()}")
-
-        # # 关闭客户端套接字
-        # client_socket.close()
-        
+        self.socket_res = None
 
     # Initialize variables
     def _init_variable(self):
@@ -298,28 +143,6 @@ class AGV_APP(AGV_Window, QMainWindow, QWidget):
         if isinstance(event, QEnterEvent):
             self.setCursor(Qt.ArrowCursor)
         return super(AGV_APP, self).eventFilter(obj, event)  # Note that MyWindow is the name of the class
-        # return QWidget.eventFilter(self, obj, event)  # You can also use this, but pay attention to modifying the window type
-
-    # def mousePressEvent(self, event):
-    #     # Rewrite mouse click event
-    #     if (event.button() == Qt.LeftButton) and (event.y() < self.widget.height()):
-    #         # Click the left mouse button on the title bar area
-    #         self._move_drag = True
-    #         self.move_DragPosition = event.globalPos() - self.pos()
-    #         event.accept()
-    #
-    # def mouseMoveEvent(self, QMouseEvent):
-    #     try:
-    #         if Qt.LeftButton and self._move_drag:
-    #             # title bar drag and drop window position
-    #             self.move(QMouseEvent.globalPos() - self.move_DragPosition)
-    #             QMouseEvent.accept()
-    #     except Exception as e:
-    #         self.loger.info(e)
-    #
-    # def mouseReleaseEvent(self, QMouseEvent):
-    #     # After the mouse is released, each trigger resets
-    #     self._move_drag = False
 
     def resizeEvent(self, QResizeEvent):
         # 自定义窗口调整大小事件
@@ -387,6 +210,81 @@ class AGV_APP(AGV_Window, QMainWindow, QWidget):
         self._bottom_drag = False
         self._right_drag = False
         self.setCursor(Qt.ArrowCursor)
+
+    def connect(self):
+        ip = self.agv_ip_text.text()
+        port = self.agv_port_text.text()
+        try:
+            if ip and port is not None:
+                self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                server_address = (ip, int(port))
+                self.client_socket.connect(server_address)
+                t = threading.Thread(target=self.get_res)
+            else:
+                QMessageBox.information(self, "提示", "连接失败，请检查IP地址以及确认AGV已经启动服务端", QMessageBox.Ok)
+        except Exception:
+            QMessageBox.information(self, "提示", "连接失败，请检查IP地址以及确认AGV已经启动服务端", QMessageBox.Ok)
+
+
+    def send_msg(self, msg):
+        # 向服务器发送数据
+        self.client_socket.sendall(msg)
+
+        # 接收来自服务器的响应
+        response = self.client_socket.recv(1024)
+        print(f"Received response from server: {response.decode()}")
+
+
+    def get_res(self):
+        while 1:
+            data = self.client_socket.recv(1024).decode('UTF-8')
+            socket_res = data
+            print(f"Received response from server: {socket_res}")
+            time.sleep(0.2)
+
+            if socket_res == 'arrive_feed':
+                main()
+                self.send_msg('picking_finished')
+
+
+
+    def start_run(self):
+        """
+        开始
+        :return:
+        """
+        print('start run')
+        self.pause_clicked = False
+        self.btn_color(self.start_btn, 'red')
+        self.start_btn.setEnabled(False)
+        self.btn_color(self.puase_btn, 'blue')
+        self.puase_btn.setEnabled(True)
+        self.send_msg('go_to_feed')
+
+    def stop_run(self):
+        """
+        暂停
+        :return:
+        """
+        print('stop run')
+        self.pause_clicked = True
+        self.send_msg('stop')
+
+    def feed_position(self):
+        """
+        上料区
+        :return:
+        """
+        print('feed-position-btn')
+        self.send_msg('go_to_feed')
+
+    def down_position(self):
+        """
+        下料区
+        :return:
+        """
+        print('feed-position-btn')
+        self.send_msg('go_to_unload')
 
     def open_camera(self):
         QApplication.processEvents()
@@ -498,6 +396,26 @@ class AGV_APP(AGV_Window, QMainWindow, QWidget):
         for i in range(1, t + 1):
             QApplication.processEvents()
             time.sleep(0.1)
+
+    def btn_color(self, btn, color):
+        if color == 'red':
+            btn.setStyleSheet("background-color: rgb(231, 76, 60);\n"
+                              "color: rgb(255, 255, 255);\n"
+                              "border-radius: 10px;\n"
+                              "border: 2px groove gray;\n"
+                              "border-style: outset;")
+        elif color == 'green':
+            btn.setStyleSheet("background-color: rgb(39, 174, 96);\n"
+                              "color: rgb(255, 255, 255);\n"
+                              "border-radius: 10px;\n"
+                              "border: 2px groove gray;\n"
+                              "border-style: outset;")
+        elif color == 'blue':
+            btn.setStyleSheet("background-color: rgb(41, 128, 185);\n"
+                              "color: rgb(255, 255, 255);\n"
+                              "border-radius: 10px;\n"
+                              "border: 2px groove gray;\n"
+                              "border-style: outset;")
 
 
 # visit resource lib
