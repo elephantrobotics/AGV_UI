@@ -1,5 +1,6 @@
 from enum import Enum
-from pymycobot.mycobot import MyCobot
+from pymycobot.mycobotsocket import MyCobotSocket
+from pymycobot import MyCobot
 from R1Control.Common import *
 import time
 
@@ -22,10 +23,27 @@ class MechArmController:
         RY = 4
         RZ = 5
 
-    def __init__(self, port: str, baud: int):
-        self.ma = MyCobot(port, baud)
-
+    def __init__(self):
+        #self.ma = MyCobotSocket('192.168.1.102',9000)
+        # self.ma.connect('/dev/ttyAMA0', '1000000')
+        self.ma = MyCobot("COM7",115200)
+        # self.ma = MyCobot("COM8", 115200)
+        #self.ma.set_gripper_calibration()
         # M5 吸泵引脚参数
+        self.ma.set_fresh_mode(0)
+        time.sleep(1)
+        # self.ma.set_tool_reference([0, 0 , 90,0 ,0 ,0])
+        # self.ma.set_end_type(1)
+        # self.ma.release_all_servos()
+        # time.sleep(1)
+        # while 1:
+        #     print(self.ma.get_coords())
+        #     time.sleep(1)
+        # print(self.ma.get_fresh_mode())
+        # time.sleep(1)
+
+        # print(self.ma.get_error_information())
+        # exit()
         self.pump_pin2_m5 = 2
         self.pump_pin5_m5 = 5
 

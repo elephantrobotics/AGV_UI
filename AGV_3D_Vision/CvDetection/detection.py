@@ -2,8 +2,8 @@ import cv2
 import numpy as np
 from enum import Enum
 from typing import *
-from CvDetection.config import *
-from CvDetection.TargetBucket import TargetBucket
+from config import *
+from TargetBucket import TargetBucket
 
 def rgb_to_hsv(self, r_, g_, b_):
     import colorsys

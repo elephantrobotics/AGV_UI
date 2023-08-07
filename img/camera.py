@@ -29,4 +29,5 @@ def CameraPage():
     return render_template('camera.html')
     
 if __name__ == '__main__':
-    app.run(host='192.168.11.191', debug=True, port=200)
+    pass
+    #app.run(host='192.168.11.191', debug=True, port=200)

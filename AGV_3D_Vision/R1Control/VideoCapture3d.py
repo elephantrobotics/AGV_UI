@@ -13,7 +13,7 @@ import cv2
 import threading
 import sys
 import time
-
+import Pipeline
 
 class VideoCaptureThread(threading.Thread):
     def __init__(self, detector, detect_type = Detector.FetchType.FETCH_ALL.value):
@@ -27,6 +27,8 @@ class VideoCaptureThread(threading.Thread):
         self.new_color_frame = None               # RGB帧
         self.fruit_type = detector.detect_target  # 水果类型
         self.detect_type = detect_type            # 摘取类型
+        self.depth_show = None
+        self.rgb_show = None
 
     # 设置中断标记
     def get_finished_flag(self):
@@ -187,11 +189,11 @@ class VideoCaptureThread(threading.Thread):
 
                 # 深度识别帧数据大小调整(height, width, 2)
                 depth_data = np.resize(depth_data, (depth_height, depth_width, 2))
-                if color_height != depth_height:
-                    filled_height = np.zeros((40, color_width, 2))
-                    filled_width = np.zeros((color_height, 30, 2))
-                    depth_data = np.vstack([filled_height, depth_data, filled_height])
-                    depth_data = np.hstack([filled_width, depth_data])
+                # if color_height != depth_height:
+                #     filled_height = np.zeros((40, color_width, 2))
+                #     filled_width = np.zeros((color_height, 30, 2))
+                #     depth_data = np.vstack([filled_height, depth_data, filled_height])
+                #     depth_data = np.hstack([filled_width, depth_data])
 
                 # 深度帧数据8bit转16bit
                 new_depth_data = depth_data[:, :, 0] + depth_data[:, :, 1] * 256
@@ -225,7 +227,7 @@ class VideoCaptureThread(threading.Thread):
     # x、y信息转世界坐标信息（适用于摘取 Fetch 类型）
     def xy_to_world(self, cx, cy, frame):
         x, y = cx, cy
-        z = frame[y,x]
+        z = frame[int((y-40)/2),int((x-40)/2)]
         if DEBUG == True:
             print("pixel coord X, Y, Z: ", (x, y, z))
 
@@ -350,18 +352,20 @@ class VideoCaptureThread(threading.Thread):
         # 将深度帧数据GRAY转RGB
         new_depth_frame = cv2.cvtColor(depth_frame, cv2.COLOR_GRAY2RGB)
 
+        self.rgb_show = cv2.cvtColor(self.new_color_frame,cv2.COLOR_BGR2RGB)
+        self.depth_show = new_depth_frame
         # 创建窗口
-        # newDatas = np.vstack([self.new_color_frame, new_depth_frame])
+        #newDatas = np.vstack([self.new_color_frame, new_depth_frame])
 
-        cv2.namedWindow("ColorViewer", cv2.WINDOW_AUTOSIZE)
-        cv2.namedWindow("DepthViewer", cv2.WINDOW_AUTOSIZE)
+        #cv2.namedWindow("ColorViewer", cv2.WINDOW_AUTOSIZE)
+        #cv2.namedWindow("DepthViewer", cv2.WINDOW_AUTOSIZE)
 
         # 显示图像
-        cv2.imshow("ColorViewer", self.new_color_frame)
-        cv2.imshow("DepthViewer", new_depth_frame)
+        #cv2.imshow("ColorViewer", self.new_color_frame)
+        #cv2.imshow("DepthViewer", new_depth_frame)
 
         # 将彩色帧数据大小调整为(height,width,3)
-        bind_mouse_event(cv2.cvtColor(self.new_color_frame, cv2.COLOR_RGB2BGR), "ColorViewer", mouseHSV)
+        #bind_mouse_event(cv2.cvtColor(self.new_color_frame, cv2.COLOR_RGB2BGR), "ColorViewer", mouseHSV)
 
     def close_window(self):
         # 按 ESC 或 'q' 关闭窗口
@@ -393,9 +397,6 @@ class VideoCaptureThread(threading.Thread):
     def run(self):
         while True:
             frame = self.vp.get_color_frame()
-            cv2.namedWindow("ColorViewer", cv2.WINDOW_AUTOSIZE)
-            cv2.namedWindow("DepthViewer", cv2.WINDOW_AUTOSIZE)
-
             if frame is None:
                 continue
             else:

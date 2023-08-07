@@ -1,28 +1,24 @@
 #!/usr/bin/env python3
 # encoding:utf-8
-import math
 import os
 import socket
-import struct
 import sys
 import threading
 import time
-import traceback
+import select
 import cv2
-import numpy as np
-import serial
-import serial.tools.list_ports
-from PyQt5 import QtCore, QtGui, QtWidgets, QtWebEngineWidgets
+from PyQt5 import QtCore, QtGui
 from PyQt5.QtCore import QPoint
-from PyQt5.QtCore import pyqtSlot, Qt, QCoreApplication
-from PyQt5.QtGui import QEnterEvent, QPixmap, QImage
-from PyQt5.QtWidgets import QMainWindow, QApplication, QInputDialog, QWidget, QMessageBox, QDialog, QLabel
-from pymycobot.mycobot import MyCobot
-from pymycobot.mycobotsocket import MyCobotSocket
-from libraries.pyqtfile.agv_UI import Ui_AGV_UI as AGV_Window
-from PyQt5.QtWebEngineWidgets import QWebEngineView
 from PyQt5.QtCore import QUrl
-from AGV_3D_Vision.main import main
+from PyQt5.QtCore import pyqtSlot, Qt, pyqtSignal, QThread
+from PyQt5.QtGui import QEnterEvent, QPixmap, QImage
+from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QMessageBox, QDialog, QLabel
+
+from libraries.pyqtfile.agv_UI import Ui_AGV_UI as AGV_Window
+
+from CvDetection.detection import Detector
+from R1Control.RobotR1 import RobotR1
+from R1Control.VideoCapture3d import VideoCaptureThread
 
 
 class AGV_APP(AGV_Window, QMainWindow, QWidget):
@@ -36,23 +32,43 @@ class AGV_APP(AGV_Window, QMainWindow, QWidget):
         self.move(350, 10)
         self._init_variable()
         self._init_status()
+        self._close_max_min_icon()
         self.min_btn.clicked.connect(self.min_clicked)  # minimize
         self.max_btn.clicked.connect(self.max_clicked)
         self.close_btn.clicked.connect(self.close_clicked)  # close
-        self.agv_camera_btn.clicked.connect(self.camera_checked)
-        self.feed_camera.clicked.connect(self.robot_camera_status)
-        self.agv_camera.mousePressEvent = self.show_camera_popup
 
+        self.agv_camera_btn.clicked.connect(self.camera_checked)  # feed camera color and depth
+
+        # self.feed_camera.clicked.connect(self.robot_camera_status)
+        # self.agv_camera.mousePressEvent = self.show_camera_popup
+        self.start_btn.setCheckable(True)
         self.start_btn.clicked.connect(self.start_run)
+        self.puase_btn.setCheckable(True)
         self.puase_btn.clicked.connect(self.stop_run)
+        self.feed_position_ben.setCheckable(True)
         self.feed_position_ben.clicked.connect(self.feed_position)
+        self.down_position_btn.setCheckable(True)
         self.down_position_btn.clicked.connect(self.down_position)
+        self.feed_complete_btn.setCheckable(True)
+        self.feed_complete_btn.clicked.connect(self.feed_complete)
+        self.unload_complete_btn.setCheckable(True)
+        self.unload_complete_btn.clicked.connect(self.unload_complete)
 
         self.agv_connect_btn.clicked.connect(self.connect)
+
+        # self.agv_camera_btn.setEnabled(False)
         self.start_btn.setEnabled(False)
+        self.puase_btn.setEnabled(False)
+        self.feed_position_ben.setEnabled(False)
+        self.down_position_btn.setEnabled(False)
+        self.feed_complete_btn.setEnabled(False)
+        self.unload_complete_btn.setEnabled(False)
 
         self.mc = None
         self.socket_res = None
+
+        # connect to the 270
+        self.r1 = RobotR1()
 
     # Initialize variables
     def _init_variable(self):
@@ -81,7 +97,7 @@ class AGV_APP(AGV_Window, QMainWindow, QWidget):
 
         w = self.logo_pic_lab.width()
         h = self.logo_pic_lab.height()
-        self.pix = QPixmap(libraries_path + '/images/logo_pic.png')  # the path to the icon
+        self.pix = QPixmap(libraries_path + '/images/logo_pic.jpg')  # the path to the icon
         self.logo_pic_lab.setPixmap(self.pix)
         self.logo_pic_lab.setScaledContents(True)
 
@@ -123,6 +139,24 @@ class AGV_APP(AGV_Window, QMainWindow, QWidget):
         self.cap.release()
         self.close()
         QApplication.exit()
+
+    @pyqtSlot(QImage)
+    def update_image(self, image):
+        # 在主线程中更新UI元素
+        pixmap = QPixmap.fromImage(image)
+        # self.label.setPixmap(pixmap.scaled(640, 480))
+        self.agv_camera.setPixmap(pixmap.scaled(320, 240))
+
+        # self.agv_camera.setPixmap(pixmap_color)
+
+    @pyqtSlot(QImage)
+    def update_processed_image(self, image):
+        # 在主线程中更新UI元素
+        pixmap = QPixmap.fromImage(image)
+        self.label_2.setPixmap(pixmap.scaled(320, 240))
+        # self.label_processed.setPixmap(pixmap.scaled(640, 480))
+
+        # self.label_2.setPixmap(QPixmap.fromImage(depth_show))
 
     def _initDrag(self):
         # Set the mouse tracking judgment trigger default value
@@ -220,71 +254,134 @@ class AGV_APP(AGV_Window, QMainWindow, QWidget):
                 server_address = (ip, int(port))
                 self.client_socket.connect(server_address)
                 t = threading.Thread(target=self.get_res)
+                t.start()
+                self.start_btn.setEnabled(True)
+                self.puase_btn.setEnabled(True)
+                self.feed_position_ben.setEnabled(True)
+                self.down_position_btn.setEnabled(True)
+                self.feed_complete_btn.setEnabled(True)
+                self.unload_complete_btn.setEnabled(True)
+                self.agv_connect_btn.setEnabled((False))
+                self.btn_color(self.agv_connect_btn, 'red')
+                QMessageBox.information(self, "提示", "连接成功", QMessageBox.Ok)
             else:
                 QMessageBox.information(self, "提示", "连接失败，请检查IP地址以及确认AGV已经启动服务端", QMessageBox.Ok)
-        except Exception:
+        except Exception as e:
+            print(str(e))
             QMessageBox.information(self, "提示", "连接失败，请检查IP地址以及确认AGV已经启动服务端", QMessageBox.Ok)
-
 
     def send_msg(self, msg):
         # 向服务器发送数据
-        self.client_socket.sendall(msg)
-
-        # 接收来自服务器的响应
-        response = self.client_socket.recv(1024)
-        print(f"Received response from server: {response.decode()}")
-
+        self.client_socket.send(msg.encode())
 
     def get_res(self):
+        socket_res = self.client_socket.recv(1024).decode()
         while 1:
-            data = self.client_socket.recv(1024).decode('UTF-8')
-            socket_res = data
-            print(f"Received response from server: {socket_res}")
+            read_to_read, _, _ = select.select([self.client_socket], [], [], 1)
+            if read_to_read:
+                socket_res = self.client_socket.recv(1024).decode()
             time.sleep(0.2)
-
+            #print("-------------------------------------------",socket_res)192.168.1.103
+            start_time = time.monotonic()
             if socket_res == 'arrive_feed':
-                main()
-                self.send_msg('picking_finished')
-
-
+                while self.r1.i < 3:
+                    current_time = time.monotonic()
+                    self.r1.motion(self.video_thread.capture_thread)
+                    time.sleep(1)
+                    print("-------------------------------------------",current_time - start_time)
+                    if current_time - start_time >= 120:
+                        break
+                else:
+                    self.r1.i = -1
+                    send_data = "picking_finished"
+                    self.client_socket.send(send_data.encode())
+                    socket_res = None
+                self.r1.move_end(50, 1)
 
     def start_run(self):
         """
         开始
         :return:
         """
-        print('start run')
-        self.pause_clicked = False
-        self.btn_color(self.start_btn, 'red')
-        self.start_btn.setEnabled(False)
-        self.btn_color(self.puase_btn, 'blue')
-        self.puase_btn.setEnabled(True)
-        self.send_msg('go_to_feed')
+        # self.pause_clicked = True
+        # 检查按钮是否被选中
+        if self.start_btn.isChecked():
+            self.btn_color(self.start_btn, 'red')
+            # print('start run')
+            self.send_msg('go_to_feed')
+        else:
+            self.btn_color(self.start_btn, 'grey')
 
     def stop_run(self):
         """
         暂停
         :return:
         """
-        print('stop run')
+        _translate = QtCore.QCoreApplication.translate
         self.pause_clicked = True
-        self.send_msg('stop')
+        # 检查按钮是否被选中
+        if self.puase_btn.isChecked():
+            self.btn_color(self.puase_btn, 'red')
+            self.puase_btn.setText(_translate("AGV_UI", "恢复"))
+            self.send_msg('stop')
+            print('stop run')
+        else:
+            self.btn_color(self.puase_btn, 'blue')
+            self.puase_btn.setText(_translate("AGV_UI", "暂停"))
+            self.send_msg('Resume_Stop')
+            print('Resume_Stop')
 
     def feed_position(self):
         """
         上料区
         :return:
         """
-        print('feed-position-btn')
-        self.send_msg('go_to_feed')
+        # 检查按钮是否被选中
+        if self.feed_position_ben.isChecked():
+            self.btn_color(self.feed_position_ben, 'red')
+            print('feed-position-btn')
+            self.send_msg('single_go_to_feed')
+        else:
+            self.btn_color(self.feed_position_ben, 'blue')
 
     def down_position(self):
         """
         下料区
         :return:
         """
-        print('feed-position-btn')
-        self.send_msg('go_to_unload')
+        # 检查按钮是否被选中
+        if self.down_position_btn.isChecked():
+            self.btn_color(self.down_position_btn, 'red')
+            print('go_to_unload')
+            self.send_msg('single_go_to_unload')
+        else:
+            self.btn_color(self.down_position_btn, 'blue')
+
+    def feed_complete(self):
+        """
+        上料完成
+        :return:
+        """
+        # 检查按钮是否被选中
+        if self.feed_complete_btn.isChecked():
+            self.btn_color(self.feed_complete_btn, 'red')
+            print('feed_complete')
+            self.send_msg('single_picking_finished')
+        else:
+            self.btn_color(self.feed_complete_btn, 'blue')
+
+    def unload_complete(self):
+        """
+        下料完成
+        :return:
+        """
+        # 检查按钮是否被选中
+        if self.unload_complete_btn.isChecked():
+            self.btn_color(self.unload_complete_btn, 'red')
+            print('unload_complete')
+            self.send_msg('single_placed_finished')
+        else:
+            self.btn_color(self.unload_complete_btn, 'blue')
 
     def open_camera(self):
         QApplication.processEvents()
@@ -306,21 +403,27 @@ class AGV_APP(AGV_Window, QMainWindow, QWidget):
 
     def camera_checked(self):
         """Bind camera switch"""
-        if not self.camera_status:
-            self.show_agv_camera()
-        else:
-            self.close_camera()
+        # try:
+        if not self.rbt_camera_status:
+
+            self.video_thread = VideoThread()
+            self.video_thread.frame_signal.connect(self.update_image)
+            self.video_thread.processed_frame_signal.connect(self.update_processed_image)
+            self.video_thread.start()
+            self.agv_camera_btn.setEnabled(False)
+
+        # except Exception as e:
+        #     print(str(e))
 
     def robot_camera_status(self):
         try:
             if not self.rbt_camera_status:
-                t = threading.Thread(target=self.show_feed_camera())
+                #t = threading.Thread(target=self.show_feed_camera)
                 print(self.rbt_camera_status)
-                t.start()
+                #t.start()
                 print(1)
             else:
                 print(2)
-                # self.robot_camera.setPixmap(None)
                 self.robot_camera.load(QUrl('about:blank'))
                 self.robot_camera.setZoomFactor(0.5)
                 # t.join()
@@ -329,62 +432,57 @@ class AGV_APP(AGV_Window, QMainWindow, QWidget):
             print(str(e))
 
     def show_feed_camera(self):
-        self.robot_camera.load(QUrl('http://192.168.11.191:200'))
-        # self.robot_camera.load(QUrl('http://www.baidu.com'))
+        self.robot_camera.show()
+        # self.label_camera1_depth.sh
+        self.robot_camera.load(QUrl('http://www.baidu.com'))
         self.robot_camera.setZoomFactor(1.0)
         # 将QWebEngineView控件的内容设置为QLabel控件的背景图片
         # self.robot_camera.setPixmap(self.web_view.grab().scaled(self.robot_camera.width(), self.robot_camera.height()))
         self.rbt_camera_status = True
 
     def show_agv_camera(self):
-        if not self.camera_status:
-            self.open_camera()
+        # self.agv_camera.show()
+        # self.label_2.show()
         try:
-            while self.camera_status:
-                _, frame = self.cap.read()
-                frame = cv2.resize(frame, (510, 360))
-                # deal img
-                QApplication.processEvents()
-                show = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-                # Convert the read video data into QImage format
-                showImage = QtGui.QImage(show.data, show.shape[1], show.shape[0], show.shape[1] * 3,
-                                         QtGui.QImage.Format_RGB888)
-                # Display the QImage in the Label that displays the video
-                self.agv_camera.setPixmap(QtGui.QPixmap.fromImage(showImage))
+            # time.sleep(0.2)
+            # t = threading.Timer(0.02,self.show_agv_camera)
+            # t.start()
+            pass
         except Exception as e:
-            print(str(e))
+            with open('error.log', 'a') as f:
+                f.write(e)
 
-    def show_camera_popup(self, event):
-        try:
-            self.camera_status = False
-            if event.button() == Qt.LeftButton:
-                enlarged_dialog = QDialog(self)
-                enlarged_label = QLabel(enlarged_dialog)
-                enlarged_label.setAlignment(Qt.AlignCenter)
-                enlarged_dialog.setWindowTitle("Enlarged Camera")
-                enlarged_dialog.setGeometry(300, 50, 1280, 960)
-                enlarged_label.setGeometry(0, 0, 1280, 960)
+    def camera_show(self):
+        self.agv_camera.show()
+        with open('error.log', 'a') as f:
+            f.write('logloglogloglgo')
+        while True:
+            log = 'start show camera'
+            rgb = self.capture_thread.new_color_frame
 
-                def on_close():
-                    self.camera_status = True
-                    print(self.camera_status)
-                    self.show_agv_camera()
+            rgb_show = QImage(rgb, rgb.shape[1], rgb.shape[0], QImage.Format_RGB888)
 
-                enlarged_dialog.finished.connect(on_close)
-                enlarged_dialog.show()
-                while True:
-                    ret, frame = self.cap.read()
-                    if ret:
-                        img = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-                        img = cv2.resize(img, (1280, 960))
-                        h, w, ch = img.shape
-                        bytesPerLine = ch * w
-                        qImg = QImage(img.data, w, h, bytesPerLine, QImage.Format_RGB888)
-                        pixmap = QPixmap.fromImage(qImg)
-                        enlarged_label.setPixmap(pixmap)
-                    QApplication.processEvents()
-        except Exception as e:
-            print(str(e))
+            pixmap_color = QPixmap(rgb_show)
+            pixmap_color = pixmap_color.scaled(320, 240, Qt.KeepAspectRatio)
+            with open('error.log', 'a') as f:
+                f.write(rgb)
+            self.agv_camera.setPixmap(pixmap_color)
+
+            time.sleep(0.5)
+
+    def show_camera_popup(self):
+        self.label_camera1_color.show()
+        self.label_camera1_depth.show()
+        while True:
+            rgb = self.r1.capture_thread.rgb_show
+            depth = self.r1.capture_thread.depth_show
+            rgb_show = QImage(rgb, rgb.shape[1], rgb.shape[0], QImage.Format_RGB888)
+            depth_show = QImage(depth, depth.shape[1], depth.shape[0], QImage.Format_RGB888)
+            pixmap_color = QPixmap(rgb_show)
+            pixmap_color = pixmap_color.scaled(320, 240, Qt.KeepAspectRatio)
+            self.label_camera1_color.setPixmap(pixmap_color)
+            self.label_camera1_depth.setPixmap(QPixmap.fromImage(depth_show))
+            time.sleep(0.5)
 
     def stop_wait(self, t):
         """Refresh the software screen in real time during the robot movement"""
@@ -416,7 +514,48 @@ class AGV_APP(AGV_Window, QMainWindow, QWidget):
                               "border-radius: 10px;\n"
                               "border: 2px groove gray;\n"
                               "border-style: outset;")
+        elif color == 'grey':
+            btn.setStyleSheet("background-color:rgb(41, 128, 185);\n"
+                              "background-color: rgb(218, 218, 218);\n"
+                              "color: rgb(255, 255, 255);\n"
+                              "border-radius: 10px;\n"
+                              "border: 2px groove gray;\n"
+                              "border-style: outset;")
 
+
+class VideoThread(QThread):
+    frame_signal = pyqtSignal(QImage)
+    processed_frame_signal = pyqtSignal(QImage)
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.running = False
+
+        self.capture_thread = VideoCaptureThread(Detector("apple"), Detector.FetchType.FETCH.value)
+        self.capture_thread.daemon = True
+        self.capture_thread.start()
+
+    def run(self):
+        self.running = True
+
+        while self.running:
+            try:
+                time.sleep((0.1))#需修改为标志位
+                # rgb转为qt图像
+                rgb = self.capture_thread.rgb_show
+                rgb_show = QImage(rgb, rgb.shape[1], rgb.shape[0], QImage.Format_RGB888)
+
+                # 发送rgb图像信号给主线程
+                self.frame_signal.emit(rgb_show)
+
+                # depth转为qt图像
+                depth = self.capture_thread.depth_show
+                depth_show = QImage(depth, depth.shape[1], depth.shape[0], QImage.Format_RGB888)
+
+                # 发送depth图像信号给主线程
+                self.processed_frame_signal.emit(depth_show)
+            except Exception as e:
+                print(str(e))
 
 # visit resource lib
 def resource_path(relative_path):
@@ -427,7 +566,6 @@ def resource_path(relative_path):
         base_path = os.path.abspath(".")
     return os.path.join(base_path, relative_path)
 
-
 if __name__ == '__main__':
     try:
         libraries_path = resource_path('libraries')
@@ -436,6 +574,7 @@ if __name__ == '__main__':
         app = QApplication(sys.argv)
         AGV_window = AGV_APP()
         AGV_window.show()
+
     except Exception as e:
         print(str(e))
     sys.exit(app.exec_())

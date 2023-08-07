@@ -1,8 +1,8 @@
 from ObTypes import *
 from Property import *
 from Error import ObException
-from CvDetection.utli import *
-from CvDetection.detection import Detector
+from utli import *
+from detection import Detector
 import Frame
 import Pipeline
 import StreamProfile
@@ -79,7 +79,7 @@ class VideoStreamPipe:
                 try:
                     # 根据指定的格式查找对应的Profile,优先选择Y16格式
                     videoProfile = profiles.getVideoStreamProfile(
-                        640, 0, OB_PY_FORMAT_Y16, 30
+                        320, 0, OB_PY_FORMAT_Y16, 30
                     )
                 except ObException as e:
                     print(
@@ -94,7 +94,7 @@ class VideoStreamPipe:
                     )
                     # 没找到Y16格式后不匹配格式查找对应的Profile进行开流
                     videoProfile = profiles.getVideoStreamProfile(
-                        640, 0, OB_PY_FORMAT_UNKNOWN, 30
+                        320, 0, OB_PY_FORMAT_UNKNOWN, 30
                     )
                 depthProfile = videoProfile.toConcreteStreamProfile(
                     OB_PY_STREAM_VIDEO)
@@ -175,13 +175,13 @@ class VideoStreamPipe:
                         depthData = depthFrame.data()
                         colorWidth = colorFrame.width()
                         colorHeight = colorFrame.height()
-                        # depthWidth = depthFrame.width()
-                        # depthHeight = depthFrame.height()
+                        depthWidth = depthFrame.width()
+                        depthHeight = depthFrame.height()
                         if colorSize != 0 and depthSize != 0:
                             newColorData = colorData
                             # 将彩色帧数据大小调整为(height,width,3)
                             newColorData.resize(
-                                (self.windowHeight, self.windowWidth, 3)
+                                (colorHeight,colorWidth, 3)
                             )
                             # newColorData = cv2.flip(newColorData,1)
                             # 将彩色帧数据BGR转RGB
@@ -190,7 +190,7 @@ class VideoStreamPipe:
                             
 
                             # 将深度帧数据大小调整为(height,width,2)
-                            depthData = np.resize(depthData, (400, 640, 2))
+                            depthData = np.resize(depthData, (depthHeight,depthWidth,2))
                             # # 分辨率不一致，多余的部分填0
                             # if colorHeight != depthHeight:
                             #     depthData[depthHeight:colorHeight-1,:]=0
@@ -261,7 +261,7 @@ def test():
             for obj in objs:
                 x = obj["x"]
                 y = obj["y"]
-                z = newDepthData[x - 40, y - 40]
+                z = newDepthData[int(y-40)/2,int(x-40)/2]
                 print(y - 40, x - 40, z)
         # 将深度帧数据16bit转8bit，用于渲染
         newDepthData = newDepthData.astype(np.uint8)
@@ -296,7 +296,7 @@ if __name__ == "__main__":
     vs = Detector("apple")
     while True:
         frame = vp.get_color_frame()
-        if frame is None():
+        if frame is None:
             continue
         else:
             # 在窗口中渲染一组帧数据，这里只渲染彩色帧
