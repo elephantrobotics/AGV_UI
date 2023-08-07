@@ -53,10 +53,12 @@ class AGV_APP(AGV_Window, QMainWindow, QWidget):
         self.feed_complete_btn.clicked.connect(self.feed_complete)
         self.unload_complete_btn.setCheckable(True)
         self.unload_complete_btn.clicked.connect(self.unload_complete)
+        self.language_btn.clicked.connect(self.set_language)  # set language
 
         self.agv_connect_btn.clicked.connect(self.connect)
 
         # self.agv_camera_btn.setEnabled(False)
+        self.agv_camera_btn.setEnabled(False)
         self.start_btn.setEnabled(False)
         self.puase_btn.setEnabled(False)
         self.feed_position_ben.setEnabled(False)
@@ -76,10 +78,19 @@ class AGV_APP(AGV_Window, QMainWindow, QWidget):
         self.camera_status = False
         self.rbt_camera_status = False
         self.pause_clicked = False
+        with open(libraries_path + f'/offset/language.txt', "r", encoding="utf-8") as f:
+            lange = f.read()
+        self.language = int(lange)  # Control language, 1 is English, 2 is Chinese
+        if self.language == 1:
+            self.btn_color(self.language_btn, 'green')
+        else:
+            self.btn_color(self.language_btn, 'blue')
+        self.is_language_btn_click = False
+
 
     # initialization status
     def _init_status(self):
-        pass
+        self._init_language()
 
     # Initialize window borders
     def _init_main_window(self):
@@ -255,6 +266,7 @@ class AGV_APP(AGV_Window, QMainWindow, QWidget):
                 self.client_socket.connect(server_address)
                 t = threading.Thread(target=self.get_res)
                 t.start()
+                QMessageBox.information(self, "提示", "连接成功", QMessageBox.Ok)
                 self.start_btn.setEnabled(True)
                 self.puase_btn.setEnabled(True)
                 self.feed_position_ben.setEnabled(True)
@@ -263,12 +275,18 @@ class AGV_APP(AGV_Window, QMainWindow, QWidget):
                 self.unload_complete_btn.setEnabled(True)
                 self.agv_connect_btn.setEnabled((False))
                 self.btn_color(self.agv_connect_btn, 'red')
-                QMessageBox.information(self, "提示", "连接成功", QMessageBox.Ok)
             else:
-                QMessageBox.information(self, "提示", "连接失败，请检查IP地址以及确认AGV已经启动服务端", QMessageBox.Ok)
+                if self.language == 1:
+                    QMessageBox.information(self, "prompt", "The connection failed, please check the IP address and confirm that the AGV has started the server", QMessageBox.Ok)
+                else:
+                    QMessageBox.information(self, "提示", "连接失败，请检查IP地址以及确认AGV已经启动服务端", QMessageBox.Ok)
+
         except Exception as e:
             print(str(e))
-            QMessageBox.information(self, "提示", "连接失败，请检查IP地址以及确认AGV已经启动服务端", QMessageBox.Ok)
+            if self.language == 1:
+                QMessageBox.information(self, "prompt", "The connection failed, please check the IP address and confirm that the AGV has started the server", QMessageBox.Ok)
+            else:
+                QMessageBox.information(self, "提示", "连接失败，请检查IP地址以及确认AGV已经启动服务端", QMessageBox.Ok)
 
     def send_msg(self, msg):
         # 向服务器发送数据
@@ -522,6 +540,67 @@ class AGV_APP(AGV_Window, QMainWindow, QWidget):
                               "border: 2px groove gray;\n"
                               "border-style: outset;")
 
+    def set_language(self):
+        try:
+            self.is_language_btn_click = True
+            if self.language == 1:
+                self.language = 2
+                self.btn_color(self.language_btn, 'blue')
+            else:
+                self.language = 1
+                self.btn_color(self.language_btn, 'green')
+            self._init_language()
+            self.is_language_btn_click = False
+            with open(rf'{libraries_path}/offset/language.txt', "w",
+                      encoding="utf-8") as file:
+                file.write(str(self.language))
+        except Exception as e:
+            print(str(e))
+
+    def _init_language(self):
+        _translate = QtCore.QCoreApplication.translate
+        if self.language == 1:
+            self.camera_lab_5.setText(_translate("AGV_UI", "Connect"))
+            self.language_btn.setText(_translate("AGV_UI", "简体中文"))
+            self.agv_ip.setText(_translate("AGV_UI", "IP"))
+            self.agv_port.setText(_translate("AGV_UI", "PORT"))
+            self.agv_connect_btn.setText(_translate("AGV_UI", "Connect"))
+            self.camera_lab.setText(_translate("AGV_UI", "Camera"))
+            self.agv_camera_btn.setText(_translate("AGV_UI", "AGV Camera"))
+            self.feed_camera.setText(_translate("AGV_UI", "Feed Camera"))
+            self.agv_con_lab.setText(_translate("AGV_UI", "AGV Control"))
+            self.start_btn.setText(_translate("AGV_UI", "Start"))
+            self.puase_btn.setText(_translate("AGV_UI", "Pause"))
+            self.position_con_lab.setText(_translate("AGV_UI", "Fixed Point Control"))
+            self.feed_position_ben.setText(_translate("AGV_UI", "Feeding area"))
+            self.down_position_btn.setText(_translate("AGV_UI", "Cutting area"))
+            self.feed_complete_btn.setText(_translate("AGV_UI", "Loading completed"))
+            self.unload_complete_btn.setText(_translate("AGV_UI", "Cutting completed"))
+            self.camera_lab_3.setToolTip(_translate("AGV_UI", "Enlarge the corresponding monitoring screen"))
+            self.camera_lab_4.setToolTip(_translate("AGV_UI", "Enlarge the corresponding monitoring screen"))
+            self.label.setText(_translate("AGV_UI", "Feed screen："))
+        elif self.language == 2:
+            self.camera_lab_5.setText(_translate("AGV_UI", "建立连接"))
+            self.language_btn.setText(_translate("AGV_UI", "English"))
+            self.agv_ip.setText(_translate("AGV_UI", "IP"))
+            self.agv_port.setText(_translate("AGV_UI", "PORT"))
+            self.agv_connect_btn.setText(_translate("AGV_UI", "连接"))
+            self.camera_lab.setText(_translate("AGV_UI", "摄像头"))
+            self.agv_camera_btn.setText(_translate("AGV_UI", "AGV摄像头"))
+            self.feed_camera.setText(_translate("AGV_UI", "上料区摄像头"))
+            self.agv_con_lab.setText(_translate("AGV_UI", "AGV控制"))
+            self.start_btn.setText(_translate("AGV_UI", "开始"))
+            self.puase_btn.setText(_translate("AGV_UI", "暂停"))
+            self.position_con_lab.setText(_translate("AGV_UI", "定点控制"))
+            self.feed_position_ben.setText(_translate("AGV_UI", "上料区"))
+            self.down_position_btn.setText(_translate("AGV_UI", "下料区"))
+            self.feed_complete_btn.setText(_translate("AGV_UI", "上料完成"))
+            self.unload_complete_btn.setText(_translate("AGV_UI", "下料完成"))
+            self.camera_lab_3.setToolTip(_translate("AGV_UI", "放大对应的监控画面"))
+            self.camera_lab_3.setText(_translate("AGV_UI", "AGV"))
+            self.camera_lab_4.setToolTip(_translate("AGV_UI", "放大对应的监控画面"))
+            self.camera_lab_4.setText(_translate("AGV_UI", "Sand Table"))
+            self.label.setText(_translate("AGV_UI", "上料区画面："))
 
 class VideoThread(QThread):
     frame_signal = pyqtSignal(QImage)

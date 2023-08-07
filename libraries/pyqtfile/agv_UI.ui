@@ -10,6 +10,12 @@
     <height>969</height>
    </rect>
   </property>
+  <property name="minimumSize">
+   <size>
+    <width>0</width>
+    <height>30</height>
+   </size>
+  </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
@@ -283,26 +289,59 @@ color: rgb(255, 255, 255);</string>
              <property name="styleSheet">
               <string notr="true">background-color: rgb(218, 218, 218);</string>
              </property>
-             <layout class="QVBoxLayout" name="verticalLayout_3" stretch="1,2,1,1,1,1,1,1,1,1,6">
+             <layout class="QVBoxLayout" name="verticalLayout_3" stretch="0,2,1,1,1,1,1,1,6">
               <property name="topMargin">
                <number>9</number>
               </property>
               <item>
-               <widget class="QLabel" name="camera_lab_5">
-                <property name="font">
-                 <font>
-                  <family>Arial</family>
-                  <pointsize>14</pointsize>
-                  <weight>75</weight>
-                  <bold>true</bold>
-                 </font>
-                </property>
-                <property name="styleSheet">
-                 <string notr="true">background-color: rgb(255, 255, 255，200);</string>
-                </property>
-                <property name="text">
-                 <string>建立连接</string>
-                </property>
+               <widget class="QWidget" name="widget_8" native="true">
+                <layout class="QHBoxLayout" name="horizontalLayout_7" stretch="7,3">
+                 <item>
+                  <widget class="QLabel" name="camera_lab_5">
+                   <property name="font">
+                    <font>
+                     <family>Arial</family>
+                     <pointsize>14</pointsize>
+                     <weight>75</weight>
+                     <bold>true</bold>
+                    </font>
+                   </property>
+                   <property name="styleSheet">
+                    <string notr="true">background-color: rgb(255, 255, 255，200);</string>
+                   </property>
+                   <property name="text">
+                    <string>建立连接</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="language_btn">
+                   <property name="minimumSize">
+                    <size>
+                     <width>0</width>
+                     <height>30</height>
+                    </size>
+                   </property>
+                   <property name="font">
+                    <font>
+                     <family>Arial</family>
+                     <weight>75</weight>
+                     <bold>true</bold>
+                    </font>
+                   </property>
+                   <property name="styleSheet">
+                    <string notr="true">background-color:rgb(41, 128, 185);
+color: rgb(255, 255, 255);
+border-radius: 10px;
+border: 2px groove gray;
+border-style: outset;</string>
+                   </property>
+                   <property name="text">
+                    <string>English</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
                </widget>
               </item>
               <item>
@@ -368,8 +407,6 @@ color: rgb(255, 255, 255);</string>
                         </widget>
                        </item>
                       </layout>
-                      <zorder>agv_ip</zorder>
-                      <zorder>agv_ip_text</zorder>
                      </widget>
                     </item>
                     <item>
@@ -773,7 +810,7 @@ border-style: outset;</string>
                      <number>20</number>
                     </property>
                     <item>
-                     <widget class="QPushButton" name="power_btn">
+                     <widget class="QPushButton" name="feed_complete_btn">
                       <property name="minimumSize">
                        <size>
                         <width>0</width>
@@ -798,7 +835,7 @@ border: 2px groove gray;
 border-style: outset;</string>
                       </property>
                       <property name="text">
-                       <string>充电区</string>
+                       <string>上料完成</string>
                       </property>
                      </widget>
                     </item>
@@ -806,115 +843,36 @@ border-style: outset;</string>
                      <widget class="QWidget" name="widget_11" native="true"/>
                     </item>
                     <item>
-                     <widget class="QWidget" name="widget_8" native="true"/>
+                     <widget class="QPushButton" name="unload_complete_btn">
+                      <property name="minimumSize">
+                       <size>
+                        <width>0</width>
+                        <height>30</height>
+                       </size>
+                      </property>
+                      <property name="font">
+                       <font>
+                        <family>Arial</family>
+                        <weight>75</weight>
+                        <bold>true</bold>
+                       </font>
+                      </property>
+                      <property name="cursor">
+                       <cursorShape>PointingHandCursor</cursorShape>
+                      </property>
+                      <property name="styleSheet">
+                       <string notr="true">background-color:rgb(41, 128, 185);
+color: rgb(255, 255, 255);
+border-radius: 10px;
+border: 2px groove gray;
+border-style: outset;</string>
+                      </property>
+                      <property name="text">
+                       <string>下料完成</string>
+                      </property>
+                     </widget>
                     </item>
                    </layout>
-                  </widget>
-                 </item>
-                </layout>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLabel" name="camera_lab_2">
-                <property name="font">
-                 <font>
-                  <family>Arial</family>
-                  <pointsize>14</pointsize>
-                  <weight>75</weight>
-                  <bold>true</bold>
-                 </font>
-                </property>
-                <property name="toolTip">
-                 <string>放大对应的监控画面</string>
-                </property>
-                <property name="styleSheet">
-                 <string notr="true">background-color: rgb(255, 255, 255，200);</string>
-                </property>
-                <property name="text">
-                 <string>画面监控</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QWidget" name="widget_12" native="true">
-                <property name="styleSheet">
-                 <string notr="true">background-color: rgb(236, 240, 241);
-border-radius: 15px;</string>
-                </property>
-                <layout class="QHBoxLayout" name="horizontalLayout_7" stretch="4,1,4">
-                 <property name="leftMargin">
-                  <number>20</number>
-                 </property>
-                 <property name="topMargin">
-                  <number>9</number>
-                 </property>
-                 <property name="rightMargin">
-                  <number>20</number>
-                 </property>
-                 <property name="bottomMargin">
-                  <number>9</number>
-                 </property>
-                 <item>
-                  <widget class="QPushButton" name="agv_camera_loog_btn">
-                   <property name="minimumSize">
-                    <size>
-                     <width>0</width>
-                     <height>30</height>
-                    </size>
-                   </property>
-                   <property name="font">
-                    <font>
-                     <family>Arial</family>
-                     <weight>75</weight>
-                     <bold>true</bold>
-                    </font>
-                   </property>
-                   <property name="cursor">
-                    <cursorShape>PointingHandCursor</cursorShape>
-                   </property>
-                   <property name="styleSheet">
-                    <string notr="true">background-color:rgb(41, 128, 185);
-color: rgb(255, 255, 255);
-border-radius: 10px;
-border: 2px groove gray;
-border-style: outset;</string>
-                   </property>
-                   <property name="text">
-                    <string>小车画面</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QWidget" name="widget_13" native="true"/>
-                 </item>
-                 <item>
-                  <widget class="QPushButton" name="feed_camera_look_btn">
-                   <property name="minimumSize">
-                    <size>
-                     <width>0</width>
-                     <height>30</height>
-                    </size>
-                   </property>
-                   <property name="font">
-                    <font>
-                     <family>Arial</family>
-                     <weight>75</weight>
-                     <bold>true</bold>
-                    </font>
-                   </property>
-                   <property name="cursor">
-                    <cursorShape>PointingHandCursor</cursorShape>
-                   </property>
-                   <property name="styleSheet">
-                    <string notr="true">background-color:rgb(41, 128, 185);
-color: rgb(255, 255, 255);
-border-radius: 10px;
-border: 2px groove gray;
-border-style: outset;</string>
-                   </property>
-                   <property name="text">
-                    <string>上料区画面</string>
-                   </property>
                   </widget>
                  </item>
                 </layout>
@@ -941,9 +899,9 @@ border-style: outset;</string>
                     <property name="geometry">
                      <rect>
                       <x>0</x>
-                      <y>50</y>
-                      <width>211</width>
-                      <height>71</height>
+                      <y>30</y>
+                      <width>231</width>
+                      <height>91</height>
                      </rect>
                     </property>
                     <property name="text">
@@ -1005,7 +963,7 @@ border-style: outset;</string>
              <property name="styleSheet">
               <string notr="true"/>
              </property>
-             <layout class="QVBoxLayout" name="verticalLayout_5" stretch="1,40,1,58">
+             <layout class="QVBoxLayout" name="verticalLayout_5" stretch="1,40">
               <item>
                <widget class="QLabel" name="label">
                 <property name="font">
@@ -1023,15 +981,8 @@ border-style: outset;</string>
               </item>
               <item>
                <widget class="QWidget" name="widget_16" native="true">
-                <layout class="QHBoxLayout" name="horizontalLayout_9" stretch="2,6,2">
-                 <item>
-                  <widget class="QLabel" name="label_2">
-                   <property name="text">
-                    <string/>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
+                <layout class="QGridLayout" name="gridLayout">
+                 <item row="0" column="1">
                   <widget class="QLabel" name="agv_camera">
                    <property name="styleSheet">
                     <string notr="true"/>
@@ -1041,53 +992,8 @@ border-style: outset;</string>
                    </property>
                   </widget>
                  </item>
-                 <item>
-                  <widget class="QLabel" name="label_4">
-                   <property name="text">
-                    <string/>
-                   </property>
-                  </widget>
-                 </item>
-                </layout>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLabel" name="label_3">
-                <property name="font">
-                 <font>
-                  <family>Arial</family>
-                  <pointsize>18</pointsize>
-                  <weight>75</weight>
-                  <bold>true</bold>
-                 </font>
-                </property>
-                <property name="text">
-                 <string>上料区画面：</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QWidget" name="widget_17" native="true">
-                <layout class="QHBoxLayout" name="horizontalLayout_10" stretch="1,8,1">
-                 <item>
-                  <widget class="QLabel" name="label_5">
-                   <property name="text">
-                    <string/>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QWebEngineView" name="robot_camera">
-                   <property name="styleSheet">
-                    <string notr="true">background-color: rgb(236, 240, 241);</string>
-                   </property>
-                   <property name="text">
-                    <string/>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QLabel" name="label_7">
+                 <item row="0" column="0">
+                  <widget class="QLabel" name="label_2">
                    <property name="text">
                     <string/>
                    </property>
@@ -1109,13 +1015,6 @@ border-style: outset;</string>
    </layout>
   </widget>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>QWebEngineView</class>
-   <extends>QLabel</extends>
-   <header>qwebengineview.h</header>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>
