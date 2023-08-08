@@ -36,10 +36,8 @@ class AGV_APP(AGV_Window, QMainWindow, QWidget):
         self.min_btn.clicked.connect(self.min_clicked)  # minimize
         self.max_btn.clicked.connect(self.max_clicked)
         self.close_btn.clicked.connect(self.close_clicked)  # close
-
-        self.agv_camera_btn.clicked.connect(self.camera_checked)  # feed camera color and depth
-
-        # self.feed_camera.clicked.connect(self.robot_camera_status)
+        #self.agv_camera_btn.clicked.connect(self.camera_checked)  
+        self.feed_camera.clicked.connect(self.robot_camera_status)# feed camera color and depth
         # self.agv_camera.mousePressEvent = self.show_camera_popup
         self.start_btn.setCheckable(True)
         self.start_btn.clicked.connect(self.start_run)
@@ -266,7 +264,10 @@ class AGV_APP(AGV_Window, QMainWindow, QWidget):
                 self.client_socket.connect(server_address)
                 t = threading.Thread(target=self.get_res)
                 t.start()
-                QMessageBox.information(self, "提示", "连接成功", QMessageBox.Ok)
+                if self.language == 1:
+                    QMessageBox.information(self, "communication", "Successfully connected", QMessageBox.Ok)
+                else:
+                    QMessageBox.information(self, "提示", "连接成功", QMessageBox.Ok)
                 self.start_btn.setEnabled(True)
                 self.puase_btn.setEnabled(True)
                 self.feed_position_ben.setEnabled(True)
@@ -420,34 +421,27 @@ class AGV_APP(AGV_Window, QMainWindow, QWidget):
             print(str(e))
 
     def camera_checked(self):
+        pass
         """Bind camera switch"""
         # try:
-        if not self.rbt_camera_status:
+        # if not self.rbt_camera_status:
 
-            self.video_thread = VideoThread()
-            self.video_thread.frame_signal.connect(self.update_image)
-            self.video_thread.processed_frame_signal.connect(self.update_processed_image)
-            self.video_thread.start()
-            self.agv_camera_btn.setEnabled(False)
+        #     self.video_thread = VideoThread()
+        #     self.video_thread.frame_signal.connect(self.update_image)
+        #     self.video_thread.processed_frame_signal.connect(self.update_processed_image)
+        #     self.video_thread.start()
+        #     self.agv_camera_btn.setEnabled(False)
 
         # except Exception as e:
         #     print(str(e))
 
     def robot_camera_status(self):
-        try:
-            if not self.rbt_camera_status:
-                #t = threading.Thread(target=self.show_feed_camera)
-                print(self.rbt_camera_status)
-                #t.start()
-                print(1)
-            else:
-                print(2)
-                self.robot_camera.load(QUrl('about:blank'))
-                self.robot_camera.setZoomFactor(0.5)
-                # t.join()
-                self.rbt_camera_status = False
-        except Exception as e:
-            print(str(e))
+        if not self.rbt_camera_status:
+            self.video_thread = VideoThread()
+            self.video_thread.frame_signal.connect(self.update_image)
+            self.video_thread.processed_frame_signal.connect(self.update_processed_image)
+            self.video_thread.start()
+            self.feed_camera.setEnabled(False)
 
     def show_feed_camera(self):
         self.robot_camera.show()
