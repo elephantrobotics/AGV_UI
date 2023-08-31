@@ -217,11 +217,11 @@ class Ui_myAGV(object):
 
         self.horizontalLayout_slider.addWidget(self.label_7)
 
-        self.horizontalSlider = QSlider(self.sidebar)
-        self.horizontalSlider.setObjectName(u"horizontalSlider")
-        self.horizontalSlider.setOrientation(Qt.Horizontal)
+        self.horizontal_Slider = QSlider(self.sidebar)
+        self.horizontal_Slider.setObjectName(u"horizontal_Slider")
+        self.horizontal_Slider.setOrientation(Qt.Horizontal)
 
-        self.horizontalLayout_slider.addWidget(self.horizontalSlider)
+        self.horizontalLayout_slider.addWidget(self.horizontal_Slider)
 
         self.label_8 = QLabel(self.sidebar)
         self.label_8.setObjectName(u"label_8")

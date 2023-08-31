@@ -1,0 +1,41 @@
+
+QPushButton{
+    background-color:rgb(230,230,230);
+    width: 50px;
+    height: 32px;
+    border: 1px solid grey;
+    border-radius:10px;
+}
+
+QComboBox{
+    background-color:rgb(230,230,230);
+    /* width: 50px; */
+    height: 32px;
+    border: 1px solid grey;
+}
+
+
+
+
+#radar_button:checked{
+    background-color:rgb(126, 170, 146);
+    border:none;
+   border-radius:10px;
+}
+
+#open_build_map:checked{
+    background-color:rgb(215, 19, 19);
+    border:none;
+   border-radius:10px;
+}
+
+#navigation_3d_button:checked{
+    background-color:rgb(215, 19, 19);
+    border:none;
+
+}
+
+#navigation_button:checked{
+    background-color:rgb(215, 19, 19);
+    border:none;
+}
