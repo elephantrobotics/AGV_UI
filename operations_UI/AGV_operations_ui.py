@@ -24,20 +24,20 @@ class Ui_myAGV(object):
     def setupUi(self, myAGV):
         if not myAGV.objectName():
             myAGV.setObjectName(u"myAGV")
-        myAGV.resize(869, 706)
+        myAGV.resize(869, 656)
         self.verticalLayout_8 = QVBoxLayout(myAGV)
         self.verticalLayout_8.setObjectName(u"verticalLayout_8")
         self.widget = QWidget(myAGV)
         self.widget.setObjectName(u"widget")
         self.horizontalLayout_17 = QHBoxLayout(self.widget)
         self.horizontalLayout_17.setObjectName(u"horizontalLayout_17")
+        self.horizontalLayout_17.setContentsMargins(2, 2, 2, 2)
         self.sidebar = QFrame(self.widget)
         self.sidebar.setObjectName(u"sidebar")
         self.sidebar.setFrameShape(QFrame.StyledPanel)
         self.sidebar.setFrameShadow(QFrame.Raised)
-        self.verticalLayout_13 = QVBoxLayout(self.sidebar)
-        self.verticalLayout_13.setObjectName(u"verticalLayout_13")
-        self.verticalLayout_13.setContentsMargins(-1, 8, -1, 0)
+        self.verticalLayout_11 = QVBoxLayout(self.sidebar)
+        self.verticalLayout_11.setObjectName(u"verticalLayout_11")
         self.verticalLayout_language = QVBoxLayout()
         self.verticalLayout_language.setObjectName(u"verticalLayout_language")
         self.horizontalLayout_language = QHBoxLayout()
@@ -73,15 +73,29 @@ class Ui_myAGV(object):
         self.verticalLayout_language.addLayout(self.horizontalLayout_radar)
 
 
-        self.verticalLayout_13.addLayout(self.verticalLayout_language)
+        self.verticalLayout_11.addLayout(self.verticalLayout_language)
 
-        self.verticalLayout_basic = QVBoxLayout()
-        self.verticalLayout_basic.setObjectName(u"verticalLayout_basic")
+        self.verticalSpacer_5 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+
+        self.verticalLayout_11.addItem(self.verticalSpacer_5)
+
+        self.verticalLayout_4 = QVBoxLayout()
+        self.verticalLayout_4.setObjectName(u"verticalLayout_4")
+        self.horizontalLayout_3 = QHBoxLayout()
+        self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
         self.basic_control = QLabel(self.sidebar)
         self.basic_control.setObjectName(u"basic_control")
         self.basic_control.setStyleSheet(u"font: 13pt \"Arial\";")
 
-        self.verticalLayout_basic.addWidget(self.basic_control)
+        self.horizontalLayout_3.addWidget(self.basic_control)
+
+        self.widget_2 = QWidget(self.sidebar)
+        self.widget_2.setObjectName(u"widget_2")
+
+        self.horizontalLayout_3.addWidget(self.widget_2)
+
+
+        self.verticalLayout_4.addLayout(self.horizontalLayout_3)
 
         self.horizontalLayout_basic = QHBoxLayout()
         self.horizontalLayout_basic.setObjectName(u"horizontalLayout_basic")
@@ -96,10 +110,14 @@ class Ui_myAGV(object):
         self.horizontalLayout_basic.addWidget(self.basic_control_selection)
 
 
-        self.verticalLayout_basic.addLayout(self.horizontalLayout_basic)
+        self.verticalLayout_4.addLayout(self.horizontalLayout_basic)
 
 
-        self.verticalLayout_13.addLayout(self.verticalLayout_basic)
+        self.verticalLayout_11.addLayout(self.verticalLayout_4)
+
+        self.verticalSpacer_6 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+
+        self.verticalLayout_11.addItem(self.verticalSpacer_6)
 
         self.verticalLayout_map = QVBoxLayout()
         self.verticalLayout_map.setObjectName(u"verticalLayout_map")
@@ -150,15 +168,29 @@ class Ui_myAGV(object):
         self.verticalLayout_map.addLayout(self.horizontalLayout_nav)
 
 
-        self.verticalLayout_13.addLayout(self.verticalLayout_map)
+        self.verticalLayout_11.addLayout(self.verticalLayout_map)
 
-        self.verticalLayout_led = QVBoxLayout()
-        self.verticalLayout_led.setObjectName(u"verticalLayout_led")
+        self.verticalSpacer_4 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+
+        self.verticalLayout_11.addItem(self.verticalSpacer_4)
+
+        self.verticalLayout_9 = QVBoxLayout()
+        self.verticalLayout_9.setObjectName(u"verticalLayout_9")
+        self.horizontalLayout_2 = QHBoxLayout()
+        self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
         self.label_4 = QLabel(self.sidebar)
         self.label_4.setObjectName(u"label_4")
         self.label_4.setStyleSheet(u"font: 13pt \"Arial\";")
 
-        self.verticalLayout_led.addWidget(self.label_4)
+        self.horizontalLayout_2.addWidget(self.label_4)
+
+        self.widget_3 = QWidget(self.sidebar)
+        self.widget_3.setObjectName(u"widget_3")
+
+        self.horizontalLayout_2.addWidget(self.widget_3)
+
+
+        self.verticalLayout_9.addLayout(self.horizontalLayout_2)
 
         self.horizontalLayout_palette = QHBoxLayout()
         self.horizontalLayout_palette.setObjectName(u"horizontalLayout_palette")
@@ -183,6 +215,11 @@ class Ui_myAGV(object):
 
         self.lineEdit_HEX = QLineEdit(self.sidebar)
         self.lineEdit_HEX.setObjectName(u"lineEdit_HEX")
+        sizePolicy1 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+        sizePolicy1.setHorizontalStretch(0)
+        sizePolicy1.setVerticalStretch(0)
+        sizePolicy1.setHeightForWidth(self.lineEdit_HEX.sizePolicy().hasHeightForWidth())
+        self.lineEdit_HEX.setSizePolicy(sizePolicy1)
 
         self.horizontalLayout_7.addWidget(self.lineEdit_HEX)
 
@@ -207,8 +244,10 @@ class Ui_myAGV(object):
 
         self.horizontalLayout_palette.addLayout(self.verticalLayout)
 
+        self.horizontalLayout_palette.setStretch(0, 1)
+        self.horizontalLayout_palette.setStretch(1, 1)
 
-        self.verticalLayout_led.addLayout(self.horizontalLayout_palette)
+        self.verticalLayout_9.addLayout(self.horizontalLayout_palette)
 
         self.horizontalLayout_slider = QHBoxLayout()
         self.horizontalLayout_slider.setObjectName(u"horizontalLayout_slider")
@@ -229,18 +268,32 @@ class Ui_myAGV(object):
         self.horizontalLayout_slider.addWidget(self.label_8)
 
 
-        self.verticalLayout_led.addLayout(self.horizontalLayout_slider)
+        self.verticalLayout_9.addLayout(self.horizontalLayout_slider)
 
 
-        self.verticalLayout_13.addLayout(self.verticalLayout_led)
+        self.verticalLayout_11.addLayout(self.verticalLayout_9)
 
-        self.verticalLayout_test = QVBoxLayout()
-        self.verticalLayout_test.setObjectName(u"verticalLayout_test")
+        self.verticalSpacer_3 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+
+        self.verticalLayout_11.addItem(self.verticalSpacer_3)
+
+        self.verticalLayout_10 = QVBoxLayout()
+        self.verticalLayout_10.setObjectName(u"verticalLayout_10")
+        self.horizontalLayout = QHBoxLayout()
+        self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.label_9 = QLabel(self.sidebar)
         self.label_9.setObjectName(u"label_9")
         self.label_9.setStyleSheet(u"font: 13pt \"Arial\";")
 
-        self.verticalLayout_test.addWidget(self.label_9)
+        self.horizontalLayout.addWidget(self.label_9)
+
+        self.widget_4 = QWidget(self.sidebar)
+        self.widget_4.setObjectName(u"widget_4")
+
+        self.horizontalLayout.addWidget(self.widget_4)
+
+
+        self.verticalLayout_10.addLayout(self.horizontalLayout)
 
         self.horizontalLayout_11 = QHBoxLayout()
         self.horizontalLayout_11.setObjectName(u"horizontalLayout_11")
@@ -255,10 +308,10 @@ class Ui_myAGV(object):
         self.horizontalLayout_11.addWidget(self.comboBox_testing)
 
 
-        self.verticalLayout_test.addLayout(self.horizontalLayout_11)
+        self.verticalLayout_10.addLayout(self.horizontalLayout_11)
 
 
-        self.verticalLayout_13.addLayout(self.verticalLayout_test)
+        self.verticalLayout_11.addLayout(self.verticalLayout_10)
 
 
         self.horizontalLayout_17.addWidget(self.sidebar)
@@ -269,12 +322,14 @@ class Ui_myAGV(object):
         self.interface_2.setFrameShadow(QFrame.Raised)
         self.verticalLayout_6 = QVBoxLayout(self.interface_2)
         self.verticalLayout_6.setObjectName(u"verticalLayout_6")
+        self.verticalLayout_6.setContentsMargins(8, 0, 0, 2)
         self.area_log = QFrame(self.interface_2)
         self.area_log.setObjectName(u"area_log")
         self.area_log.setFrameShape(QFrame.StyledPanel)
         self.area_log.setFrameShadow(QFrame.Raised)
         self.horizontalLayout_20 = QHBoxLayout(self.area_log)
         self.horizontalLayout_20.setObjectName(u"horizontalLayout_20")
+        self.horizontalLayout_20.setContentsMargins(2, 2, 2, 2)
         self.textBrowser = QTextBrowser(self.area_log)
         self.textBrowser.setObjectName(u"textBrowser")
 
@@ -303,8 +358,10 @@ class Ui_myAGV(object):
         self.area_display.setFrameShadow(QFrame.Raised)
         self.verticalLayout_7 = QVBoxLayout(self.area_display)
         self.verticalLayout_7.setObjectName(u"verticalLayout_7")
+        self.verticalLayout_7.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_5 = QVBoxLayout()
         self.verticalLayout_5.setObjectName(u"verticalLayout_5")
+        self.verticalLayout_5.setContentsMargins(-1, 8, 6, 7)
         self.horizontalLayout_ipAddress = QHBoxLayout()
         self.horizontalLayout_ipAddress.setObjectName(u"horizontalLayout_ipAddress")
         self.IP_address = QLabel(self.area_display)
@@ -360,11 +417,11 @@ class Ui_myAGV(object):
 
         self.lineEdit_power = QLineEdit(self.area_display)
         self.lineEdit_power.setObjectName(u"lineEdit_power")
-        sizePolicy1 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
-        sizePolicy1.setHorizontalStretch(0)
-        sizePolicy1.setVerticalStretch(0)
-        sizePolicy1.setHeightForWidth(self.lineEdit_power.sizePolicy().hasHeightForWidth())
-        self.lineEdit_power.setSizePolicy(sizePolicy1)
+        sizePolicy2 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
+        sizePolicy2.setHorizontalStretch(0)
+        sizePolicy2.setVerticalStretch(0)
+        sizePolicy2.setHeightForWidth(self.lineEdit_power.sizePolicy().hasHeightForWidth())
+        self.lineEdit_power.setSizePolicy(sizePolicy2)
         self.lineEdit_power.setMaximumSize(QSize(120, 16777215))
 
         self.horizontalLayout_9.addWidget(self.lineEdit_power)
@@ -629,9 +686,9 @@ class Ui_myAGV(object):
         myAGV.setWindowTitle(QCoreApplication.translate("myAGV", u"Form", None))
         self.label_language.setText(QCoreApplication.translate("myAGV", u"language", None))
         self.label_radar.setText(QCoreApplication.translate("myAGV", u"Laser Radar", None))
-        self.radar_button.setText(QCoreApplication.translate("myAGV", u"off", None))
+        self.radar_button.setText(QCoreApplication.translate("myAGV", u"on", None))
         self.basic_control.setText(QCoreApplication.translate("myAGV", u"Basic Control", None))
-        self.basic_control_button.setText(QCoreApplication.translate("myAGV", u"off", None))
+        self.basic_control_button.setText(QCoreApplication.translate("myAGV", u"on", None))
         self.label_map_nav.setText(QCoreApplication.translate("myAGV", u"Map Navigation", None))
         self.save_map_button.setText(QCoreApplication.translate("myAGV", u"Save Map", None))
         self.open_build_map.setText(QCoreApplication.translate("myAGV", u"Open Build Map", None))
@@ -646,25 +703,25 @@ class Ui_myAGV(object):
         self.start_detection_button.setText(QCoreApplication.translate("myAGV", u"Start Detection", None))
         self.log_clear.setText(QCoreApplication.translate("myAGV", u"clear", None))
         self.IP_address.setText(QCoreApplication.translate("myAGV", u"IP Address", None))
-        self.status_battery_main.setText(QCoreApplication.translate("myAGV", u"TextLabel", None))
+        self.status_battery_main.setText("")
         self.main_battery.setText(QCoreApplication.translate("myAGV", u"Main Battery", None))
         self.electricity_main.setText(QCoreApplication.translate("myAGV", u"Power", None))
         self.voltage.setText(QCoreApplication.translate("myAGV", u"Voltage", None))
         self.eletricity.setText(QCoreApplication.translate("myAGV", u"Electricity", None))
-        self.status_battery_backup.setText(QCoreApplication.translate("myAGV", u"TextLabel", None))
+        self.status_battery_backup.setText("")
         self.backup_battery.setText(QCoreApplication.translate("myAGV", u"Backup Battery", None))
         self.power_backup.setText(QCoreApplication.translate("myAGV", u"Power", None))
         self.voltage_backup.setText(QCoreApplication.translate("myAGV", u"Voltage", None))
         self.eletricity_backup.setText(QCoreApplication.translate("myAGV", u"Electricity", None))
-        self.status_motor_1.setText(QCoreApplication.translate("myAGV", u"TextLabel", None))
+        self.status_motor_1.setText("")
         self.motor_1.setText(QCoreApplication.translate("myAGV", u"Motor 1", None))
-        self.status_motor_2.setText(QCoreApplication.translate("myAGV", u"TextLabel", None))
+        self.status_motor_2.setText("")
         self.motor_2.setText(QCoreApplication.translate("myAGV", u"Motor 2", None))
-        self.status_motor_3.setText(QCoreApplication.translate("myAGV", u"TextLabel", None))
+        self.status_motor_3.setText("")
         self.motor_3.setText(QCoreApplication.translate("myAGV", u"Motor 3", None))
-        self.status_motor_4.setText(QCoreApplication.translate("myAGV", u"TextLabel", None))
+        self.status_motor_4.setText("")
         self.motor_4.setText(QCoreApplication.translate("myAGV", u"motor 4", None))
-        self.status_radar.setText(QCoreApplication.translate("myAGV", u"TextLabel", None))
+        self.status_radar.setText("")
         self.Radar.setText(QCoreApplication.translate("myAGV", u"Radar", None))
     # retranslateUi
 

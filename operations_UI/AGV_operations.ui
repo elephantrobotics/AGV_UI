@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>869</width>
-    <height>706</height>
+    <height>656</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,6 +17,18 @@
    <item>
     <widget class="QWidget" name="widget" native="true">
      <layout class="QHBoxLayout" name="horizontalLayout_17" stretch="1,3">
+      <property name="leftMargin">
+       <number>2</number>
+      </property>
+      <property name="topMargin">
+       <number>2</number>
+      </property>
+      <property name="rightMargin">
+       <number>2</number>
+      </property>
+      <property name="bottomMargin">
+       <number>2</number>
+      </property>
       <item>
        <widget class="QFrame" name="sidebar">
         <property name="frameShape">
@@ -25,13 +37,7 @@
         <property name="frameShadow">
          <enum>QFrame::Raised</enum>
         </property>
-        <layout class="QVBoxLayout" name="verticalLayout_13">
-         <property name="topMargin">
-          <number>8</number>
-         </property>
-         <property name="bottomMargin">
-          <number>0</number>
-         </property>
+        <layout class="QVBoxLayout" name="verticalLayout_11">
          <item>
           <layout class="QVBoxLayout" name="verticalLayout_language">
            <item>
@@ -66,7 +72,7 @@
              <item>
               <widget class="QPushButton" name="radar_button">
                <property name="text">
-                <string>off</string>
+                <string>on</string>
                </property>
               </widget>
              </item>
@@ -75,23 +81,43 @@
           </layout>
          </item>
          <item>
-          <layout class="QVBoxLayout" name="verticalLayout_basic">
+          <spacer name="verticalSpacer_5">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_4">
            <item>
-            <widget class="QLabel" name="basic_control">
-             <property name="styleSheet">
-              <string notr="true">font: 13pt &quot;Arial&quot;;</string>
-             </property>
-             <property name="text">
-              <string>Basic Control</string>
-             </property>
-            </widget>
+            <layout class="QHBoxLayout" name="horizontalLayout_3">
+             <item>
+              <widget class="QLabel" name="basic_control">
+               <property name="styleSheet">
+                <string notr="true">font: 13pt &quot;Arial&quot;;</string>
+               </property>
+               <property name="text">
+                <string>Basic Control</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QWidget" name="widget_2" native="true"/>
+             </item>
+            </layout>
            </item>
            <item>
             <layout class="QHBoxLayout" name="horizontalLayout_basic">
              <item>
               <widget class="QPushButton" name="basic_control_button">
                <property name="text">
-                <string>off</string>
+                <string>on</string>
                </property>
               </widget>
              </item>
@@ -101,6 +127,19 @@
             </layout>
            </item>
           </layout>
+         </item>
+         <item>
+          <spacer name="verticalSpacer_6">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
          </item>
          <item>
           <layout class="QVBoxLayout" name="verticalLayout_map">
@@ -160,19 +199,39 @@
           </layout>
          </item>
          <item>
-          <layout class="QVBoxLayout" name="verticalLayout_led">
+          <spacer name="verticalSpacer_4">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_9">
            <item>
-            <widget class="QLabel" name="label_4">
-             <property name="styleSheet">
-              <string notr="true">font: 13pt &quot;Arial&quot;;</string>
-             </property>
-             <property name="text">
-              <string>LED Control</string>
-             </property>
-            </widget>
+            <layout class="QHBoxLayout" name="horizontalLayout_2">
+             <item>
+              <widget class="QLabel" name="label_4">
+               <property name="styleSheet">
+                <string notr="true">font: 13pt &quot;Arial&quot;;</string>
+               </property>
+               <property name="text">
+                <string>LED Control</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QWidget" name="widget_3" native="true"/>
+             </item>
+            </layout>
            </item>
            <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_palette">
+            <layout class="QHBoxLayout" name="horizontalLayout_palette" stretch="1,1">
              <item>
               <widget class="QTextEdit" name="color_palette">
                <property name="sizePolicy">
@@ -195,7 +254,14 @@
                   </widget>
                  </item>
                  <item>
-                  <widget class="QLineEdit" name="lineEdit_HEX"/>
+                  <widget class="QLineEdit" name="lineEdit_HEX">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                  </widget>
                  </item>
                 </layout>
                </item>
@@ -245,16 +311,36 @@
           </layout>
          </item>
          <item>
-          <layout class="QVBoxLayout" name="verticalLayout_test">
+          <spacer name="verticalSpacer_3">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_10">
            <item>
-            <widget class="QLabel" name="label_9">
-             <property name="styleSheet">
-              <string notr="true">font: 13pt &quot;Arial&quot;;</string>
-             </property>
-             <property name="text">
-              <string>Test</string>
-             </property>
-            </widget>
+            <layout class="QHBoxLayout" name="horizontalLayout">
+             <item>
+              <widget class="QLabel" name="label_9">
+               <property name="styleSheet">
+                <string notr="true">font: 13pt &quot;Arial&quot;;</string>
+               </property>
+               <property name="text">
+                <string>Test</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QWidget" name="widget_4" native="true"/>
+             </item>
+            </layout>
            </item>
            <item>
             <layout class="QHBoxLayout" name="horizontalLayout_11">
@@ -284,6 +370,18 @@
          <enum>QFrame::Raised</enum>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_6" stretch="2,1">
+         <property name="leftMargin">
+          <number>8</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>2</number>
+         </property>
          <item>
           <widget class="QFrame" name="area_log">
            <property name="frameShape">
@@ -293,6 +391,18 @@
             <enum>QFrame::Raised</enum>
            </property>
            <layout class="QHBoxLayout" name="horizontalLayout_20">
+            <property name="leftMargin">
+             <number>2</number>
+            </property>
+            <property name="topMargin">
+             <number>2</number>
+            </property>
+            <property name="rightMargin">
+             <number>2</number>
+            </property>
+            <property name="bottomMargin">
+             <number>2</number>
+            </property>
             <item>
              <widget class="QTextBrowser" name="textBrowser"/>
             </item>
@@ -332,8 +442,29 @@
             <enum>QFrame::Raised</enum>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_7">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
             <item>
              <layout class="QVBoxLayout" name="verticalLayout_5">
+              <property name="topMargin">
+               <number>8</number>
+              </property>
+              <property name="rightMargin">
+               <number>6</number>
+              </property>
+              <property name="bottomMargin">
+               <number>7</number>
+              </property>
               <item>
                <layout class="QHBoxLayout" name="horizontalLayout_ipAddress">
                 <item>
@@ -399,7 +530,7 @@
 border: 1px solid</string>
                       </property>
                       <property name="text">
-                       <string>TextLabel</string>
+                       <string/>
                       </property>
                      </widget>
                     </item>
@@ -519,7 +650,7 @@ border: 1px solid</string>
 border: 1px solid</string>
                       </property>
                       <property name="text">
-                       <string>TextLabel</string>
+                       <string/>
                       </property>
                      </widget>
                     </item>
@@ -633,7 +764,7 @@ border: 1px solid</string>
 border: 1px solid</string>
                       </property>
                       <property name="text">
-                       <string>TextLabel</string>
+                       <string/>
                       </property>
                      </widget>
                     </item>
@@ -667,7 +798,7 @@ border: 1px solid</string>
 border: 1px solid</string>
                       </property>
                       <property name="text">
-                       <string>TextLabel</string>
+                       <string/>
                       </property>
                      </widget>
                     </item>
@@ -701,7 +832,7 @@ border: 1px solid</string>
 border: 1px solid</string>
                       </property>
                       <property name="text">
-                       <string>TextLabel</string>
+                       <string/>
                       </property>
                      </widget>
                     </item>
@@ -735,7 +866,7 @@ border: 1px solid</string>
 border: 1px solid</string>
                       </property>
                       <property name="text">
-                       <string>TextLabel</string>
+                       <string/>
                       </property>
                      </widget>
                     </item>
@@ -786,7 +917,7 @@ border: 1px solid</string>
 border: 1px solid</string>
                       </property>
                       <property name="text">
-                       <string>TextLabel</string>
+                       <string/>
                       </property>
                      </widget>
                     </item>

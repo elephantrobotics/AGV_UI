@@ -7,7 +7,7 @@ import traceback
 import socket
 
 from PySide6.QtCore import Signal, QCoreApplication, QObject, QThread
-from PySide6.QtWidgets import QWidget, QApplication, QMessageBox, QFileDialog, QPushButton, QSizePolicy
+from PySide6.QtWidgets import QWidget, QApplication, QMessageBox, QFileDialog, QPushButton, QSizePolicy,QLabel
 # from PySide6.QtCore import Qdia
 from PySide6.QtGui import QColor
 from operations_UI.AGV_operations_ui import Ui_myAGV
@@ -21,7 +21,6 @@ if os.name == "posix":
 
 lock = False
 
-
 class MyWidget(QWidget):
 
     def __init__(self):
@@ -34,7 +33,8 @@ class MyWidget(QWidget):
 
         self.led_default = [255, 0, 0]  # red light
 
-        self.myagv = MyAgv("/dev/ttyAMA2", 115200)
+        self.myagv=None
+        # self.myagv = MyAgv("/dev/ttyAMA2", 115200)
         self.st=None
         with open('style.qss', 'r') as qss_file:
             qss = qss_file.read()
@@ -53,7 +53,7 @@ class MyWidget(QWidget):
 
         self.label_color = QWidget()
 
-        color = ColorCircle(self, [255, 255, 255])
+        color = ColorCircle(self, [255, 0, 0])
 
         label_policy = QSizePolicy(QSizePolicy.Preferred,
                                    QSizePolicy.Preferred)
@@ -78,6 +78,9 @@ class MyWidget(QWidget):
     def ui_set(self):
 
         def ui_params():
+            """
+            set selection choices and style
+            """
             language_params = [
                 self.tr("English"),
                 self.tr("Chinese")
@@ -113,6 +116,18 @@ class MyWidget(QWidget):
             self.ui.lineEdit_electricity.setVisible(False)
             self.ui.lineEdit_electricity_backup.setVisible(False)
 
+            self.ui.horizontalLayout_basic.setStretch(1,1) #set the basic button
+
+            self.ui.lineEdit_HEX.setVisible(False)
+            self.ui.lineEdit_RGB.setVisible(False)
+
+            self.hex=QLabel("")
+            self.rgb=QLabel("")
+
+            self.ui.horizontalLayout_7.addWidget(self.hex)
+            self.ui.horizontalLayout_8.addWidget(self.rgb)
+            #
+
         def ui_buttons():
             self.ui.radar_button.setCheckable(True)
             self.ui.radar_button.setChecked(True)
@@ -131,7 +146,7 @@ class MyWidget(QWidget):
             self.ui.start_detection_button.toggle()
 
             self.ui.status_radar.setStyleSheet("""
-                background-color:green;
+                background-color:grey;
                 border-radius: 9px;
                 border: 1px solid
                 """)
@@ -149,8 +164,8 @@ class MyWidget(QWidget):
 
             self.ui.log_clear.clicked.connect(self.clear_log)
 
-            self.ui.lineEdit_RGB.setReadOnly(True)
-            self.ui.lineEdit_HEX.setReadOnly(True)
+            # self.ui.lineEdit_RGB.setReadOnly(True)
+            # self.ui.lineEdit_HEX.setReadOnly(True)
             self.ui.horizontal_Slider.setRange(0, 511)
             self.ui.horizontal_Slider.setValue(511)
 
@@ -177,6 +192,9 @@ class MyWidget(QWidget):
         current_time = self.get_current_time()
         self.msg_log("Finishe " + item + " testing", current_time)
 
+        if item=="LED":
+            self.myagv.set_led(1,255,0,0)
+
         self.ui.start_detection_button.setText("Start Detection")
         self.ui.comboBox_testing.setDisabled(False)
         self.button_status_switch(True)
@@ -194,6 +212,8 @@ class MyWidget(QWidget):
 
         hex = color.name()
 
+        self.hex.setText(hex)
+        self.rgb.setText(rgb_color)
         self.ui.lineEdit_HEX.setText(hex)
         self.ui.lineEdit_RGB.setText(rgb_color)
 
@@ -259,7 +279,6 @@ class MyWidget(QWidget):
                 radar_open = threading.Thread(target=self.radar_open, daemon=True)
                 radar_open.start()
                 self.radar_flag = True
-
                 self.ui.status_radar.setStyleSheet("""
                 background-color:green;
                 border-radius: 9px;
@@ -280,11 +299,12 @@ class MyWidget(QWidget):
 
             try:
                 self.radar_flag = False
-                self.ui.status_radar.setStyleSheet("""
-                background-color:grey;
-                border-radius: 9px;
-                border: 1px solid
-                """)
+                if self.radar_flag==False:
+                    self.ui.status_radar.setStyleSheet("""
+                    background-color:grey;
+                    border-radius: 9px;
+                    border: 1px solid
+                    """)
                 close_run_launch = "myagv_active.launch"
                 radar_close = threading.Thread(target=self.radar_close, args=(close_run_launch,), daemon=True)
                 radar_close.start()
@@ -303,7 +323,7 @@ class MyWidget(QWidget):
         if self.ui.basic_control_button.isChecked():
 
             self.ui.basic_control_button.setText("on")
-            self.ui.basic_control_button.setStyleSheet("background:green")
+            # self.ui.basic_control_button.setStyleSheet("background:green")
 
             self.ui.basic_control_selection.setEnabled(False)
             if control_item_basic == "Keyboard Control" or control_item_basic == "键盘控制":
@@ -461,8 +481,7 @@ class MyWidget(QWidget):
         if self.ui.open_build_map.isChecked():
             self.ui.open_build_map.setText("Close Build Map")
 
-            if self.radar_flag:
-                pass
+            if self.radar_flag:pass
 
             else:
                 print("radar not open !")

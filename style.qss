@@ -1,32 +1,44 @@
 
 QPushButton{
     background-color:rgb(230,230,230);
-    width: 50px;
-    height: 32px;
+    width: 40px;
+    height: 30px;
     border: 1px solid grey;
-    border-radius:10px;
+    border-radius:8px;
 }
 
 QComboBox{
-    background-color:rgb(230,230,230);
+    background-color:rgb(255,255,255);
     /* width: 50px; */
     height: 32px;
     border: 1px solid grey;
 }
 
+#lineEdit_RGB,#lineEdit_HEX{
+    background-color: rgb(255,255,255);
+}
 
 
+/* 86, 214, 80 --light--green */
+/* 109, 108, 108 --light -grey */
 
 #radar_button:checked{
-    background-color:rgb(126, 170, 146);
+    background-color:rgb(86, 214, 80);
     border:none;
-   border-radius:10px;
+   border-radius:8px;
+}
+
+#basic_control_button:checked{
+    background-color:rgb(86, 214, 80);
+    border:none;
+   border-radius:8px;
+
 }
 
 #open_build_map:checked{
     background-color:rgb(215, 19, 19);
     border:none;
-   border-radius:10px;
+   border-radius:8px;
 }
 
 #navigation_3d_button:checked{
@@ -39,3 +51,37 @@ QComboBox{
     background-color:rgb(215, 19, 19);
     border:none;
 }
+
+
+#label_4,#label_map_nav,#basic_control,#label_radar,#label_language#label_9{
+    font: 14pt "Arial";
+}
+
+#sidebar{
+    background-color: rgb(245, 245, 245);
+}
+
+#area_display{
+    background-color: rgb(214, 213, 213);
+}
+
+#textBrowser{
+    border: 2px solid rgb(49, 156, 210);
+}
+
+#status_battery_main,#status_battery_backup,
+#status_motor_1,#status_motor_2,#status_motor_3,#status_motor_4{
+    border-radius: 9px;
+    border: 1px solid;
+    background-color:grey;
+
+}
+
+
+/* status_motor_1 */
+
+
+/* #myAGV,#interface_2,#sidebar,#area_log,#area_display{
+    margin: 0;
+    padding: 0;
+} */
