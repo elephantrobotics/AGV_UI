@@ -1,4 +1,6 @@
-import os
+
+# encoding:utf-8
+
 import subprocess
 import sys
 import threading
@@ -6,12 +8,10 @@ import time
 import traceback
 import socket
 
-from PySide6.QtCore import Signal, QCoreApplication, QObject, QThread
-from PySide6.QtWidgets import QWidget, QApplication, QMessageBox, QFileDialog, QPushButton, QSizePolicy,QLabel
-# from PySide6.QtCore import Qdia
-from PySide6.QtGui import QColor
+from PySide6.QtCore import Signal, QCoreApplication, QObject, QThread,Qt,QSize,QPoint,QTranslator
+from PySide6.QtWidgets import QWidget, QApplication, QMessageBox, QFileDialog, QPushButton, QSizePolicy,QLabel,QMainWindow,QSizeGrip
+from PySide6.QtGui import QPixmap,QIcon,QEventPoint,QEnterEvent
 from operations_UI.AGV_operations_ui import Ui_myAGV
-
 from pymycobot.myagv import MyAgv
 from operations_UI.color_picker import ColorCircle
 import os
@@ -21,7 +21,7 @@ if os.name == "posix":
 
 lock = False
 
-class MyWidget(QWidget):
+class myAGV_windows(QMainWindow):
 
     def __init__(self):
         super().__init__()
@@ -29,24 +29,85 @@ class MyWidget(QWidget):
         self.ui = Ui_myAGV()
         self.ui.setupUi(self)
 
+
         self.ui.color_palette.setVisible(False)
 
         self.led_default = [255, 0, 0]  # red light
 
-        self.myagv=None
-        # self.myagv = MyAgv("/dev/ttyAMA2", 115200)
+        # self.myagv=None
+        self.myagv = MyAgv("/dev/ttyAMA2", 115200)
         self.st=None
-        with open('style.qss', 'r') as qss_file:
-            qss = qss_file.read()
-            self.setStyleSheet(qss)
+        self.status=None
+        
+        # with open("style.qss", "r") as qss_file:
+        #     qss = qss_file.read()
+        #     self.setStyleSheet(qss)
 
         self.color_painter()
+        self.ui.max_btn.clicked.connect(self.max_clicked)
+        self.ui.min_btn.clicked.connect(self.min_clicked)
+        self.ui.close_btn.clicked.connect(self.close_clicked)  
+        self._initDrag()
+
 
         self.radar_flag = False
         self.keyboard_flag = False
         self.joystick_flag = False
 
+        self.pix = QPixmap(os.getcwd()+'operations_UI/img_UI/logo.ico')
+        print(self.pix.size())
+
+        self.red_button="""
+            background-color: rgb(198, 61, 47);
+            color: rgb(255, 255, 255);
+            border-radius: 7px;
+            border: 2px groove gray;
+            border-style: outset;
+            font: 75 9pt "Arial";
+        """
+
+        self.green_button="""
+            background-color: rgb(39, 174, 96);
+            color: rgb(255, 255, 255);
+            border-radius: 7px;
+            border: 2px groove gray;
+            border-style: outset;
+            font: 75 9pt "Arial";
+        
+        """
+
+        self.blue_button="""
+            background-color:rgb(41, 128, 185);
+            color: rgb(255, 255, 255);
+            border-radius: 10px;
+            border: 2px groove gray;
+            border-style: outset;
+            font: 75 9pt "Arial";
+        """
+
+        self.light_grey="""
+                    background-color:grey;
+                    border-radius: 9px;
+                    border: 1px solid
+        """
+
+        self.light_green="""
+                    background-color:green;
+                    border-radius: 9px;
+                    border: 1px solid
+        """
+        self.ui.label_value.setVisible(False)
+        self.ui.lineEdit_RGB.setStyleSheet("background:None")
+        self.ui.lineEdit_HEX.setStyleSheet("background:None")
+
+        self._app=QApplication.instance()
+        self.translator = QTranslator(self)
+        # self.ui.logo_lab.setPixmap(self.pix)
+        # self.ui.logo_lab.setScaledContents(True)
+        self.ui.logo_lab.setVisible(False)
+        self.ui_window_set()
         self.ui_set()
+        
 
 
     def color_painter(self):
@@ -65,10 +126,6 @@ class MyWidget(QWidget):
         color.setMinimumWidth(150)
         color.setMinimumHeight(150)
 
-        # color.currentColorChanged.connect(
-        #     lambda x: print(x.red(), x.green(), x.blue(), x.name())
-        # )
-
         color.currentColorChanged.connect(self.lighter_set)
 
         self.ui.horizontalLayout_palette.insertWidget(0, color)
@@ -82,27 +139,27 @@ class MyWidget(QWidget):
             set selection choices and style
             """
             language_params = [
-                self.tr("English"),
-                self.tr("Chinese")
+                QCoreApplication.translate("myAGV","English"),
+                QCoreApplication.translate("myAGV","Chinese")
             ]
 
             basic_control_params = [
-                self.tr("Keyboard Control"),
-                self.tr("Joystick Control"),
-                self.tr("Joystick Control-Number")
+                QCoreApplication.translate("myAGV","Keyboard Control"),
+                QCoreApplication.translate("myAGV","Joystick-Alphabet"),
+                QCoreApplication.translate("myAGV","Joystick-Number")
             ]
 
             map_nav_params = [
-                self.tr("Gmapping"),
-                self.tr("Cartographer"),
-                self.tr("3D Mapping")
+                QCoreApplication.translate("myAGV","Gmapping"),
+                QCoreApplication.translate("myAGV","Cartographer"),
+                QCoreApplication.translate("myAGV","3D Mapping")
             ]
 
             test_params = [
-                self.tr("Motor"),
-                self.tr("LED"),
-                self.tr("3D Camera"),
-                self.tr("Pump")
+                QCoreApplication.translate("myAGV","Motor"),
+                QCoreApplication.translate("myAGV","LED"),
+                QCoreApplication.translate("myAGV","3D Camera"),
+                QCoreApplication.translate("myAGV","Pump")
             ]
 
             self.ui.comboBox_language_selection.addItems(language_params)
@@ -110,23 +167,7 @@ class MyWidget(QWidget):
             self.ui.build_map_selection.addItems(map_nav_params)
             self.ui.comboBox_testing.addItems(test_params)
 
-            self.ui.eletricity.setVisible(False)
-            self.ui.eletricity_backup.setVisible(False)
 
-            self.ui.lineEdit_electricity.setVisible(False)
-            self.ui.lineEdit_electricity_backup.setVisible(False)
-
-            self.ui.horizontalLayout_basic.setStretch(1,1) #set the basic button
-
-            self.ui.lineEdit_HEX.setVisible(False)
-            self.ui.lineEdit_RGB.setVisible(False)
-
-            self.hex=QLabel("")
-            self.rgb=QLabel("")
-
-            self.ui.horizontalLayout_7.addWidget(self.hex)
-            self.ui.horizontalLayout_8.addWidget(self.rgb)
-            #
 
         def ui_buttons():
             self.ui.radar_button.setCheckable(True)
@@ -145,11 +186,18 @@ class MyWidget(QWidget):
             self.ui.start_detection_button.setChecked(True)
             self.ui.start_detection_button.toggle()
 
-            self.ui.status_radar.setStyleSheet("""
-                background-color:grey;
-                border-radius: 9px;
-                border: 1px solid
-                """)
+            self.ui.navigation_3d_button.setCheckable(True)
+            self.ui.navigation_3d_button.setChecked(True)
+            self.ui.navigation_3d_button.toggle()
+
+            self.ui.navigation_button.setCheckable(True)
+            self.ui.navigation_button.setChecked(True)
+            self.ui.navigation_button.toggle()
+
+            self.ui.status_radar.setStyleSheet(self.light_grey)
+            self.ui.status_battery_main.setStyleSheet(self.light_grey)
+            self.ui.status_battery_backup_2.setStyleSheet(self.light_grey)
+            self.ui.status_motor_1.setStyleSheet(self.light_grey)
 
         def ui_functions():
             self.ui.radar_button.clicked.connect(self.radar_control)
@@ -159,13 +207,11 @@ class MyWidget(QWidget):
             self.ui.open_build_map.clicked.connect(self.open_build_map)
 
             self.ui.navigation_3d_button.clicked.connect(self.navigation_3d)
-
             self.ui.navigation_button.clicked.connect(self.map_navigation)
 
             self.ui.log_clear.clicked.connect(self.clear_log)
 
-            # self.ui.lineEdit_RGB.setReadOnly(True)
-            # self.ui.lineEdit_HEX.setReadOnly(True)
+            self.ui.comboBox_language_selection.currentTextChanged.connect(self.language_selection)
             self.ui.horizontal_Slider.setRange(0, 511)
             self.ui.horizontal_Slider.setValue(511)
 
@@ -179,6 +225,158 @@ class MyWidget(QWidget):
 
         self.status_detecting()
 
+    def ui_window_set(self):
+
+        def set_normal_window():
+
+            # Set the form to be borderless
+            self.setWindowFlags(Qt.FramelessWindowHint)
+            # Set the background to be transparent
+            self.setAttribute(Qt.WA_TranslucentBackground)
+
+            w = self.ui.logo_lab.width()
+            h = self.ui.logo_lab.height()
+            self.pix = QPixmap(libraries_path+'/img_UI/logo.png')
+            # self.ui.logo_lab.setPixmap(self.pix)
+            # self.ui.logo_lab.setScaledContents(True)
+
+        # Close, minimize button display text
+        def _close_max_min_icon():
+            self.ui.min_btn.setStyleSheet("border-image: url({}/img_UI/min.ico);".format(libraries_path))
+            self.ui.max_btn.setStyleSheet("border-image: url({}/img_UI/max.ico);".format(libraries_path))
+            self.ui.close_btn.setStyleSheet("border-image: url({}/img_UI/close.ico);".format(libraries_path))
+
+        set_normal_window()
+        _close_max_min_icon()
+    
+    def min_clicked(self):
+        self.showMinimized()
+    
+    def max_clicked(self):
+        if self.isMaximized():
+            self.showNormal()
+
+            icon_max = QIcon()
+            icon_max.addPixmap(QPixmap("./operations_UI/img_UI/max.ico"), QIcon.Normal, QIcon.Off)
+            self.max_btn.setIcon(icon_max)
+            self.max_btn.setIconSize(QSize(30, 30))
+            self.max_btn.setToolTip("<html><head/><body><p>maximize</p></body></html>")
+        else:
+            self.showMaximized()
+            # self.max_btn.setStyleSheet("border-image: url({}/AiKit_UI_img/nomel.png);".format(libraries_path))
+            icon_nomel = QIcon()
+            icon_nomel.addPixmap(QPixmap("operations_UI/img_UI/nomel.ico"), QIcon.Normal,
+                                 QIcon.Off)
+            self.max_btn.setIcon(icon_nomel)
+            self.max_btn.setIconSize(QSize(30, 30))
+            self.max_btn.setToolTip("<html><head/><body><p>recover</p></body></html>")
+
+    def close_clicked(self):
+        self.close()
+        QCoreApplication.instance().quit
+    
+    def _initDrag(self):
+        # Set the mouse tracking judgment trigger default value
+        self._move_drag = False
+        self._corner_drag = False
+        self._bottom_drag = False
+        self._right_drag = False
+
+    def eventFilter(self, obj, event):
+        # Event filter, used to solve the problem of reverting to the standard mouse style after the mouse enters other controls
+        if isinstance(event, QEnterEvent):
+            self.setCursor(Qt.ArrowCursor)
+        return super(myAGV_windows, self).eventFilter(obj, event)  # Note that MyWindow is the name of the class
+        # return QWidget.eventFilter(self, obj, event)  # You can also use this, but pay attention to modifying the window type
+
+    def resizeEvent(self, QResizeEvent):
+        # 自定义窗口调整大小事件
+        # 改变窗口大小的三个坐标范围
+        self._right_rect = [QPoint(x, y) for x in range(self.width() - 5, self.width() + 5)
+                            for y in range(self.ui.widget.height() + 20, self.height() - 5)]
+        self._bottom_rect = [QPoint(x, y) for x in range(1, self.width() - 5)
+                             for y in range(self.height() - 5, self.height() + 1)]
+        self._corner_rect = [QPoint(x, y) for x in range(self.width() - 5, self.width() + 100)
+                             for y in range(self.height() - 5, self.height() + 1)]
+        
+    def mousePressEvent(self, event):
+        # 重写鼠标点击的事件
+        if (event.button() == Qt.LeftButton) and (event.pos() in self._corner_rect):
+            # 鼠标左键点击右下角边界区域
+            self._corner_drag = True
+            event.accept()
+        elif (event.button() == Qt.LeftButton) and (event.pos() in self._right_rect):
+            # 鼠标左键点击右侧边界区域
+            self._right_drag = True
+            event.accept()
+        elif (event.button() == Qt.LeftButton) and (event.pos() in self._bottom_rect):
+            # 鼠标左键点击下侧边界区域
+            self._bottom_drag = True
+            event.accept()
+        elif (event.button() == Qt.LeftButton) and (event.y() < self.ui.widget.height()):
+            # 鼠标左键点击标题栏区域
+            self._move_drag = True
+            self.move_DragPosition = event.globalPos() - self.pos()
+            event.accept()
+
+    def mousePressEvent(self, event):
+        # 重写鼠标点击的事件
+        if (event.button() == Qt.LeftButton) and (event.pos() in self._corner_rect):
+            # 鼠标左键点击右下角边界区域
+            self._corner_drag = True
+            event.accept()
+        elif (event.button() == Qt.LeftButton) and (event.pos() in self._right_rect):
+            # 鼠标左键点击右侧边界区域
+            self._right_drag = True
+            event.accept()
+        elif (event.button() == Qt.LeftButton) and (event.pos() in self._bottom_rect):
+            # 鼠标左键点击下侧边界区域
+            self._bottom_drag = True
+            event.accept()
+        elif (event.button() == Qt.LeftButton) and (event.y() < self.ui.widget.height()):
+            # 鼠标左键点击标题栏区域
+            self._move_drag = True
+            self.move_DragPosition = event.globalPos() - self.pos()
+            event.accept()
+
+    def mouseMoveEvent(self, QMouseEvent):
+        # 判断鼠标位置切换鼠标手势
+        if QMouseEvent.pos() in self._corner_rect:  # QMouseEvent.pos()获取相对位置
+            self.setCursor(Qt.SizeFDiagCursor)
+        elif QMouseEvent.pos() in self._bottom_rect:
+            self.setCursor(Qt.SizeVerCursor)
+        elif QMouseEvent.pos() in self._right_rect:
+            self.setCursor(Qt.SizeHorCursor)
+
+        # 当鼠标左键点击不放及满足点击区域的要求后，分别实现不同的窗口调整
+        # 没有定义左方和上方相关的5个方向，主要是因为实现起来不难，但是效果很差，拖放的时候窗口闪烁，再研究研究是否有更好的实现
+        if Qt.LeftButton and self._right_drag:
+            # 右侧调整窗口宽度
+            self.resize(QMouseEvent.pos().x(), self.height())
+            QMouseEvent.accept()
+        elif Qt.LeftButton and self._bottom_drag:
+            # 下侧调整窗口高度
+            self.resize(self.width(), QMouseEvent.pos().y())
+            QMouseEvent.accept()
+        elif Qt.LeftButton and self._corner_drag:
+            #  由于我窗口设置了圆角,这个调整大小相当于没有用了
+            # 右下角同时调整高度和宽度
+            self.resize(QMouseEvent.pos().x(), QMouseEvent.pos().y())
+            QMouseEvent.accept()
+        elif Qt.LeftButton and self._move_drag:
+            # 标题栏拖放窗口位置
+            self.move(QMouseEvent.globalPos() - self.move_DragPosition)
+            QMouseEvent.accept()
+
+    def mouseReleaseEvent(self, QMouseEvent):
+        # 鼠标释放后，各扳机复位
+        self._move_drag = False
+        self._corner_drag = False
+        self._bottom_drag = False
+        self._right_drag = False
+        self.setCursor(Qt.ArrowCursor)
+
+
     def stop_init(self, item):
         if item == "LED":
             if self.myagv:
@@ -190,12 +388,12 @@ class MyWidget(QWidget):
 
     def testing_finished(self, item):
         current_time = self.get_current_time()
-        self.msg_log("Finishe " + item + " testing", current_time)
+        self.msg_log(QCoreApplication.translate("myAGV","Finishe ") + item + QCoreApplication.translate("myAGV"," testing"), current_time)
 
         if item=="LED":
             self.myagv.set_led(1,255,0,0)
 
-        self.ui.start_detection_button.setText("Start Detection")
+        self.ui.start_detection_button.setText(QCoreApplication.translate("myAGV","Start Detection"))
         self.ui.comboBox_testing.setDisabled(False)
         self.button_status_switch(True)
 
@@ -212,8 +410,6 @@ class MyWidget(QWidget):
 
         hex = color.name()
 
-        self.hex.setText(hex)
-        self.rgb.setText(rgb_color)
         self.ui.lineEdit_HEX.setText(hex)
         self.ui.lineEdit_RGB.setText(rgb_color)
 
@@ -228,15 +424,17 @@ class MyWidget(QWidget):
         """
         lang = self.ui.comboBox_language_selection.currentText()
 
-        if lang == "English" or lang == "英文": pass
-        if lang == "Chinese" or lang == "中文": pass
+        if lang == "English" or lang == "英文":
+            print("----")
+            self._app.removeTranslator(self.translator)
+            self.ui.retranslateUi(self)
+        if lang == "Chinese" or lang == "中文":
+            print("======")
+            self.translator.load("D:\projects\cc\AGV_UI\operations_lang.qm")
+            self._app.installTranslator(self.translator)
+            self.ui.retranslateUi(self)
 
     def button_status_switch(self, status):
-        """
-        set button logic
-        :param status:button status
-        :return:
-        """
         button = [
             self.ui.basic_control_button,
             self.ui.save_map_button,
@@ -268,11 +466,11 @@ class MyWidget(QWidget):
     def radar_control(self):
 
         if self.ui.radar_button.isChecked():
+            self.ui.radar_button.setStyleSheet(self.red_button)
+            self.ui.radar_button.setText(QCoreApplication.translate("myAGV","OFF"))
 
-            self.ui.radar_button.setText(self.tr("on"))
-
-            print("open radar set")
-            msg = "radar open..."
+            # print("open radar set")
+            msg = QCoreApplication.translate("myAGV","Radar open...")
             current_time = self.get_current_time()
             self.msg_log(msg, current_time)
             try:
@@ -290,10 +488,11 @@ class MyWidget(QWidget):
                 self.msg_error(e, current_time)
 
         else:
+            self.ui.radar_button.setStyleSheet(self.green_button)
 
-            self.ui.radar_button.setText(self.tr("off"))
+            self.ui.radar_button.setText(QCoreApplication.translate("myAGV","ON"))
 
-            msg = "close radar"
+            msg = QCoreApplication.translate("myAGV","close radar")
             current_time = self.get_current_time()
             self.msg_log(msg, current_time)
 
@@ -313,31 +512,22 @@ class MyWidget(QWidget):
                 e = traceback.format_exc()
                 self.msg_error(e, current_time)
 
-            print("close radar set")
+            # print("close radar set")
 
     def basic_control(self):
 
-        # 设置下拉框不可选区
-
         control_item_basic = self.ui.basic_control_selection.currentText()
         if self.ui.basic_control_button.isChecked():
+            self.ui.basic_control_button.setStyleSheet(self.red_button)
+            self.ui.basic_control_button.setText(QCoreApplication.translate("myAGV","OFF"))
+            self.ui.basic_control_selection.setEnabled(False) # 设置下拉框不可选区
 
-            self.ui.basic_control_button.setText("on")
-            # self.ui.basic_control_button.setStyleSheet("background:green")
-
-            self.ui.basic_control_selection.setEnabled(False)
             if control_item_basic == "Keyboard Control" or control_item_basic == "键盘控制":
                 self.keyboard_flag = True
                 try:
-
-                    # global lock
-                    # while lock:
-                    #     pass
-                    # lock=True
-
                     print("open key")
 
-                    msg = "keyboard open"
+                    msg = QCoreApplication.translate("myAGV","Keyboard open...")
                     current_time = self.get_current_time()
                     self.msg_log(msg, current_time)
 
@@ -349,7 +539,7 @@ class MyWidget(QWidget):
                     self.msg_error(e, current_time)
 
 
-            elif control_item_basic == "Joystick Control" or control_item_basic == "手柄控制":
+            elif control_item_basic == "Joystick-Number" or control_item_basic == "手柄控制(字母)":
                 self.joystick_flag = True
                 try:
                     # global lock
@@ -358,7 +548,7 @@ class MyWidget(QWidget):
                     # lock=True
 
                     print("open joy")
-                    msg = "open joystick control..."
+                    msg = QCoreApplication.translate("myAGV","Open joystick control...")
                     current_time = self.get_current_time()
                     self.msg_log(msg, current_time)
                     joystick_open = threading.Thread(target=self.joystick_open, daemon=True)
@@ -368,10 +558,10 @@ class MyWidget(QWidget):
                     e = traceback.format_exc()
                     self.msg_error(e, current_time)
 
-            elif control_item_basic == "Joystick Control-Number":
+            elif control_item_basic == "Joystick-Number" or control_item_basic == "手柄控制(数字)":
                 self.joystick_flag = True
                 try:
-                    msg = "open joystick control"
+                    msg = QCoreApplication.translate("myAGV","Open joystick control")
                     current_time = self.get_current_time()
                     self.msg_log(msg, current_time)
                     joystick_open = threading.Thread(target=self.joystick_open_number, daemon=True)
@@ -384,19 +574,15 @@ class MyWidget(QWidget):
 
         else:
 
-            self.ui.basic_control_button.setText("off")
-
+            self.ui.basic_control_button.setStyleSheet(self.green_button)
+            self.ui.basic_control_button.setText("OFF")
             self.ui.basic_control_selection.setEnabled(True)
 
             if control_item_basic == "Keyboard Control" or control_item_basic == "键盘控制":
                 self.keyboard_flag = False
-                msg = "close keyboard control"
+                msg = QCoreApplication.translate("myAGV","Close keyboard control")
                 current_time = self.get_current_time()
                 try:
-                    # global lock
-                    # while lock:
-                    #     pass
-                    # lock=True
 
                     self.msg_log(msg, current_time)
                     keyboard_run_launch = "myagv_teleop.launch"
@@ -412,11 +598,11 @@ class MyWidget(QWidget):
                     self.msg_error(e, current_time)
 
 
-            elif control_item_basic == "Joystick Control" or control_item_basic == "手柄控制":
+            elif control_item_basic == "Joystick-Number" or control_item_basic == "手柄控制(字母)":
                 self.joystick_flag = False
-                print("close joy")
+                # print("close joy")
 
-                msg = "close joystick control..."
+                msg =QCoreApplication.translate("myAGV","close joystick control")
                 current_time = self.get_current_time()
 
                 try:
@@ -431,9 +617,9 @@ class MyWidget(QWidget):
                     e = traceback.format_exc()
                     self.msg_error(e, current_time)
 
-            elif control_item_basic == "Joystick Control-Number":
+            elif control_item_basic == "Joystick-Number" or control_item_basic == "手柄控制(数字)":
 
-                msg = "close joystick control"
+                msg = QCoreApplication.translate("myAGV","close joystick control")
                 current_time = self.get_current_time()
 
                 try:
@@ -473,19 +659,22 @@ class MyWidget(QWidget):
 
         build_map_method = self.ui.build_map_selection.currentText()
 
-        # 建图时导航不可用
-        self.ui.build_map_selection.setEnabled(False)
-        self.ui.navigation_button.setEnabled(False)
-        self.ui.navigation_3d_button.setEnabled(False)
+
 
         if self.ui.open_build_map.isChecked():
-            self.ui.open_build_map.setText("Close Build Map")
+            # 建图时导航不可用
+            self.ui.build_map_selection.setEnabled(False)
+            self.ui.navigation_button.setEnabled(False)
+            self.ui.navigation_3d_button.setEnabled(False)
 
-            if self.radar_flag:pass
+            if self.radar_flag:
+                self.ui.open_build_map.setText(QCoreApplication.translate("myAGV","Close Build Map"))
+                self.ui.open_build_map.setStyleSheet(self.red_button)
+
 
             else:
                 print("radar not open !")
-                QMessageBox.warning(None, "", "Radar not open!")
+                QMessageBox.warning(None, "Warning", QCoreApplication.translate("myAGV","Radar not open!"))
 
             if not self.keyboard_flag:
                 pass
@@ -494,11 +683,10 @@ class MyWidget(QWidget):
             else:
                 #     open keyboard
                 self.keyboard_flag = True
-
+                print("OOOOOO")
                 self.ui.basic_control_selection.setCurrentIndex(0)
                 self.ui.basic_control_selection.setEnabled(False)
-
-                self.ui.basic_control_button.setText("on")
+                self.ui.basic_control_button.setText(QCoreApplication.translate("myAGV","OFF"))
 
             if build_map_method == "Gmapping": gmapping_build()
 
@@ -506,7 +694,13 @@ class MyWidget(QWidget):
 
 
         else:
-            self.ui.open_build_map.setText("off")
+            self.ui.open_build_map.setStyleSheet(self.blue_button)
+            self.ui.open_build_map.setText(QCoreApplication.translate("myAGV","Open Build Map"))
+
+            # 关闭建图打开导航按钮
+            self.ui.build_map_selection.setEnabled(True)
+            self.ui.navigation_button.setEnabled(True)
+            self.ui.navigation_3d_button.setEnabled(True)
 
             if build_map_method == "Gmapping": gmapping_close()
 
@@ -519,8 +713,8 @@ class MyWidget(QWidget):
             self.ui.open_build_map.setEnabled(False)  # 打开建图不可选
             self.ui.navigation_button.setEnabled(False)  # 导航不可选
 
-            self.ui.navigation_button.setText("Close 3d navigation")
-            # self.ui.navigation_button.setStyleSheet("background:red")
+            self.ui.navigation_3d_button.setText(QCoreApplication.translate("myAGV","Close 3D Navigation"))
+            self.ui.navigation_3d_button.setStyleSheet(self.red_button)
 
             open_navigation = threading.Thread(target=self.navigation_open, daemon=True)
             open_navigation.start()
@@ -530,8 +724,8 @@ class MyWidget(QWidget):
             self.ui.open_build_map.setEnabled(True)
             self.ui.navigation_button.setEnabled(True)
 
-            self.ui.navigation_button.setText("3d navigation")
-            # self.ui.navigation_button.setStyleSheet("background:grey")
+            self.ui.navigation_3d_button.setText(QCoreApplication.translate("myAGV","3D Navigation"))
+            self.ui.navigation_3d_button.setStyleSheet(self.blue_button)
 
             close_launch = "navigation_active.launch"
             close_navigation = threading.Thread(target=self.navigation_close, args=(close_launch,), daemon=True)
@@ -544,8 +738,8 @@ class MyWidget(QWidget):
             self.ui.open_build_map.setEnabled(False)
             self.ui.navigation_3d_button.setEnabled(False)
 
-            self.ui.navigation_button.setText("open navigation")
-            # self.ui.navigation_button.setStyleSheet("background:red")
+            self.ui.navigation_button.setText(QCoreApplication.translate("myAGV","Close Navigation"))
+            self.ui.navigation_button.setStyleSheet(self.red_button)
 
             open_navigation = threading.Thread(target=self.navigation_open, daemon=True)
             open_navigation.start()
@@ -555,8 +749,8 @@ class MyWidget(QWidget):
             self.ui.open_build_map.setEnabled(True)
             self.ui.navigation_3d_button.setEnabled(True)
 
-            self.ui.navigation_button.setText("navigation")
-            # self.ui.navigation_button.setStyleSheet("background:grey")
+            self.ui.navigation_button.setText(QCoreApplication.translate("myAGV","Navigation"))
+            self.ui.navigation_button.setStyleSheet(self.blue_button)
 
             close_launch = "navigation_active.launch"
             close_navigation = threading.Thread(target=self.navigation_close, args=(close_launch,), daemon=True)
@@ -568,9 +762,9 @@ class MyWidget(QWidget):
 
         if self.ui.start_detection_button.isChecked():
 
-            self.ui.start_detection_button.setText("Stop Detection")
+            self.ui.start_detection_button.setText(QCoreApplication.translate("myAGV","Stop Detection"))
             self.ui.comboBox_testing.setDisabled(True)
-            self.msg_log("start " + item + " testing...", current_time)
+            self.msg_log(QCoreApplication.translate("myAGV","Start ") + item + QCoreApplication.translate("myAGV"," testing..."), current_time)
 
             self.st = Start_testing(item, self.myagv)
             self.st.testing_finish.connect(self.testing_finished)
@@ -580,14 +774,14 @@ class MyWidget(QWidget):
         else:
 
             self.ui.comboBox_testing.setDisabled(False)
-            self.msg_log("Stop " + item + " testing", current_time)
+            self.msg_log(QCoreApplication.translate("myAGV","Stop ") + item + QCoreApplication.translate("myAGV"," testing"), current_time)
             self.st.terminate()
             self.stop_init(item)
             self.button_status_switch(True)
 
     def status_detecting(self):
         def ip_set(ip_str):
-            self.ui.lineEdit_3.setText(ip_str)
+            self.ui.lineEdit.setText(ip_str)
 
         def voltage_set(vol_1, vol_2):
             self.ui.lineEdit_voltage.setText(str(vol_1))
@@ -711,7 +905,7 @@ class MyWidget(QWidget):
             "cp /home/ubuntu/map.pgm /home/ubuntu/myagv_ros/src/myagv_navigation/map/my_map.pgm && cp /home/ubuntu/map.yaml /home/ubuntu/myagv_ros/src/myagv_navigation/map/my_map.yaml")
 
         current_time = self.get_current_time()
-        self.msg_log("保存成功", current_time)
+        self.msg_log(QCoreApplication.translate("myAGV","Save successfully!"), current_time)
 
         QMessageBox.information(None, "",
                                 f"Save successfully! \n Save Path:\n /home/ubuntu/myagv_ros/src/myagv_navigation/map/my_map.pgm\n /home/ubuntu/myagv_ros/src/myagv_navigation/map/my_map.yaml")
@@ -814,16 +1008,16 @@ class Start_testing(QThread):
 
     def run(self) -> None:
 
-        if self.test == "Motor":
+        if self.test == QCoreApplication.translate("myAGV","Motor"):
             self.motor_testing()
 
-        elif self.test == "LED":
+        elif self.test == QCoreApplication.translate("myAGV","LED"):
             self.LED_testing()
 
-        elif self.test == "Camera":
+        elif self.test == QCoreApplication.translate("myAGV","Camera"):
             self.Camera_testing()
 
-        elif self.test == "Pump":
+        elif self.test == QCoreApplication.translate("myAGV","Pump"):
             self.Pump_testing()
 
 
@@ -903,11 +1097,21 @@ class status_detect(QThread):
             self.get_motors_run()
             time.sleep(1)
 
+def resource_path(relative_path):
+    # check if Bundle Resource
+    if getattr(sys, 'frozen', False):
+        base_path = sys._MEIPASS
+    else:
+        base_path = os.path.abspath(".")
+    return os.path.join(base_path, relative_path)
+
 
 # 程序入口
 if __name__ == "__main__":
+    libraries_path = resource_path('operations_UI')
+    libraries_path = libraries_path.replace("\\", "/")
     app = QApplication(sys.argv)
 
-    window = MyWidget()
+    window = myAGV_windows()
     window.show()
     sys.exit(app.exec())
