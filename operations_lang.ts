@@ -44,158 +44,6 @@
         <translation>3D Mapping</translation>
     </message>
     <message>
-        <location filename="AGV_operations_ui.py" line="795"/>
-        <source>Motor</source>
-        <translation>电机</translation>
-    </message>
-    <message>
-        <location filename="operations.py" line="1003"/>
-        <location filename="operations.py" line="148"/>
-        <source>LED</source>
-        <translation>LED</translation>
-    </message>
-    <message>
-        <location filename="operations.py" line="149"/>
-        <source>3D Camera</source>
-        <translation>3D 相机</translation>
-    </message>
-    <message>
-        <location filename="operations.py" line="1009"/>
-        <location filename="operations.py" line="150"/>
-        <source>Pump</source>
-        <translation>吸泵</translation>
-    </message>
-    <message>
-        <location filename="operations.py" line="380"/>
-        <source>Finishe </source>
-        <translation>完成</translation>
-    </message>
-    <message>
-        <location filename="operations.py" line="766"/>
-        <location filename="operations.py" line="380"/>
-        <source> testing</source>
-        <translation>测试</translation>
-    </message>
-    <message>
-        <location filename="AGV_operations_ui.py" line="779"/>
-        <source>Start Detection</source>
-        <translation>开始检测</translation>
-    </message>
-    <message>
-        <location filename="operations.py" line="678"/>
-        <location filename="operations.py" line="511"/>
-        <location filename="operations.py" line="459"/>
-        <source>OFF</source>
-        <translation>关</translation>
-    </message>
-    <message>
-        <location filename="operations.py" line="462"/>
-        <source>Radar open...</source>
-        <translation>打开雷达……</translation>
-    </message>
-    <message>
-        <location filename="AGV_operations_ui.py" line="765"/>
-        <location filename="AGV_operations_ui.py" line="763"/>
-        <source>ON</source>
-        <translation>开</translation>
-    </message>
-    <message>
-        <location filename="operations.py" line="484"/>
-        <source>close radar</source>
-        <translation>关闭雷达</translation>
-    </message>
-    <message>
-        <location filename="operations.py" line="519"/>
-        <source>Keyboard open...</source>
-        <translation>打开键盘……</translation>
-    </message>
-    <message>
-        <location filename="operations.py" line="540"/>
-        <source>Open joystick control...</source>
-        <translation>打开手柄控制……</translation>
-    </message>
-    <message>
-        <location filename="operations.py" line="553"/>
-        <source>Open joystick control</source>
-        <translation>打开手柄控制</translation>
-    </message>
-    <message>
-        <location filename="operations.py" line="572"/>
-        <source>Close keyboard control</source>
-        <translation>关闭键盘控制</translation>
-    </message>
-    <message>
-        <location filename="operations.py" line="611"/>
-        <location filename="operations.py" line="594"/>
-        <source>close joystick control</source>
-        <translation>关闭手柄控制</translation>
-    </message>
-    <message>
-        <location filename="operations.py" line="660"/>
-        <source>Close Build Map</source>
-        <translation>关闭建图</translation>
-    </message>
-    <message>
-        <location filename="operations.py" line="666"/>
-        <source>Radar not open!</source>
-        <translation>雷达未打开!</translation>
-    </message>
-    <message>
-        <location filename="AGV_operations_ui.py" line="768"/>
-        <source>Open Build Map</source>
-        <translation>打开建图</translation>
-    </message>
-    <message>
-        <location filename="operations.py" line="705"/>
-        <source>Close 3D Navigation</source>
-        <translation>关闭3D导航</translation>
-    </message>
-    <message>
-        <location filename="AGV_operations_ui.py" line="769"/>
-        <source>3D Navigation</source>
-        <translation>3D导航</translation>
-    </message>
-    <message>
-        <location filename="operations.py" line="730"/>
-        <source>Close Navigation</source>
-        <translation>关闭导航</translation>
-    </message>
-    <message>
-        <location filename="AGV_operations_ui.py" line="770"/>
-        <source>Navigation</source>
-        <translation>导航</translation>
-    </message>
-    <message>
-        <location filename="operations.py" line="754"/>
-        <source>Stop Detection</source>
-        <translation>停止检测</translation>
-    </message>
-    <message>
-        <location filename="operations.py" line="756"/>
-        <source>Start </source>
-        <translation>开始</translation>
-    </message>
-    <message>
-        <location filename="operations.py" line="756"/>
-        <source> testing...</source>
-        <translation>测试中……</translation>
-    </message>
-    <message>
-        <location filename="operations.py" line="766"/>
-        <source>Stop </source>
-        <translation>停止</translation>
-    </message>
-    <message>
-        <location filename="operations.py" line="897"/>
-        <source>Save successfully!</source>
-        <translation>保存成功！</translation>
-    </message>
-    <message>
-        <location filename="operations.py" line="1006"/>
-        <source>Camera</source>
-        <translation>相机</translation>
-    </message>
-    <message>
         <location filename="AGV_operations_ui.py" line="755"/>
         <source>MainWindow</source>
         <translation></translation>
@@ -293,9 +141,181 @@
         <translation>电压</translation>
     </message>
     <message>
+        <location filename="AGV_operations_ui.py" line="795"/>
+        <source>Motor</source>
+        <translation>电机</translation>
+    </message>
+    <message>
         <location filename="AGV_operations_ui.py" line="797"/>
         <source>Radar</source>
         <translation>雷达</translation>
+    </message>
+    <message>
+        <location filename="operations.py" line="1003"/>
+        <location filename="operations.py" line="148"/>
+        <source>LED</source>
+        <translation>LED</translation>
+    </message>
+    <message>
+        <location filename="operations.py" line="149"/>
+        <source>3D Camera</source>
+        <translation>3D 相机</translation>
+    </message>
+    <message>
+        <location filename="operations.py" line="1009"/>
+        <location filename="operations.py" line="150"/>
+        <source>Pump</source>
+        <translation>吸泵</translation>
+    </message>
+    <message>
+        <location filename="operations.py" line="380"/>
+        <source>Finishe </source>
+        <translation>完成</translation>
+    </message>
+    <message>
+        <location filename="operations.py" line="766"/>
+        <location filename="operations.py" line="380"/>
+        <source> testing</source>
+        <translation>测试</translation>
+    </message>
+    <message>
+        <location filename="AGV_operations_ui.py" line="779"/>
+        <source>Start Detection</source>
+        <translation>开始检测</translation>
+    </message>
+    <message>
+        <location filename="operations.py" line="678"/>
+        <location filename="operations.py" line="511"/>
+        <location filename="operations.py" line="459"/>
+        <source>OFF</source>
+        <translation>关</translation>
+    </message>
+    <message>
+        <location filename="operations.py" line="462"/>
+        <source>Radar open...</source>
+        <translation>打开雷达……</translation>
+    </message>
+    <message>
+        <location filename="AGV_operations_ui.py" line="765"/>
+        <location filename="AGV_operations_ui.py" line="763"/>
+        <source>ON</source>
+        <translation>开</translation>
+    </message>
+    <message>
+        <location filename="operations.py" line="484"/>
+        <source>close radar</source>
+        <translation>关闭雷达</translation>
+    </message>
+    <message>
+        <location filename="operations.py" line="519"/>
+        <source>Keyboard open...</source>
+        <translation>打开键盘……</translation>
+    </message>
+    <message>
+        <location filename="operations.py" line="540"/>
+        <source>Open joystick control...</source>
+        <translation>打开手柄控制……</translation>
+    </message>
+    <message>
+        <location filename="operations.py" line="553"/>
+        <source>Open joystick control</source>
+        <translation>打开手柄控制</translation>
+    </message>
+    <message>
+        <location filename="operations.py" line="572"/>
+        <source>Close keyboard control</source>
+        <translation>关闭键盘控制</translation>
+    </message>
+    <message>
+        <location filename="operations.py" line="611"/>
+        <location filename="operations.py" line="594"/>
+        <source>close joystick control</source>
+        <translation>关闭手柄控制</translation>
+    </message>
+    <message>
+        <location filename="operations.py" line="660"/>
+        <source>Close Build Map</source>
+        <translation>关闭建图</translation>
+    </message>
+    <message>
+        <location filename="operations.py" line="687"/>
+        <source>Open Gmapping...</source>
+        <translation>打开Gmapping建图……</translation>
+    </message>
+    <message>
+        <location filename="operations.py" line="691"/>
+        <source>Open Cartographer...</source>
+        <translation>打开Cartographer建图……</translation>
+    </message>
+    <message>
+        <location filename="operations.py" line="666"/>
+        <source>Radar not open!</source>
+        <translation>雷达未打开!</translation>
+    </message>
+    <message>
+        <location filename="AGV_operations_ui.py" line="768"/>
+        <source>Open Build Map</source>
+        <translation>打开建图</translation>
+    </message>
+    <message>
+        <location filename="operations.py" line="710"/>
+        <source>Close Gmapping</source>
+        <translation>关闭Gmapping建图</translation>
+    </message>
+    <message>
+        <location filename="operations.py" line="714"/>
+        <source>Close Cartographer</source>
+        <translation>关闭Cartographer建图</translation>
+    </message>
+    <message>
+        <location filename="operations.py" line="705"/>
+        <source>Close 3D Navigation</source>
+        <translation>关闭3D导航</translation>
+    </message>
+    <message>
+        <location filename="AGV_operations_ui.py" line="769"/>
+        <source>3D Navigation</source>
+        <translation>3D导航</translation>
+    </message>
+    <message>
+        <location filename="operations.py" line="730"/>
+        <source>Close Navigation</source>
+        <translation>关闭导航</translation>
+    </message>
+    <message>
+        <location filename="AGV_operations_ui.py" line="770"/>
+        <source>Navigation</source>
+        <translation>导航</translation>
+    </message>
+    <message>
+        <location filename="operations.py" line="754"/>
+        <source>Stop Detection</source>
+        <translation>停止检测</translation>
+    </message>
+    <message>
+        <location filename="operations.py" line="756"/>
+        <source>Start </source>
+        <translation>开始</translation>
+    </message>
+    <message>
+        <location filename="operations.py" line="756"/>
+        <source> testing...</source>
+        <translation>测试中……</translation>
+    </message>
+    <message>
+        <location filename="operations.py" line="766"/>
+        <source>Stop </source>
+        <translation>停止</translation>
+    </message>
+    <message>
+        <location filename="operations.py" line="897"/>
+        <source>Save successfully!</source>
+        <translation>保存成功！</translation>
+    </message>
+    <message>
+        <location filename="operations.py" line="1006"/>
+        <source>Camera</source>
+        <translation>相机</translation>
     </message>
 </context>
 </TS>

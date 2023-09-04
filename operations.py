@@ -44,10 +44,10 @@ class myAGV_windows(QMainWindow):
         #     self.setStyleSheet(qss)
 
         self.color_painter()
-        self.ui.max_btn.clicked.connect(self.max_clicked)
-        self.ui.min_btn.clicked.connect(self.min_clicked)
-        self.ui.close_btn.clicked.connect(self.close_clicked)  
-        self._initDrag()
+        # self.ui.max_btn.clicked.connect(self.max_clicked)
+        # self.ui.min_btn.clicked.connect(self.min_clicked)
+        # self.ui.close_btn.clicked.connect(self.close_clicked)
+        # self._initDrag()
 
 
         self.radar_flag = False
@@ -105,7 +105,8 @@ class myAGV_windows(QMainWindow):
         # self.ui.logo_lab.setPixmap(self.pix)
         # self.ui.logo_lab.setScaledContents(True)
         self.ui.logo_lab.setVisible(False)
-        self.ui_window_set()
+        # self.ui_window_set()
+        self.ui.menu_widget.setVisible(False)
         self.ui_set()
         
 
@@ -217,7 +218,6 @@ class myAGV_windows(QMainWindow):
 
             self.ui.start_detection_button.clicked.connect(self.start_testing)
 
-            # self.status_deteccting() #todo status checking iii...threading
 
         ui_params()
         ui_functions()
@@ -275,106 +275,106 @@ class myAGV_windows(QMainWindow):
         self.close()
         QCoreApplication.instance().quit
     
-    def _initDrag(self):
-        # Set the mouse tracking judgment trigger default value
-        self._move_drag = False
-        self._corner_drag = False
-        self._bottom_drag = False
-        self._right_drag = False
-
-    def eventFilter(self, obj, event):
-        # Event filter, used to solve the problem of reverting to the standard mouse style after the mouse enters other controls
-        if isinstance(event, QEnterEvent):
-            self.setCursor(Qt.ArrowCursor)
-        return super(myAGV_windows, self).eventFilter(obj, event)  # Note that MyWindow is the name of the class
-        # return QWidget.eventFilter(self, obj, event)  # You can also use this, but pay attention to modifying the window type
-
-    def resizeEvent(self, QResizeEvent):
-        # 自定义窗口调整大小事件
-        # 改变窗口大小的三个坐标范围
-        self._right_rect = [QPoint(x, y) for x in range(self.width() - 5, self.width() + 5)
-                            for y in range(self.ui.widget.height() + 20, self.height() - 5)]
-        self._bottom_rect = [QPoint(x, y) for x in range(1, self.width() - 5)
-                             for y in range(self.height() - 5, self.height() + 1)]
-        self._corner_rect = [QPoint(x, y) for x in range(self.width() - 5, self.width() + 100)
-                             for y in range(self.height() - 5, self.height() + 1)]
-        
-    def mousePressEvent(self, event):
-        # 重写鼠标点击的事件
-        if (event.button() == Qt.LeftButton) and (event.pos() in self._corner_rect):
-            # 鼠标左键点击右下角边界区域
-            self._corner_drag = True
-            event.accept()
-        elif (event.button() == Qt.LeftButton) and (event.pos() in self._right_rect):
-            # 鼠标左键点击右侧边界区域
-            self._right_drag = True
-            event.accept()
-        elif (event.button() == Qt.LeftButton) and (event.pos() in self._bottom_rect):
-            # 鼠标左键点击下侧边界区域
-            self._bottom_drag = True
-            event.accept()
-        elif (event.button() == Qt.LeftButton) and (event.y() < self.ui.widget.height()):
-            # 鼠标左键点击标题栏区域
-            self._move_drag = True
-            self.move_DragPosition = event.globalPos() - self.pos()
-            event.accept()
-
-    def mousePressEvent(self, event):
-        # 重写鼠标点击的事件
-        if (event.button() == Qt.LeftButton) and (event.pos() in self._corner_rect):
-            # 鼠标左键点击右下角边界区域
-            self._corner_drag = True
-            event.accept()
-        elif (event.button() == Qt.LeftButton) and (event.pos() in self._right_rect):
-            # 鼠标左键点击右侧边界区域
-            self._right_drag = True
-            event.accept()
-        elif (event.button() == Qt.LeftButton) and (event.pos() in self._bottom_rect):
-            # 鼠标左键点击下侧边界区域
-            self._bottom_drag = True
-            event.accept()
-        elif (event.button() == Qt.LeftButton) and (event.y() < self.ui.widget.height()):
-            # 鼠标左键点击标题栏区域
-            self._move_drag = True
-            self.move_DragPosition = event.globalPos() - self.pos()
-            event.accept()
-
-    def mouseMoveEvent(self, QMouseEvent):
-        # 判断鼠标位置切换鼠标手势
-        if QMouseEvent.pos() in self._corner_rect:  # QMouseEvent.pos()获取相对位置
-            self.setCursor(Qt.SizeFDiagCursor)
-        elif QMouseEvent.pos() in self._bottom_rect:
-            self.setCursor(Qt.SizeVerCursor)
-        elif QMouseEvent.pos() in self._right_rect:
-            self.setCursor(Qt.SizeHorCursor)
-
-        # 当鼠标左键点击不放及满足点击区域的要求后，分别实现不同的窗口调整
-        # 没有定义左方和上方相关的5个方向，主要是因为实现起来不难，但是效果很差，拖放的时候窗口闪烁，再研究研究是否有更好的实现
-        if Qt.LeftButton and self._right_drag:
-            # 右侧调整窗口宽度
-            self.resize(QMouseEvent.pos().x(), self.height())
-            QMouseEvent.accept()
-        elif Qt.LeftButton and self._bottom_drag:
-            # 下侧调整窗口高度
-            self.resize(self.width(), QMouseEvent.pos().y())
-            QMouseEvent.accept()
-        elif Qt.LeftButton and self._corner_drag:
-            #  由于我窗口设置了圆角,这个调整大小相当于没有用了
-            # 右下角同时调整高度和宽度
-            self.resize(QMouseEvent.pos().x(), QMouseEvent.pos().y())
-            QMouseEvent.accept()
-        elif Qt.LeftButton and self._move_drag:
-            # 标题栏拖放窗口位置
-            self.move(QMouseEvent.globalPos() - self.move_DragPosition)
-            QMouseEvent.accept()
-
-    def mouseReleaseEvent(self, QMouseEvent):
-        # 鼠标释放后，各扳机复位
-        self._move_drag = False
-        self._corner_drag = False
-        self._bottom_drag = False
-        self._right_drag = False
-        self.setCursor(Qt.ArrowCursor)
+    # def _initDrag(self):
+    #     # Set the mouse tracking judgment trigger default value
+    #     self._move_drag = False
+    #     self._corner_drag = False
+    #     self._bottom_drag = False
+    #     self._right_drag = False
+    #
+    # def eventFilter(self, obj, event):
+    #     # Event filter, used to solve the problem of reverting to the standard mouse style after the mouse enters other controls
+    #     if isinstance(event, QEnterEvent):
+    #         self.setCursor(Qt.ArrowCursor)
+    #     return super(myAGV_windows, self).eventFilter(obj, event)  # Note that MyWindow is the name of the class
+    #     # return QWidget.eventFilter(self, obj, event)  # You can also use this, but pay attention to modifying the window type
+    #
+    # def resizeEvent(self, QResizeEvent):
+    #     # 自定义窗口调整大小事件
+    #     # 改变窗口大小的三个坐标范围
+    #     self._right_rect = [QPoint(x, y) for x in range(self.width() - 5, self.width() + 5)
+    #                         for y in range(self.ui.widget.height() + 20, self.height() - 5)]
+    #     self._bottom_rect = [QPoint(x, y) for x in range(1, self.width() - 5)
+    #                          for y in range(self.height() - 5, self.height() + 1)]
+    #     self._corner_rect = [QPoint(x, y) for x in range(self.width() - 5, self.width() + 100)
+    #                          for y in range(self.height() - 5, self.height() + 1)]
+    #
+    # def mousePressEvent(self, event):
+    #     # 重写鼠标点击的事件
+    #     if (event.button() == Qt.LeftButton) and (event.pos() in self._corner_rect):
+    #         # 鼠标左键点击右下角边界区域
+    #         self._corner_drag = True
+    #         event.accept()
+    #     elif (event.button() == Qt.LeftButton) and (event.pos() in self._right_rect):
+    #         # 鼠标左键点击右侧边界区域
+    #         self._right_drag = True
+    #         event.accept()
+    #     elif (event.button() == Qt.LeftButton) and (event.pos() in self._bottom_rect):
+    #         # 鼠标左键点击下侧边界区域
+    #         self._bottom_drag = True
+    #         event.accept()
+    #     elif (event.button() == Qt.LeftButton) and (event.y() < self.ui.widget.height()):
+    #         # 鼠标左键点击标题栏区域
+    #         self._move_drag = True
+    #         self.move_DragPosition = event.globalPos() - self.pos()
+    #         event.accept()
+    #
+    # def mousePressEvent(self, event):
+    #     # 重写鼠标点击的事件
+    #     if (event.button() == Qt.LeftButton) and (event.pos() in self._corner_rect):
+    #         # 鼠标左键点击右下角边界区域
+    #         self._corner_drag = True
+    #         event.accept()
+    #     elif (event.button() == Qt.LeftButton) and (event.pos() in self._right_rect):
+    #         # 鼠标左键点击右侧边界区域
+    #         self._right_drag = True
+    #         event.accept()
+    #     elif (event.button() == Qt.LeftButton) and (event.pos() in self._bottom_rect):
+    #         # 鼠标左键点击下侧边界区域
+    #         self._bottom_drag = True
+    #         event.accept()
+    #     elif (event.button() == Qt.LeftButton) and (event.y() < self.ui.widget.height()):
+    #         # 鼠标左键点击标题栏区域
+    #         self._move_drag = True
+    #         self.move_DragPosition = event.globalPos() - self.pos()
+    #         event.accept()
+    #
+    # def mouseMoveEvent(self, QMouseEvent):
+    #     # 判断鼠标位置切换鼠标手势
+    #     if QMouseEvent.pos() in self._corner_rect:  # QMouseEvent.pos()获取相对位置
+    #         self.setCursor(Qt.SizeFDiagCursor)
+    #     elif QMouseEvent.pos() in self._bottom_rect:
+    #         self.setCursor(Qt.SizeVerCursor)
+    #     elif QMouseEvent.pos() in self._right_rect:
+    #         self.setCursor(Qt.SizeHorCursor)
+    #
+    #     # 当鼠标左键点击不放及满足点击区域的要求后，分别实现不同的窗口调整
+    #     # 没有定义左方和上方相关的5个方向，主要是因为实现起来不难，但是效果很差，拖放的时候窗口闪烁，再研究研究是否有更好的实现
+    #     if Qt.LeftButton and self._right_drag:
+    #         # 右侧调整窗口宽度
+    #         self.resize(QMouseEvent.pos().x(), self.height())
+    #         QMouseEvent.accept()
+    #     elif Qt.LeftButton and self._bottom_drag:
+    #         # 下侧调整窗口高度
+    #         self.resize(self.width(), QMouseEvent.pos().y())
+    #         QMouseEvent.accept()
+    #     elif Qt.LeftButton and self._corner_drag:
+    #         #  由于我窗口设置了圆角,这个调整大小相当于没有用了
+    #         # 右下角同时调整高度和宽度
+    #         self.resize(QMouseEvent.pos().x(), QMouseEvent.pos().y())
+    #         QMouseEvent.accept()
+    #     elif Qt.LeftButton and self._move_drag:
+    #         # 标题栏拖放窗口位置
+    #         self.move(QMouseEvent.globalPos() - self.move_DragPosition)
+    #         QMouseEvent.accept()
+    #
+    # def mouseReleaseEvent(self, QMouseEvent):
+    #     # 鼠标释放后，各扳机复位
+    #     self._move_drag = False
+    #     self._corner_drag = False
+    #     self._bottom_drag = False
+    #     self._right_drag = False
+    #     self.setCursor(Qt.ArrowCursor)
 
 
     def stop_init(self, item):
@@ -430,7 +430,7 @@ class myAGV_windows(QMainWindow):
             self.ui.retranslateUi(self)
         if lang == "Chinese" or lang == "中文":
             print("======")
-            self.translator.load("D:\projects\cc\AGV_UI\operations_lang.qm")
+            self.translator.load("operations_lang.qm")
             self._app.installTranslator(self.translator)
             self.ui.retranslateUi(self)
 
@@ -671,26 +671,29 @@ class myAGV_windows(QMainWindow):
                 self.ui.open_build_map.setText(QCoreApplication.translate("myAGV","Close Build Map"))
                 self.ui.open_build_map.setStyleSheet(self.red_button)
 
+                if not self.keyboard_flag:
+                    pass
+
+
+                else:
+                    #     open keyboard
+                    self.keyboard_flag = True
+                    self.ui.basic_control_selection.setCurrentIndex(0)
+                    self.ui.basic_control_selection.setEnabled(False)
+                    self.ui.basic_control_button.setText(QCoreApplication.translate("myAGV", "OFF"))
+                current = self.get_current_time()
+                if build_map_method == "Gmapping":
+
+                    self.msg_log(QCoreApplication.translate("myAGV","Open Gmapping..."),current)
+                    gmapping_build()
+
+                if build_map_method == "Cartographer":
+                    self.msg_log(QCoreApplication.translate("myAGV","Open Cartographer..."),current)
+                    cartographer_build()
 
             else:
                 print("radar not open !")
                 QMessageBox.warning(None, "Warning", QCoreApplication.translate("myAGV","Radar not open!"))
-
-            if not self.keyboard_flag:
-                pass
-
-
-            else:
-                #     open keyboard
-                self.keyboard_flag = True
-                print("OOOOOO")
-                self.ui.basic_control_selection.setCurrentIndex(0)
-                self.ui.basic_control_selection.setEnabled(False)
-                self.ui.basic_control_button.setText(QCoreApplication.translate("myAGV","OFF"))
-
-            if build_map_method == "Gmapping": gmapping_build()
-
-            if build_map_method == "Cartographer": cartographer_build()
 
 
         else:
@@ -702,11 +705,17 @@ class myAGV_windows(QMainWindow):
             self.ui.navigation_button.setEnabled(True)
             self.ui.navigation_3d_button.setEnabled(True)
 
-            if build_map_method == "Gmapping": gmapping_close()
+            current_close=self.get_current_time()
+            if build_map_method == "Gmapping":
+                self.msg_log(QCoreApplication.translate("myAGV", "Close Gmapping"), current_close)
+                gmapping_close()
 
-            if build_map_method == "Cartographer": cartographer_close()
+            if build_map_method == "Cartographer":
+                self.msg_log(QCoreApplication.translate("myAGV", "Close Cartographer"), current_close)
+                cartographer_close()
 
     def navigation_3d(self):
+        current_time=self.get_current_time()
 
         if self.ui.navigation_3d_button.isChecked():
             self.ui.build_map_selection.setEnabled(False)  # 建图不可选
@@ -716,6 +725,7 @@ class myAGV_windows(QMainWindow):
             self.ui.navigation_3d_button.setText(QCoreApplication.translate("myAGV","Close 3D Navigation"))
             self.ui.navigation_3d_button.setStyleSheet(self.red_button)
 
+            self.msg_log(QCoreApplication.translate("myAGV", "Open 3D navigation", current_time))
             open_navigation = threading.Thread(target=self.navigation_open, daemon=True)
             open_navigation.start()
 
@@ -727,11 +737,14 @@ class myAGV_windows(QMainWindow):
             self.ui.navigation_3d_button.setText(QCoreApplication.translate("myAGV","3D Navigation"))
             self.ui.navigation_3d_button.setStyleSheet(self.blue_button)
 
+            self.msg_log(QCoreApplication.translate("myAGV", "Close 3D navigation", current_time))
+
             close_launch = "navigation_active.launch"
             close_navigation = threading.Thread(target=self.navigation_close, args=(close_launch,), daemon=True)
             close_navigation.start()
 
     def map_navigation(self):
+        current_time=self.get_current_time()
 
         if self.ui.navigation_button.isChecked():
             self.ui.build_map_selection.setEnabled(False)
@@ -741,6 +754,7 @@ class myAGV_windows(QMainWindow):
             self.ui.navigation_button.setText(QCoreApplication.translate("myAGV","Close Navigation"))
             self.ui.navigation_button.setStyleSheet(self.red_button)
 
+            self.msg_log(QCoreApplication.translate("myAGV", "Open navigation", current_time))
             open_navigation = threading.Thread(target=self.navigation_open, daemon=True)
             open_navigation.start()
 
@@ -751,7 +765,7 @@ class myAGV_windows(QMainWindow):
 
             self.ui.navigation_button.setText(QCoreApplication.translate("myAGV","Navigation"))
             self.ui.navigation_button.setStyleSheet(self.blue_button)
-
+            self.msg_log(QCoreApplication.translate("myAGV", "Close navigation", current_time))
             close_launch = "navigation_active.launch"
             close_navigation = threading.Thread(target=self.navigation_close, args=(close_launch,), daemon=True)
             close_navigation.start()
@@ -772,7 +786,7 @@ class myAGV_windows(QMainWindow):
             self.st.start()
 
         else:
-
+            self.ui.start_detection_button.setText(QCoreApplication.translate("myAGV", "Start Detection"))
             self.ui.comboBox_testing.setDisabled(False)
             self.msg_log(QCoreApplication.translate("myAGV","Stop ") + item + QCoreApplication.translate("myAGV"," testing"), current_time)
             self.st.terminate()
@@ -802,13 +816,13 @@ class myAGV_windows(QMainWindow):
                 """)
 
             if b_2:
-                self.ui.status_battery_backup.setStyleSheet("""
+                self.ui.status_battery_backup_2.setStyleSheet("""
                     background-color:green;
                     border-radius: 9px;
                     border: 1px solid
                 """)
             else:
-                self.ui.status_battery_backup.setStyleSheet("""
+                self.ui.status_battery_backup_2.setStyleSheet("""
                     background-color:grey;
                     border-radius: 9px;
                     border: 1px solid
@@ -884,7 +898,7 @@ class myAGV_windows(QMainWindow):
 
         self.keyboard_open()
         launch_command = "roslaunch ./src/myagv_navigation/launch/myagv_slam_laser.launch"
-        subprocess.run(launch_command, shell=True)
+        subprocess.run(['gnome-terminal', '-e', f"bash -c '{launch_command}; exec $SHELL'"])
 
     def gmapping_build_close(self, run_launch):
         close_command = "ps -ef | grep -E " + run_launch + " | grep -v 'grep' | awk '{print $2}' | xargs kill -9"
@@ -900,7 +914,9 @@ class myAGV_windows(QMainWindow):
         subprocess.run(close_command, shell=True)
 
     def save_map_file(self):
-        subprocess.run("rosrun map_server map_saver", shell=True)
+        # cd_command=""
+        launch_command="rosrun map_server map_saver"
+        subprocess.run(['gnome-terminal', '-e', f"bash -c '{launch_command}; exec $SHELL'"])
         subprocess.run(
             "cp /home/ubuntu/map.pgm /home/ubuntu/myagv_ros/src/myagv_navigation/map/my_map.pgm && cp /home/ubuntu/map.yaml /home/ubuntu/myagv_ros/src/myagv_navigation/map/my_map.yaml")
 
@@ -1047,11 +1063,16 @@ class status_detect(QThread):
     def get_info(self):
 
         # battery
-        data = self.agv.get_battery_info()
+        for i in range(5):
+
+            data = self.agv.get_battery_info()
+            if data:
+                break
 
         batterys = data[0]
         battery_1 = batterys[-2]
         battery_2 = batterys[-1]
+
 
         b_1_voltage = data[1]
 
@@ -1060,7 +1081,7 @@ class status_detect(QThread):
         self.battery.emit(battery_1, battery_2)
 
         # voltage
-
+        power_1=power_2=0
         if b_1_voltage:
             # voltage_1 = b_1_voltage
             power_1 =  b_1_voltage / (12.2) * 100
