@@ -14,14 +14,14 @@ from PyQt5.QtCore import pyqtSlot, Qt, pyqtSignal, QThread
 from PyQt5.QtGui import QEnterEvent, QPixmap, QImage
 from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QMessageBox, QDialog, QLabel
 
-from libraries.pyqtfile.agv_UI import Ui_AGV_UI as AGV_Window
+from libraries.pyqtfile.agv_UI import Ui_AGV_UI as PC_Window
 
 from CvDetection.detection import Detector
 from R1Control.RobotR1 import RobotR1
 from R1Control.VideoCapture3d import VideoCaptureThread
 
 
-class AGV_APP(AGV_Window, QMainWindow, QWidget):
+class AGV_APP(PC_Window, QMainWindow, QWidget):
     def __init__(self):
         super(AGV_APP, self).__init__()
         self.setupUi(self)
@@ -645,8 +645,8 @@ if __name__ == '__main__':
         libraries_path = libraries_path.replace("\\", "/")
         print(libraries_path)
         app = QApplication(sys.argv)
-        AGV_window = AGV_APP()
-        AGV_window.show()
+        PC_Window = AGV_APP()
+        PC_Window.show()
 
     except Exception as e:
         print(str(e))
