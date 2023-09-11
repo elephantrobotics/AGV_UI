@@ -257,24 +257,39 @@ class Ui_AGV_UI(object):
         self.agv_con_lab.setStyleSheet("background-color: rgb(255, 255, 255，200);")
         self.agv_con_lab.setObjectName("agv_con_lab")
         self.horizontalLayout_5.addWidget(self.agv_con_lab)
-        self.agv_connect_btn_2 = QtWidgets.QPushButton(self.widget_11)
-        self.agv_connect_btn_2.setMinimumSize(QtCore.QSize(0, 30))
+        self.save_point = QtWidgets.QPushButton(self.widget_11)
+        self.save_point.setMinimumSize(QtCore.QSize(0, 30))
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setBold(True)
         font.setWeight(75)
-        self.agv_connect_btn_2.setFont(font)
-        self.agv_connect_btn_2.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.agv_connect_btn_2.setStyleSheet("background-color:rgb(41, 128, 185);\n"
+        self.save_point.setFont(font)
+        self.save_point.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.save_point.setStyleSheet("background-color:rgb(41, 128, 185);\n"
 "color: rgb(255, 255, 255);\n"
 "border-radius: 10px;\n"
 "border: 2px groove gray;\n"
 "border-style: outset;")
-        self.agv_connect_btn_2.setObjectName("agv_connect_btn_2")
-        self.horizontalLayout_5.addWidget(self.agv_connect_btn_2)
+        self.save_point.setObjectName("save_point")
+        self.horizontalLayout_5.addWidget(self.save_point)
         self.horizontalLayout_5.setStretch(0, 7)
         self.horizontalLayout_5.setStretch(1, 3)
         self.verticalLayout_3.addWidget(self.widget_11)
+        self.pushButton = QtWidgets.QPushButton(self.widget)
+        self.pushButton.setMinimumSize(QtCore.QSize(50, 30))
+        self.pushButton.setMaximumSize(QtCore.QSize(120, 16777215))
+        font = QtGui.QFont()
+        font.setFamily("Arial")
+        font.setBold(True)
+        font.setWeight(75)
+        self.pushButton.setFont(font)
+        self.pushButton.setStyleSheet("background-color:rgb(41, 128, 185);\n"
+"color: rgb(255, 255, 255);\n"
+"border-radius: 10px;\n"
+"border: 2px groove gray;\n"
+"border-style: outset;")
+        self.pushButton.setObjectName("pushButton")
+        self.verticalLayout_3.addWidget(self.pushButton)
         self.widget_5 = QtWidgets.QWidget(self.widget)
         self.widget_5.setStyleSheet("background-color: rgb(236, 240, 241);\n"
 "border-radius: 15px;")
@@ -513,9 +528,9 @@ class Ui_AGV_UI(object):
         self.verticalLayout_3.addWidget(self.widget_14)
         self.verticalLayout_3.setStretch(1, 2)
         self.verticalLayout_3.setStretch(2, 1)
-        self.verticalLayout_3.setStretch(3, 4)
         self.verticalLayout_3.setStretch(4, 4)
-        self.verticalLayout_3.setStretch(5, 6)
+        self.verticalLayout_3.setStretch(5, 4)
+        self.verticalLayout_3.setStretch(6, 6)
         self.horizontalLayout_2.addWidget(self.widget)
         self.widget_2 = QtWidgets.QWidget(self.body)
         self.widget_2.setStyleSheet("")
@@ -580,7 +595,8 @@ class Ui_AGV_UI(object):
         self.agv_port.setText(_translate("AGV_UI", "PORT"))
         self.agv_connect_btn.setText(_translate("AGV_UI", "开启"))
         self.agv_con_lab.setText(_translate("AGV_UI", "定点导航位置"))
-        self.agv_connect_btn_2.setText(_translate("AGV_UI", "保存"))
+        self.save_point.setText(_translate("AGV_UI", "保存"))
+        self.pushButton.setText(_translate("AGV_UI", "点位获取"))
         self.label_3.setText(_translate("AGV_UI", "目标点1"))
         self.X_lab.setText(_translate("AGV_UI", "X"))
         self.Y_lab.setText(_translate("AGV_UI", "Y"))

@@ -307,7 +307,7 @@ color: rgb(255, 255, 255);</string>
              <property name="styleSheet">
               <string notr="true">background-color: rgb(218, 218, 218);</string>
              </property>
-             <layout class="QVBoxLayout" name="verticalLayout_3" stretch="0,2,1,4,4,6">
+             <layout class="QVBoxLayout" name="verticalLayout_3" stretch="0,2,1,0,4,4,6">
               <property name="topMargin">
                <number>9</number>
               </property>
@@ -529,7 +529,7 @@ border-style: outset;</string>
                   </widget>
                  </item>
                  <item>
-                  <widget class="QPushButton" name="agv_connect_btn_2">
+                  <widget class="QPushButton" name="save_point">
                    <property name="minimumSize">
                     <size>
                      <width>0</width>
@@ -559,6 +559,39 @@ border-style: outset;</string>
                   </widget>
                  </item>
                 </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButton">
+                <property name="minimumSize">
+                 <size>
+                  <width>50</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>120</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <family>Arial</family>
+                  <weight>75</weight>
+                  <bold>true</bold>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">background-color:rgb(41, 128, 185);
+color: rgb(255, 255, 255);
+border-radius: 10px;
+border: 2px groove gray;
+border-style: outset;</string>
+                </property>
+                <property name="text">
+                 <string>点位获取</string>
+                </property>
                </widget>
               </item>
               <item>
