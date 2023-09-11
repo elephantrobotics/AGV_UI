@@ -148,6 +148,7 @@ class Ui_AGV_UI(object):
         font.setBold(True)
         font.setWeight(75)
         self.language_btn.setFont(font)
+        self.language_btn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.language_btn.setStyleSheet("background-color:rgb(41, 128, 185);\n"
 "color: rgb(255, 255, 255);\n"
 "border-radius: 10px;\n"
@@ -181,16 +182,17 @@ class Ui_AGV_UI(object):
         self.agv_ip.setFont(font)
         self.agv_ip.setObjectName("agv_ip")
         self.horizontalLayout_11.addWidget(self.agv_ip)
-        self.label = QtWidgets.QLabel(self.widget_19)
+        self.agv_IP_text = QtWidgets.QLineEdit(self.widget_19)
         font = QtGui.QFont()
-        font.setFamily("Arial")
-        font.setBold(False)
-        font.setWeight(50)
-        self.label.setFont(font)
-        self.label.setObjectName("label")
-        self.horizontalLayout_11.addWidget(self.label)
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        self.agv_IP_text.setFont(font)
+        self.agv_IP_text.setStyleSheet("background-color: rgb(255, 255, 255);")
+        self.agv_IP_text.setObjectName("agv_IP_text")
+        self.horizontalLayout_11.addWidget(self.agv_IP_text)
         self.horizontalLayout_11.setStretch(0, 1)
-        self.horizontalLayout_11.setStretch(1, 2)
+        self.horizontalLayout_11.setStretch(1, 3)
         self.verticalLayout_6.addWidget(self.widget_19)
         self.widget_20 = QtWidgets.QWidget(self.widget_21)
         self.widget_20.setObjectName("widget_20")
@@ -215,7 +217,7 @@ class Ui_AGV_UI(object):
         self.agv_port_text.setObjectName("agv_port_text")
         self.horizontalLayout_12.addWidget(self.agv_port_text)
         self.horizontalLayout_12.setStretch(0, 1)
-        self.horizontalLayout_12.setStretch(1, 2)
+        self.horizontalLayout_12.setStretch(1, 3)
         self.verticalLayout_6.addWidget(self.widget_20)
         self.horizontalLayout_13.addWidget(self.widget_21)
         self.widget_22 = QtWidgets.QWidget(self.PORT)
@@ -535,6 +537,7 @@ class Ui_AGV_UI(object):
         self.horizontalLayout_4.addWidget(self.log_lab)
         self.clear_log_btn = QtWidgets.QPushButton(self.widget_3)
         self.clear_log_btn.setMinimumSize(QtCore.QSize(30, 30))
+        self.clear_log_btn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.clear_log_btn.setStyleSheet("background-color:rgb(41, 128, 185);\n"
 "color: rgb(255, 255, 255);\n"
 "border-radius: 10px;\n"
@@ -574,7 +577,6 @@ class Ui_AGV_UI(object):
         self.connect_lab.setText(_translate("AGV_UI", "Socket服务"))
         self.language_btn.setText(_translate("AGV_UI", "English"))
         self.agv_ip.setText(_translate("AGV_UI", "IP"))
-        self.label.setText(_translate("AGV_UI", "IPtext"))
         self.agv_port.setText(_translate("AGV_UI", "PORT"))
         self.agv_connect_btn.setText(_translate("AGV_UI", "开启"))
         self.agv_con_lab.setText(_translate("AGV_UI", "定点导航位置"))

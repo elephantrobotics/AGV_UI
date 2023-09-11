@@ -347,6 +347,9 @@ color: rgb(255, 255, 255);</string>
                      <bold>true</bold>
                     </font>
                    </property>
+                   <property name="cursor">
+                    <cursorShape>PointingHandCursor</cursorShape>
+                   </property>
                    <property name="styleSheet">
                     <string notr="true">background-color:rgb(41, 128, 185);
 color: rgb(255, 255, 255);
@@ -394,7 +397,7 @@ border-style: outset;</string>
                     </property>
                     <item>
                      <widget class="QWidget" name="widget_19" native="true">
-                      <layout class="QHBoxLayout" name="horizontalLayout_11" stretch="1,2">
+                      <layout class="QHBoxLayout" name="horizontalLayout_11" stretch="1,3">
                        <item>
                         <widget class="QLabel" name="agv_ip">
                          <property name="font">
@@ -411,16 +414,16 @@ border-style: outset;</string>
                         </widget>
                        </item>
                        <item>
-                        <widget class="QLabel" name="label">
+                        <widget class="QLineEdit" name="agv_IP_text">
                          <property name="font">
                           <font>
-                           <family>Arial</family>
-                           <weight>50</weight>
-                           <bold>false</bold>
+                           <pointsize>12</pointsize>
+                           <weight>75</weight>
+                           <bold>true</bold>
                           </font>
                          </property>
-                         <property name="text">
-                          <string>IPtext</string>
+                         <property name="styleSheet">
+                          <string notr="true">background-color: rgb(255, 255, 255);</string>
                          </property>
                         </widget>
                        </item>
@@ -429,7 +432,7 @@ border-style: outset;</string>
                     </item>
                     <item>
                      <widget class="QWidget" name="widget_20" native="true">
-                      <layout class="QHBoxLayout" name="horizontalLayout_12" stretch="1,2">
+                      <layout class="QHBoxLayout" name="horizontalLayout_12" stretch="1,3">
                        <item>
                         <widget class="QLabel" name="agv_port">
                          <property name="font">
@@ -1131,6 +1134,9 @@ border-radius: 15px;</string>
                      <width>30</width>
                      <height>30</height>
                     </size>
+                   </property>
+                   <property name="cursor">
+                    <cursorShape>PointingHandCursor</cursorShape>
                    </property>
                    <property name="styleSheet">
                     <string notr="true">background-color:rgb(41, 128, 185);

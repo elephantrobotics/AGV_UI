@@ -174,13 +174,6 @@ class AGV_APP(PC_Window, QMainWindow, QWidget):
         self._bottom_drag = False
         self._right_drag = False
 
-    def _initDrag(self):
-        # Set the mouse tracking judgment trigger default value
-        self._move_drag = False
-        self._corner_drag = False
-        self._bottom_drag = False
-        self._right_drag = False
-
     def eventFilter(self, obj, event):
         # Event filter, used to solve the problem of reverting to the standard mouse style after the mouse enters other controls
         if isinstance(event, QEnterEvent):
