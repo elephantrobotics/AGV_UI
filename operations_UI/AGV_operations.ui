@@ -295,6 +295,16 @@ font: 75 14pt &quot;Arial&quot;;</string>
                   <height>25</height>
                  </size>
                 </property>
+                <item>
+                 <property name="text">
+                  <string>English</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Chinese</string>
+                 </property>
+                </item>
                </widget>
               </item>
              </layout>
@@ -391,6 +401,21 @@ font: 75 9pt &quot;Arial&quot;;</string>
                   <height>25</height>
                  </size>
                 </property>
+                <item>
+                 <property name="text">
+                  <string>Keyboard Control</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Joystick-Alphabet</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Joystick-Number</string>
+                 </property>
+                </item>
                </widget>
               </item>
              </layout>
@@ -692,7 +717,33 @@ font: 75 9pt &quot;Arial&quot;;</string>
                </widget>
               </item>
               <item>
-               <widget class="QComboBox" name="comboBox_testing"/>
+               <widget class="QComboBox" name="comboBox_testing">
+                <item>
+                 <property name="text">
+                  <string>Motor</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>LED</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>2D Camera</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>3D Camera</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Pump</string>
+                 </property>
+                </item>
+               </widget>
               </item>
              </layout>
             </widget>

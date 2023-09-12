@@ -145,6 +145,8 @@ class Ui_myAGV(object):
         self.horizontalLayout_12.addWidget(self.label_language)
 
         self.comboBox_language_selection = QComboBox(self.widget)
+        self.comboBox_language_selection.addItem("")
+        self.comboBox_language_selection.addItem("")
         self.comboBox_language_selection.setObjectName(u"comboBox_language_selection")
         self.comboBox_language_selection.setMinimumSize(QSize(0, 25))
 
@@ -214,6 +216,9 @@ class Ui_myAGV(object):
         self.horizontalLayout_13.addWidget(self.basic_control_button)
 
         self.basic_control_selection = QComboBox(self.widget_8)
+        self.basic_control_selection.addItem("")
+        self.basic_control_selection.addItem("")
+        self.basic_control_selection.addItem("")
         self.basic_control_selection.setObjectName(u"basic_control_selection")
         self.basic_control_selection.setMinimumSize(QSize(0, 25))
 
@@ -447,6 +452,11 @@ class Ui_myAGV(object):
         self.horizontalLayout_10.addWidget(self.start_detection_button)
 
         self.comboBox_testing = QComboBox(self.widget_24)
+        self.comboBox_testing.addItem("")
+        self.comboBox_testing.addItem("")
+        self.comboBox_testing.addItem("")
+        self.comboBox_testing.addItem("")
+        self.comboBox_testing.addItem("")
         self.comboBox_testing.setObjectName(u"comboBox_testing")
 
         self.horizontalLayout_10.addWidget(self.comboBox_testing)
@@ -759,10 +769,17 @@ class Ui_myAGV(object):
         self.max_btn.setText("")
         self.close_btn.setText("")
         self.label_language.setText(QCoreApplication.translate("myAGV", u"language", None))
+        self.comboBox_language_selection.setItemText(0, QCoreApplication.translate("myAGV", u"English", None))
+        self.comboBox_language_selection.setItemText(1, QCoreApplication.translate("myAGV", u"Chinese", None))
+
         self.label_radar.setText(QCoreApplication.translate("myAGV", u"Laser Radar", None))
         self.radar_button.setText(QCoreApplication.translate("myAGV", u"ON", None))
         self.basic_control.setText(QCoreApplication.translate("myAGV", u"Basic Control", None))
         self.basic_control_button.setText(QCoreApplication.translate("myAGV", u"ON", None))
+        self.basic_control_selection.setItemText(0, QCoreApplication.translate("myAGV", u"Keyboard Control", None))
+        self.basic_control_selection.setItemText(1, QCoreApplication.translate("myAGV", u"Joystick-Alphabet", None))
+        self.basic_control_selection.setItemText(2, QCoreApplication.translate("myAGV", u"Joystick-Number", None))
+
         self.label_map_nav.setText(QCoreApplication.translate("myAGV", u"Map Navigation", None))
         self.save_map_button.setText(QCoreApplication.translate("myAGV", u"Save Map", None))
         self.open_build_map.setText(QCoreApplication.translate("myAGV", u"Open Build Map", None))
@@ -777,6 +794,12 @@ class Ui_myAGV(object):
         self.label_value.setText(QCoreApplication.translate("myAGV", u"value", None))
         self.label_15.setText(QCoreApplication.translate("myAGV", u"Test", None))
         self.start_detection_button.setText(QCoreApplication.translate("myAGV", u"Start Detection", None))
+        self.comboBox_testing.setItemText(0, QCoreApplication.translate("myAGV", u"Motor", None))
+        self.comboBox_testing.setItemText(1, QCoreApplication.translate("myAGV", u"LED", None))
+        self.comboBox_testing.setItemText(2, QCoreApplication.translate("myAGV", u"2D Camera", None))
+        self.comboBox_testing.setItemText(3, QCoreApplication.translate("myAGV", u"3D Camera", None))
+        self.comboBox_testing.setItemText(4, QCoreApplication.translate("myAGV", u"Pump", None))
+
         self.log_clear.setText(QCoreApplication.translate("myAGV", u"clear", None))
         self.IP_address.setText(QCoreApplication.translate("myAGV", u"IP Address", None))
         self.status_battery_main.setText("")
