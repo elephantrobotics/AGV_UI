@@ -259,14 +259,14 @@ class myAGV_windows(QMainWindow):
         current_time = self.get_current_time()
         self.msg_log(QCoreApplication.translate("myAGV","Finish ") + item + QCoreApplication.translate("myAGV"," testing"), current_time)
 
-        if item=="LED":
+        if item=="LED" or item=="LED灯": #TODO 可更新:
             self.myagv.set_led(1, 255,0,0)
-        if item == "Pump":
+        if item == "Pump" or item=="吸泵":
             # stop testing to close pump
             GPIO.output(2, 1)
             GPIO.output(3, 1)
 
-        if item=="Motor":
+        if item=="Motor" or item =="电机":
             self.myagv.stop()
 
         self.ui.start_detection_button.setText(QCoreApplication.translate("myAGV","Start Detection"))
