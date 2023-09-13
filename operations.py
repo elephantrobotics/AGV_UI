@@ -16,6 +16,7 @@ from operations_UI.AGV_operations_ui import Ui_myAGV
 from pymycobot.myagv import MyAgv
 from operations_UI.color_picker import ColorCircle
 import os
+import cv2
 
 if os.name == "posix":
     import RPi.GPIO as GPIO
@@ -268,6 +269,10 @@ class myAGV_windows(QMainWindow):
 
         if item=="Motor" or item =="电机":
             self.myagv.stop()
+
+        if item=="2D Camera" or item=="2D 相机":
+           cv2.VideoCapture(0).release()
+           cv2.destroyAllWindows()
 
         self.ui.start_detection_button.setText(QCoreApplication.translate("myAGV","Start Detection"))
         self.ui.comboBox_testing.setDisabled(False)
@@ -1100,6 +1105,36 @@ class Start_testing(QThread): #
 
     def Camera_testing(self):
         pass  # todo camera testing...
+
+    def Camera_2D_testing(self):
+
+        start_time=time.time()
+
+        cap = cv2.VideoCapture(0)
+
+        if not cap.isOpened():
+            print("Can't Open Camera!")
+            exit()
+
+        while True:
+            # 从摄像头捕获一帧图像
+            ret, frame = cap.read()
+
+            if not ret:
+                print("无法读取图像帧")
+                break
+
+            # 在窗口中显示捕获的图像
+            cv2.imshow('Camera', frame)
+
+            if time.time() - start_time >= 4:
+                break
+            # if cv2.waitKey(1) & 0xFF == ord('q'):
+            #     break
+
+        cap.release()
+        cv2.destroyAllWindows()
+        self.testing_finish.emit(self.test)
 
     def Pump_testing(self):
 
