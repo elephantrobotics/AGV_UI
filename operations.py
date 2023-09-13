@@ -121,7 +121,7 @@ class myAGV_windows(QMainWindow):
 
         if not self.radar_flag:
             self.status.start()
-    
+
     def connections_agv(self):
         if self.radar_flag: #open radar
             QMessageBox(None,"Warning","Please turn off the radar before using this function.")
@@ -129,7 +129,7 @@ class myAGV_windows(QMainWindow):
         else:
             self.myagv=MyAgv("/dev/ttyAMA2", 115200)
             return self.myagv
-    
+
     def connections(self):
         time.sleep(2)
         self.myagv=MyAgv("/dev/ttyAMA2", 115200)
@@ -255,7 +255,7 @@ class myAGV_windows(QMainWindow):
 
     def testing_finished(self, item):
         self.connections()
-        
+
         current_time = self.get_current_time()
         self.msg_log(QCoreApplication.translate("myAGV","Finish ") + item + QCoreApplication.translate("myAGV"," testing"), current_time)
 
@@ -265,7 +265,7 @@ class myAGV_windows(QMainWindow):
             # stop testing to close pump
             GPIO.output(2, 1)
             GPIO.output(3, 1)
-        
+
         if item=="Motor":
             self.myagv.stop()
 
@@ -292,7 +292,7 @@ class myAGV_windows(QMainWindow):
         else:
             self.myagv=MyAgv("/dev/ttyAMA2", 115200)
             self.myagv.set_led(1, r, g, b)
-    
+
 
     def get_current_time(self):
         current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time()))
@@ -379,12 +379,12 @@ class myAGV_windows(QMainWindow):
             time.sleep(0.1)
 
             self.ui.start_detection_button.setCheckable(False)  # 雷达打开时检测按钮不可使用
-            
+
             if self.flag_all: return
 
             self.ui.radar_button.setStyleSheet(self.red_button)
             self.ui.radar_button.setText(QCoreApplication.translate("myAGV","OFF"))
-            
+
             # print("open radar set")
             msg = QCoreApplication.translate("myAGV","Radar open...")
             current_time = self.get_current_time()
@@ -423,21 +423,21 @@ class myAGV_windows(QMainWindow):
                 current_time = self.get_current_time()
                 self.msg_log(msg, current_time)
 
-                try:    
+                try:
                     self.ui.status_radar.setStyleSheet("""
                         background-color:grey;
                         border-radius: 9px;
                         border: 1px solid
-                        """)                    
+                        """)
                     close_run_launch = "myagv_active.launch"
                     radar_close = threading.Thread(target=self.radar_close, args=(close_run_launch,), daemon=True)
                     radar_close.start()
-                    
+
                     self.radar_flag = False
                     time.sleep(4) #等待2s后，释放检测按钮（可用）
                     self.ui.start_detection_button.setCheckable(True)
                     self.status.start()
-                     
+
 
                 except Exception as e:
                     e = traceback.format_exc()
@@ -456,7 +456,7 @@ class myAGV_windows(QMainWindow):
 
                                     QMessageBox.Ok)
                 self.ui.basic_control_button.setChecked(False)
-                return 
+                return
                 print(self.radar_flag,"basic_control radar not")
             else:
                 print(self.radar_flag,"basic_control radar yes")
@@ -611,7 +611,7 @@ class myAGV_windows(QMainWindow):
             close_cart_build.start()
 
         build_map_method = self.ui.build_map_selection.currentText()
-        
+
         current_build=self.get_current_time()
 
         # keyboard_flag=False
@@ -624,7 +624,7 @@ class myAGV_windows(QMainWindow):
                                     QMessageBox.Ok)
                 self.ui.open_build_map.setChecked(False)
                 return
-            
+
 
             if not self.keyboard_flag: #检测键盘控制
                 QMessageBox.warning(None,
@@ -638,10 +638,10 @@ class myAGV_windows(QMainWindow):
 
             else:
                 self.ui.build_map_selection.setEnabled(False) #建图方式不可选取
-                
+
                 self.ui.navigation_3d_button.setEnabled(False)  #建图打开后导航均不可用
                 self.ui.navigation_button.setEnabled(False)
-                
+
                 self.flag_build=True
                 self.flag_all=True
 
@@ -693,14 +693,14 @@ class myAGV_windows(QMainWindow):
 
 
             # if keyboard_flag:
-                
+
             #     close_launch=("myagv_teleop.launch")
             #     keyboard_close_build = threading.Thread(target=self.keyboard_close, args=(close_launch,),
             #                                           daemon=True)
             #     keyboard_close_build.start()
 
             #     keyboard_flag=False
-                
+
 
             #     # self.ui.basic_control_selection.setCurrentIndex(0) #设置键控制
             #     self.ui.basic_control_selection.setEnabled(True) #基本控制可选
@@ -727,7 +727,7 @@ class myAGV_windows(QMainWindow):
             #                         QCoreApplication.translate("myAGV",
             #                                                    "Please turn off mapping before using this function."),
             #                         QMessageBox.Ok)
-            
+
             if not self.radar_flag:
                 QMessageBox.warning(None, "Warning", QCoreApplication.translate("myAGV", "Radar not open!"),
                                     QMessageBox.Ok)
@@ -819,7 +819,7 @@ class myAGV_windows(QMainWindow):
 
                                     QMessageBox.Ok)
                 self.ui.start_detection_button.setChecked(False)
-                return 
+                return
 
             else:
 
@@ -846,7 +846,7 @@ class myAGV_windows(QMainWindow):
             # print("before execute finish")
             self.testing_finished(item) #更新延迟
             # print("after execure dinis")
-            
+
             # self.flag_all=False
 
             # self.ui.comboBox_testing.setDisabled(False)
@@ -930,7 +930,7 @@ class myAGV_windows(QMainWindow):
         time.sleep(0.05)
         launch_command = "cd ~/myagv_ros | roslaunch myagv_odometry myagv_active.launch" # 使用ros 打开
         subprocess.run(['gnome-terminal', '-e', f"bash -c '{launch_command}; exec $SHELL'"])
-        
+
 
     def radar_close(self, run_launch):
         def radar_low():
@@ -986,7 +986,7 @@ class myAGV_windows(QMainWindow):
         close_command = "ps -ef | grep -E " + run_launch + " | grep -v 'grep' | awk '{print $2}' | xargs kill -9"
         # subprocess.run(close_command, shell=True)
 
-        os.system("ps -ef | grep -E rviz" + 
+        os.system("ps -ef | grep -E rviz" +
                   " | grep -v 'grep' | awk '{print $2}' | xargs kill -9")
 
         os.system("ps -ef | grep -E " + run_launch +
@@ -1001,7 +1001,7 @@ class myAGV_windows(QMainWindow):
 
         close_command = "ps -ef | grep -E " + "demo_myagv.launch" + " | grep -v 'grep' | awk '{print $2}' | xargs kill -9"
 
-        os.system("ps -ef | grep -E rviz" + 
+        os.system("ps -ef | grep -E rviz" +
                   " | grep -v 'grep' | awk '{print $2}' | xargs kill -9")
         subprocess.run(close_command, shell=True)
 
@@ -1030,7 +1030,7 @@ class myAGV_windows(QMainWindow):
     def navigation_close(self, run_launch):
         close_command = "ps -ef | grep -E " + run_launch + " | grep -v 'grep' | awk '{print $2}' | xargs kill -9"
 
-        os.system("ps -ef | grep -E rviz" + 
+        os.system("ps -ef | grep -E rviz" +
                   " | grep -v 'grep' | awk '{print $2}' | xargs kill -9")
 
         os.system("ps -ef | grep -E " + run_launch +
