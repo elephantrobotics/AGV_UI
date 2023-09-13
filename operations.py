@@ -841,67 +841,67 @@ class myAGV_windows(QMainWindow):
                 self.st.terminate()
                 self.testing_finished(item)  # 更新延迟
 
-def status_detecting(self):  # TODO add status radar-flag
-    def ip_set(ip_str):
-        self.ui.lineEdit.setText(ip_str)
+    def status_detecting(self):  # TODO add status radar-flag
+        def ip_set(ip_str):
+            self.ui.lineEdit.setText(ip_str)
 
-    def voltage_set(vol_1, vol_2):
-        self.ui.lineEdit_voltage.setText(str(vol_1))
-        self.ui.lineEdit_voltage_backup.setText(str(vol_2))
+        def voltage_set(vol_1, vol_2):
+            self.ui.lineEdit_voltage.setText(str(vol_1))
+            self.ui.lineEdit_voltage_backup.setText(str(vol_2))
 
-    def battery_set(b_1, b_2):
-        if b_1:
-            self.ui.status_battery_main.setStyleSheet("""
+        def battery_set(b_1, b_2):
+            if b_1:
+                self.ui.status_battery_main.setStyleSheet("""
+                        background-color:green;
+                        border-radius: 9px;
+                        border: 1px solid
+                    """)
+            else:
+                self.ui.status_battery_main.setStyleSheet("""
+                        background-color:grey;
+                        border-radius: 9px;
+                        border: 1px solid
+                    """)
+
+            if b_2:
+                self.ui.status_battery_backup_2.setStyleSheet("""
+                        background-color:green;
+                        border-radius: 9px;
+                        border: 1px solid
+                    """)
+            else:
+                self.ui.status_battery_backup_2.setStyleSheet("""
+                        background-color:grey;
+                        border-radius: 9px;
+                        border: 1px solid
+                    """)
+
+        def powers_set(power_1, power_2):
+            self.ui.lineEdit_power.setText(str(power_1))
+            self.ui.lineEdit_power_backup.setText(str(power_2))
+
+        def motors_set(status):
+            if status:
+                self.ui.status_motor_1.setStyleSheet(
+                    """
                     background-color:green;
                     border-radius: 9px;
                     border: 1px solid
-                """)
-        else:
-            self.ui.status_battery_main.setStyleSheet("""
+                    """)
+            else:
+                self.ui.status_motor_1.setStyleSheet(
+                    """
                     background-color:grey;
                     border-radius: 9px;
                     border: 1px solid
-                """)
+                    """)
 
-        if b_2:
-            self.ui.status_battery_backup_2.setStyleSheet("""
-                    background-color:green;
-                    border-radius: 9px;
-                    border: 1px solid
-                """)
-        else:
-            self.ui.status_battery_backup_2.setStyleSheet("""
-                    background-color:grey;
-                    border-radius: 9px;
-                    border: 1px solid
-                """)
-
-    def powers_set(power_1, power_2):
-        self.ui.lineEdit_power.setText(str(power_1))
-        self.ui.lineEdit_power_backup.setText(str(power_2))
-
-    def motors_set(status):
-        if status:
-            self.ui.status_motor_1.setStyleSheet(
-                """
-                background-color:green;
-                border-radius: 9px;
-                border: 1px solid
-                """)
-        else:
-            self.ui.status_motor_1.setStyleSheet(
-                """
-                background-color:grey;
-                border-radius: 9px;
-                border: 1px solid
-                """)
-
-    self.status = status_detect()
-    self.status.ipaddress.connect(ip_set)
-    self.status.voltages.connect(voltage_set)
-    self.status.battery.connect(battery_set)
-    self.status.powers.connect(powers_set)
-    self.status.motors.connect(motors_set)
+        self.status = status_detect()
+        self.status.ipaddress.connect(ip_set)
+        self.status.voltages.connect(voltage_set)
+        self.status.battery.connect(battery_set)
+        self.status.powers.connect(powers_set)
+        self.status.motors.connect(motors_set)
 
     # self.status.start()
 
