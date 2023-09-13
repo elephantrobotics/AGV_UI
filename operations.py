@@ -51,6 +51,8 @@ class myAGV_windows(QMainWindow):
         self.flag_all = False
         self.flag_build = False
 
+        self.camera=None
+
         self.pix = QPixmap(os.getcwd() + 'operations_UI/img_UI/logo.ico')
         print(self.pix.size())
 
@@ -265,7 +267,8 @@ class myAGV_windows(QMainWindow):
             self.myagv.stop()
 
         if item == "2D Camera" or item == "2D 相机":
-            self.camera.close_window()
+            if self.camera:
+                self.camera.close_window()
 
         self.ui.start_detection_button.setText(QCoreApplication.translate("myAGV", "Start Detection"))
         self.ui.comboBox_testing.setDisabled(False)
@@ -819,7 +822,7 @@ class myAGV_windows(QMainWindow):
                 # self.flag_all=True
                 # if self.connections_agv():
                 # self.connections()
-                if item == "2D Camera":
+                if item == "2D Camera" or item == "2D 相机":
                     self.camera=CameraWindow()
                     print("finished camera testing")
 
