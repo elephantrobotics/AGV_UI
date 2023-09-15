@@ -909,141 +909,141 @@ class myAGV_windows(QMainWindow):
     # self.status.start()
 
 
-# ____for threading start executing
+    # ____for threading start executing
 
-def radar_open(self):
-    def radar_high():
-        GPIO.setmode(GPIO.BCM)
-        time.sleep(0.1)
-        GPIO.setup(20, GPIO.OUT)
-        GPIO.output(20, GPIO.HIGH)
+    def radar_open(self):
+        def radar_high():
+            GPIO.setmode(GPIO.BCM)
+            time.sleep(0.1)
+            GPIO.setup(20, GPIO.OUT)
+            GPIO.output(20, GPIO.HIGH)
 
-    radar_high()
-    time.sleep(0.05)
-    launch_command = "cd ~/myagv_ros | roslaunch myagv_odometry myagv_active.launch"  # 使用ros 打开
-    subprocess.run(['gnome-terminal', '-e', f"bash -c '{launch_command}; exec $SHELL'"])
-
-
-def radar_close(self, run_launch):
-    def radar_low():
-        GPIO.setmode(GPIO.BCM)
-        time.sleep(0.1)
-        GPIO.setup(20, GPIO.OUT)
-        GPIO.output(20, GPIO.LOW)
-
-    radar_low()
-    time.sleep(0.05)
-
-    close_command = "ps -ef | grep -E " + run_launch + " | grep -v 'grep' | awk '{print $2}' | xargs kill -9"
-    subprocess.run(close_command, shell=True)
+        radar_high()
+        time.sleep(0.05)
+        launch_command = "cd ~/myagv_ros | roslaunch myagv_odometry myagv_active.launch"  # 使用ros 打开
+        subprocess.run(['gnome-terminal', '-e', f"bash -c '{launch_command}; exec $SHELL'"])
 
 
-def keyboard_open(self):
-    # self.flag_all=True
-    launch_command = "cd ~/myagv_ros | roslaunch myagv_teleop myagv_teleop.launch"
-    # subprocess.run(['gnome-terminal', '-e', f"bash -c '{launch_command}; exec $SHELL'"])
-    os.system(
-        "gnome-terminal -e 'bash -c \"cd /home/ubuntu; roslaunch ~/myagv_ros/src/myagv_teleop/launch/myagv_teleop.launch; exec bash\"'")
+    def radar_close(self, run_launch):
+        def radar_low():
+            GPIO.setmode(GPIO.BCM)
+            time.sleep(0.1)
+            GPIO.setup(20, GPIO.OUT)
+            GPIO.output(20, GPIO.LOW)
+
+        radar_low()
+        time.sleep(0.05)
+
+        close_command = "ps -ef | grep -E " + run_launch + " | grep -v 'grep' | awk '{print $2}' | xargs kill -9"
+        subprocess.run(close_command, shell=True)
 
 
-def keyboard_close(self, run_launch):
-    close_command = "ps -ef | grep -E " + run_launch + " | grep -v 'grep' | awk '{print $2}' | xargs kill -9"
-    subprocess.run(close_command, shell=True)
-    # self.flag_all=False
+    def keyboard_open(self):
+        # self.flag_all=True
+        launch_command = "cd ~/myagv_ros | roslaunch myagv_teleop myagv_teleop.launch"
+        # subprocess.run(['gnome-terminal', '-e', f"bash -c '{launch_command}; exec $SHELL'"])
+        os.system(
+            "gnome-terminal -e 'bash -c \"cd /home/ubuntu; roslaunch ~/myagv_ros/src/myagv_teleop/launch/myagv_teleop.launch; exec bash\"'")
 
 
-def joystick_open(self):
-    launch_command = "cd ~/myagv_ros | roslaunch myagv_ps2 myagv_ps2.launch"
-    # launch_command="roslaunch myagv_ps2 myagv_ps2.launch"
-    subprocess.run(['gnome-terminal', '-e', f"bash -c '{launch_command}; exec $SHELL'"])
+    def keyboard_close(self, run_launch):
+        close_command = "ps -ef | grep -E " + run_launch + " | grep -v 'grep' | awk '{print $2}' | xargs kill -9"
+        subprocess.run(close_command, shell=True)
+        # self.flag_all=False
 
 
-def joystick_close(self, run_launch):
-    close_command = "ps -ef | grep -E " + run_launch + " | grep -v 'grep' | awk '{print $2}' | xargs kill -9"
-    subprocess.run(close_command, shell=True)
+    def joystick_open(self):
+        launch_command = "cd ~/myagv_ros | roslaunch myagv_ps2 myagv_ps2.launch"
+        # launch_command="roslaunch myagv_ps2 myagv_ps2.launch"
+        subprocess.run(['gnome-terminal', '-e', f"bash -c '{launch_command}; exec $SHELL'"])
 
 
-def joystick_open_number(self):
-    launch_command = "cd ~/myagv_ros | roslaunch myagv_ps2 myagv_ps2_number.launch"
-    subprocess.run(['gnome-terminal', '-e', f"bash -c '{launch_command}; exec $SHELL'"])
+    def joystick_close(self, run_launch):
+        close_command = "ps -ef | grep -E " + run_launch + " | grep -v 'grep' | awk '{print $2}' | xargs kill -9"
+        subprocess.run(close_command, shell=True)
 
 
-def joystick_close_number(self, run_launch):
-    close_command = "ps -ef | grep -E " + run_launch + " | grep -v 'grep' | awk '{print $2}' | xargs kill -9"
-    subprocess.run(close_command, shell=True)
+    def joystick_open_number(self):
+        launch_command = "cd ~/myagv_ros | roslaunch myagv_ps2 myagv_ps2_number.launch"
+        subprocess.run(['gnome-terminal', '-e', f"bash -c '{launch_command}; exec $SHELL'"])
 
 
-def gmapping_build_open(self):
-    launch_command = "cd ~/myagv_ros | roslaunch myagv_navigation myagv_slam_laser.launch"
-
-    os.system(
-        "gnome-terminal -e 'bash -c \"cd /home/ubuntu; roslaunch ~/myagv_ros/src/myagv_navigation/launch/myagv_slam_laser.launch; exec bash\"'")
-
-    # subprocess.run(['gnome-terminal', '-e', f"bash -c '{launch_command}; exec $SHELL'"])
+    def joystick_close_number(self, run_launch):
+        close_command = "ps -ef | grep -E " + run_launch + " | grep -v 'grep' | awk '{print $2}' | xargs kill -9"
+        subprocess.run(close_command, shell=True)
 
 
-def gmapping_build_close(self, run_launch):
-    close_command = "ps -ef | grep -E " + run_launch + " | grep -v 'grep' | awk '{print $2}' | xargs kill -9"
-    # subprocess.run(close_command, shell=True)
+    def gmapping_build_open(self):
+        launch_command = "cd ~/myagv_ros | roslaunch myagv_navigation myagv_slam_laser.launch"
 
-    os.system("ps -ef | grep -E rviz" +
-              " | grep -v 'grep' | awk '{print $2}' | xargs kill -9")
+        os.system(
+            "gnome-terminal -e 'bash -c \"cd /home/ubuntu; roslaunch ~/myagv_ros/src/myagv_navigation/launch/myagv_slam_laser.launch; exec bash\"'")
 
-    os.system("ps -ef | grep -E " + run_launch +
-              " | grep -v 'grep' | awk '{print $2}' | xargs kill -9")
+        # subprocess.run(['gnome-terminal', '-e', f"bash -c '{launch_command}; exec $SHELL'"])
 
 
-def cartographer_build_open(self):
-    launch_command = "cd ~/myagv_ros | roslaunch cartographer_ros demo_myagv.launch"
-    subprocess.run(['gnome-terminal', '-e', f"bash -c '{launch_command}; exec $SHELL'"])
+    def gmapping_build_close(self, run_launch):
+        close_command = "ps -ef | grep -E " + run_launch + " | grep -v 'grep' | awk '{print $2}' | xargs kill -9"
+        # subprocess.run(close_command, shell=True)
+
+        os.system("ps -ef | grep -E rviz" +
+                  " | grep -v 'grep' | awk '{print $2}' | xargs kill -9")
+
+        os.system("ps -ef | grep -E " + run_launch +
+                  " | grep -v 'grep' | awk '{print $2}' | xargs kill -9")
 
 
-def cartographer_build_close(self):  # TODO 内置ros 未更新，无相关文件；未检测
-
-    close_command = "ps -ef | grep -E " + "demo_myagv.launch" + " | grep -v 'grep' | awk '{print $2}' | xargs kill -9"
-
-    os.system("ps -ef | grep -E rviz" +
-              " | grep -v 'grep' | awk '{print $2}' | xargs kill -9")
-    subprocess.run(close_command, shell=True)
+    def cartographer_build_open(self):
+        launch_command = "cd ~/myagv_ros | roslaunch cartographer_ros demo_myagv.launch"
+        subprocess.run(['gnome-terminal', '-e', f"bash -c '{launch_command}; exec $SHELL'"])
 
 
-def save_map_file(self):
-    # cd_command=""
-    launch_command = "rosrun map_server map_saver"
-    subprocess.run(['gnome-terminal', '-e', f"bash -c '{launch_command}; exec $SHELL'"])
-    subprocess.run(
-        "cp /home/ubuntu/map.pgm /home/ubuntu/myagv_ros/src/myagv_navigation/map/my_map.pgm && cp /home/ubuntu/map.yaml /home/ubuntu/myagv_ros/src/myagv_navigation/map/my_map.yaml")
+    def cartographer_build_close(self):  # TODO 内置ros 未更新，无相关文件；未检测
 
-    current_time = self.get_current_time()
-    self.msg_log(QCoreApplication.translate("myAGV", "Save successfully!"), current_time)
+        close_command = "ps -ef | grep -E " + "demo_myagv.launch" + " | grep -v 'grep' | awk '{print $2}' | xargs kill -9"
 
-    QMessageBox.information(None, "",
-                            f"Save successfully! \n Save Path:\n /home/ubuntu/myagv_ros/src/myagv_navigation/map/my_map.pgm\n /home/ubuntu/myagv_ros/src/myagv_navigation/map/my_map.yaml")
+        os.system("ps -ef | grep -E rviz" +
+                  " | grep -v 'grep' | awk '{print $2}' | xargs kill -9")
+        subprocess.run(close_command, shell=True)
 
 
-def navigation_open(self):
-    launch_command = "cd ~/myagv_ros | roslaunch myagv_navigation navigation_active.launch"
+    def save_map_file(self):
+        # cd_command=""
+        launch_command = "rosrun map_server map_saver"
+        subprocess.run(['gnome-terminal', '-e', f"bash -c '{launch_command}; exec $SHELL'"])
+        subprocess.run(
+            "cp /home/ubuntu/map.pgm /home/ubuntu/myagv_ros/src/myagv_navigation/map/my_map.pgm && cp /home/ubuntu/map.yaml /home/ubuntu/myagv_ros/src/myagv_navigation/map/my_map.yaml")
 
-    os.system(
-        "gnome-terminal -e 'bash -c \"cd /home/ubuntu; roslaunch ~/myagv_ros/src/myagv_navigation/launch/navigation_active.launch; exec bash\"'")
+        current_time = self.get_current_time()
+        self.msg_log(QCoreApplication.translate("myAGV", "Save successfully!"), current_time)
 
-    # subprocess.run(launch_command, shell=True)
-
-
-def navigation_close(self, run_launch):
-    close_command = "ps -ef | grep -E " + run_launch + " | grep -v 'grep' | awk '{print $2}' | xargs kill -9"
-
-    os.system("ps -ef | grep -E rviz" +
-              " | grep -v 'grep' | awk '{print $2}' | xargs kill -9")
-
-    os.system("ps -ef | grep -E " + run_launch +
-              " | grep -v 'grep' | awk '{print $2}' | xargs kill -9")
-    # subprocess.run(close_command, shell=True)
+        QMessageBox.information(None, "",
+                                f"Save successfully! \n Save Path:\n /home/ubuntu/myagv_ros/src/myagv_navigation/map/my_map.pgm\n /home/ubuntu/myagv_ros/src/myagv_navigation/map/my_map.yaml")
 
 
-def closeEvent(self, event):
-    print("Closed")
-    self.status.terminate()
+    def navigation_open(self):
+        launch_command = "cd ~/myagv_ros | roslaunch myagv_navigation navigation_active.launch"
+
+        os.system(
+            "gnome-terminal -e 'bash -c \"cd /home/ubuntu; roslaunch ~/myagv_ros/src/myagv_navigation/launch/navigation_active.launch; exec bash\"'")
+
+        # subprocess.run(launch_command, shell=True)
+
+
+    def navigation_close(self, run_launch):
+        close_command = "ps -ef | grep -E " + run_launch + " | grep -v 'grep' | awk '{print $2}' | xargs kill -9"
+
+        os.system("ps -ef | grep -E rviz" +
+                  " | grep -v 'grep' | awk '{print $2}' | xargs kill -9")
+
+        os.system("ps -ef | grep -E " + run_launch +
+                  " | grep -v 'grep' | awk '{print $2}' | xargs kill -9")
+        # subprocess.run(close_command, shell=True)
+
+
+    def closeEvent(self, event):
+        print("Closed")
+        self.status.terminate()
 
 
 class Start_testing(QThread):  #
