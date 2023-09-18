@@ -48,6 +48,8 @@ class myAGV_windows(QMainWindow):
         self.keyboard_flag = False
         self.joystick_flag = False
 
+        self.flag_led=False
+
         self.flag_all = False
         self.flag_build = False
 
@@ -257,7 +259,8 @@ class myAGV_windows(QMainWindow):
             current_time)
 
         if item == "LED" or item == "LED灯":  # TODO 可更新:
-            self.myagv.set_led(1, 255, 0, 0)
+           self.flag_led=False # LED light testing finished, remaining the current light
+            # self.myagv.set_led(1, 255, 0, 0)
         if item == "Pump" or item == "吸泵":
             # stop testing to close pump
             GPIO.output(2, 1)
@@ -290,8 +293,12 @@ class myAGV_windows(QMainWindow):
         if self.radar_flag:  # open radar
             QMessageBox(None, "Warning", "Please turn off the radar before using this function.")
         else:
-            self.myagv = MyAgv("/dev/ttyAMA2", 115200)
-            self.myagv.set_led(1, r, g, b)
+            if not self.flag_led:
+                self.myagv = MyAgv("/dev/ttyAMA2", 115200)
+                self.myagv.set_led(1, r, g, b)
+            else:
+                pass
+
 
     def get_current_time(self):
         current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time()))
@@ -834,6 +841,10 @@ class myAGV_windows(QMainWindow):
                     self.st = Start_testing(item, None)
                     self.st.testing_finish.connect(self.testing_finished)
                     self.button_status_switch(False)
+
+                    if item == "LED" or item == "LED灯":
+                        self.flag_led=True
+
                     self.st.start()
         else:
             # todo testing is running add warning
