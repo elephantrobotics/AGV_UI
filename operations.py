@@ -1071,20 +1071,26 @@ class Start_testing(QThread):  #
 
         self.agv.go_ahead(100)
         time.sleep(4)
-
-        self.agv.pan_left(100)
-
-        time.sleep(4)
+        self.agv.stop()
+        time.sleep(0.05)
 
         self.agv.pan_left(100)
         time.sleep(4)
+        self.agv.stop()
+        time.sleep(0.05)
+
+        self.agv.pan_left(100)
+        time.sleep(4)
+        self.agv.stop()
+        time.sleep(0.05)
 
         self.agv.counterclockwise_rotation(100)
         time.sleep(8)
+        self.agv.stop()
+        time.sleep(0.05)
 
         self.agv.clockwise_rotation(100)
         time.sleep(8)
-
         self.agv.stop()
 
         self.testing_finish.emit(self.test)
