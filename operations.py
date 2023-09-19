@@ -16,6 +16,7 @@ from operations_UI.AGV_operations_ui import Ui_myAGV
 from pymycobot.myagv import MyAgv
 from operations_UI.color_picker import ColorCircle
 from operations_UI.camera_window import CameraWindow
+from operations_UI.component_status import ComponentsSet
 import os
 import cv2
 
@@ -32,6 +33,8 @@ class myAGV_windows(QMainWindow):
 
         self.ui = Ui_myAGV()
         self.ui.setupUi(self)
+
+        # self.componentsSet=ComponentsSet(self.ui)
 
         self.ui.color_palette.setVisible(False)
 
@@ -117,7 +120,7 @@ class myAGV_windows(QMainWindow):
         self.ui.menu_widget.setVisible(False)
         self.ui_set()
 
-        self.status_detecting()
+        self.status_detecting() #TODO open
 
         self.language_initial()
         # self.ui.comboBox_language_selection.currentTextChanged.connect(self.language_change)
@@ -273,9 +276,15 @@ class myAGV_windows(QMainWindow):
             if self.camera:
                 self.camera.close_window()
 
+        testing_status=self.ui.start_detection_button.isEnabled()
+        self.ui.start_detection_button.setChecked(not testing_status)
         self.ui.start_detection_button.setText(QCoreApplication.translate("myAGV", "Start Detection"))
         self.ui.comboBox_testing.setDisabled(False)
         self.button_status_switch(True)
+        # ComponentsSet.led_control(self.ui,True)
+        ComponentsSet.testing_open_close(self.ui,True)
+
+
 
     def lighter_set(self, color):
 
@@ -290,14 +299,19 @@ class myAGV_windows(QMainWindow):
         self.ui.lineEdit_HEX.setText(hex)
         self.ui.lineEdit_RGB.setText(rgb_color)
 
-        if self.radar_flag:  # open radar
-            QMessageBox(None, "Warning", "Please turn off the radar before using this function.")
+        if self.radar_flag :  # open radar
+            print("radar open in lighter sed")
+
+            QMessageBox.warning(self, "Warning", "Please turn off the radar before using this function.",QMessageBox.Ok)
+        elif self.flag_led:
+                print("ssss in flag_led")
+                QMessageBox.warning(self, "Warning", "Please stop the detection before using the led.",QMessageBox.Ok)
+        
         else:
             if not self.flag_led:
                 self.myagv = MyAgv("/dev/ttyAMA2", 115200)
                 self.myagv.set_led(1, r, g, b)
-            else:
-                pass
+
 
 
     def get_current_time(self):
@@ -393,6 +407,9 @@ class myAGV_windows(QMainWindow):
             msg = QCoreApplication.translate("myAGV", "Radar open...")
             current_time = self.get_current_time()
             self.msg_log(msg, current_time)
+
+            ComponentsSet.radar_open_close(self.ui, False) #add limit for testing and led
+
             try:
                 radar_open = threading.Thread(target=self.radar_open, daemon=True)
                 radar_open.start()
@@ -439,6 +456,7 @@ class myAGV_windows(QMainWindow):
 
                     self.radar_flag = False
                     time.sleep(4)  # 等待2s后，释放检测按钮（可用）
+                    ComponentsSet.radar_open_close(self.ui, True) 
                     self.ui.start_detection_button.setCheckable(True)
                     self.status.start()
 
@@ -807,14 +825,12 @@ class myAGV_windows(QMainWindow):
         item = self.ui.comboBox_testing.currentText()
 
         if self.ui.start_detection_button.isChecked():
-
+            print(self.radar_flag,"radar-flag")  #TODO check the radar open for testing
             if self.radar_flag:
-                QMessageBox.warning(None, "Warning", QCoreApplication.translate("myAGV",
-                                                                                "Please turn off the radar before using this function."),
-
-                                    QMessageBox.Ok)
-                self.ui.start_detection_button.setChecked(False)
-                return
+                print("11111")
+                QMessageBox.warning(self, "Warning", QCoreApplication.translate("myAGV","Please turn off the radar before using this function."),QMessageBox.Ok)
+                # self.ui.start_detection_button.setChecked(False)
+                # return
 
             else:
 
@@ -845,6 +861,11 @@ class myAGV_windows(QMainWindow):
                     if item == "LED" or item == "LED灯":
                         self.flag_led=True
 
+                        # ComponentsSet.led_control(self.ui,False)
+                        # ComponentsSet.basic_control(self.ui, False)
+
+                    ComponentsSet.testing_open_close(self.ui,False)
+
                     self.st.start()
         else:
             # todo testing is running add warning
@@ -852,8 +873,11 @@ class myAGV_windows(QMainWindow):
             if item == "2D Camera":
                 self.testing_finished("2D Camera")
             else:
-                self.st.terminate()
-                self.testing_finished(item)  # 更新延迟
+                if self.st:
+                    self.st.terminate()
+                    self.testing_finished(item)  # 更新延迟
+                else:
+                    pass
 
     def status_detecting(self):  # TODO add status radar-flag
         def ip_set(ip_str):
@@ -1057,7 +1081,7 @@ class myAGV_windows(QMainWindow):
         self.status.terminate()
 
 
-class Start_testing(QThread):  #
+class Start_testing(QThread):  
     testing_finish = Signal(str)
     testing_stop = Signal()
 
@@ -1210,34 +1234,49 @@ class status_detect(QThread):
     def get_info(self):
 
         # battery
-        for i in range(5):
-
-            data = self.agv.get_battery_info()
-            if data:
-                break
+        data = self.agv.get_battery_info()
+        # for i in range(5):
+        #     data = self.agv.get_battery_info()
+        #     if data:
+        #         break
 
         batterys = data[0]
         battery_1 = batterys[1]
         battery_2 = batterys[0]
 
         b_1_voltage = data[1]
-
         b_2_voltage = data[2]
 
         print(data, batterys, battery_1, battery_2, "batterys")
-        self.battery.emit(int(battery_1), int(battery_2))  # todo 已修复电池插入后的显示问题
+        self.battery.emit(int(battery_1), int(battery_2))  
 
         # voltage
         power_1 = power_2 = 0
-        if b_1_voltage:
-            # voltage_1 = b_1_voltage
-            power_1 = b_1_voltage / (12.2) * 100
 
-        if b_2_voltage:
-            # voltage_2 = b_2_voltage
-            power_2 = b_2_voltage / (12.2) * 100
+        # print(battery_1,battery_2,"11-22")
+        if int(battery_1):
+            # print("battery 1")
+            if b_1_voltage:
+                # print("vol--1")
+                # voltage_1 = b_1_voltage
+                power_1 = b_1_voltage / (12.2) * 100
+        else:
+            power_1=0.00
+            b_1_voltage=0.00
+
+        if int(battery_2):
+            # print("battery_2")
+            if b_2_voltage:
+                # print("vol--2")
+                # voltage_2 = b_2_voltage
+                power_2 = b_2_voltage / (12.2) * 100
+        else:
+            power_2=0.00
+            b_2_voltage=0.00
 
         print(power_2, power_1, "power 1/ power 2")
+           
+        
         time.sleep(0.2)
         self.voltages.emit(b_1_voltage, b_2_voltage)
         self.powers.emit(round(power_1, 2), round(power_2, 2))
@@ -1246,6 +1285,11 @@ class status_detect(QThread):
         #     motors
 
         electicity = self.agv.get_motors_current()
+
+
+        print(electicity,"electricity")
+
+
         if electicity:
             self.motors.emit(True)
         else:
