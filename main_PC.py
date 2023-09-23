@@ -16,6 +16,7 @@ from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QMessageBox, QDi
 
 from libraries.pyqtfile.agv_UI import Ui_AGV_UI as PC_Window
 
+sys.path.append(os.getcwd() + "/AGV_3D_Vision")
 from CvDetection.detection import Detector
 from R1Control.RobotR1 import RobotR1
 from R1Control.VideoCapture3d import VideoCaptureThread

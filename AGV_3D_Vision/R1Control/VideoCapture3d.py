@@ -1,19 +1,30 @@
-from ObTypes import *
-from Property import *
-from Error import ObException
+import os
+import sys
+
+# sys.path.append(os.getcwd()+"/AGV_3D_Vision/CvDetection/libs")
+
+from AGV_3D_Vision.libs import *
+# from Property import *
+# from Error import ObException
 from collections import namedtuple
 from CvDetection.VideoStreamPipe import VideoStreamPipe
 from CvDetection.detection import color_detect, circle_detect, Detector
 from CvDetection.utli import *
 from R1Control.Common import *
-from openni import _openni2 as c_api
+
+# from openni import _openni2 as c_api
+
 import numpy as np
-import Pipeline
+
+# from sklearn import Pipeline
+
+# from transformers import pipeline
+
+# import Pipeline
 import cv2
 import threading
 import sys
 import time
-import Pipeline
 
 class VideoCaptureThread(threading.Thread):
     def __init__(self, detector, detect_type = Detector.FetchType.FETCH_ALL.value):
