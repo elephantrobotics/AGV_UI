@@ -12,6 +12,10 @@ import struct
 
 from pymycobot.mycobot import MyCobot
 from pymycobot.mycobotsocket import MyCobotSocket
+
+from pymycobot.mecharm import MechArm
+from pymycobot.mecharmsocket import MechArmSocket
+
 from pymycobot.utils import get_port_list
 from geometry_msgs.msg import PoseWithCovarianceStamped
 from tf.transformations import quaternion_from_euler
@@ -32,14 +36,21 @@ socket_stop_res = None
 
 agv_stop = False
 
+arrive_feed_flag=False
+
 # ip = '192.168.1.103'
 # port = 9000
 # 使用socket通信控制机械臂
-#mc = MyCobotSocket(ip, port)
+
+# ip='192.168.123.127'
+# mc = MyCobotSocket(ip, port)
+
 
 plist = get_port_list()
-mc = MyCobot(plist[0],115200)
-print(plist)
+# mc = MyCobot(plist[0],115200)
+print(plist,"plist")
+mc=MechArm(plist[0],115200)
+
 time.sleep(0.5)
 mc.send_angles([85.42, 11.68, -25.46, 1.93, 86.13, 0], 50)
 time.sleep(1)
@@ -48,6 +59,10 @@ mc.set_gripper_value(40, 30)
 pub = rospy.Publisher('/cmd_vel',Twist, queue_size=10)
 pub_setpose = rospy.Publisher('/initialpose',PoseWithCovarianceStamped, queue_size=10)
 pub_cancel = rospy.Publisher('/move_base/cancel', GoalID, queue_size=10)
+
+# 点位信息
+goal_1 = [(1.14674675465,-0.2211885452272,-0.194474697331,0.980907534938)]
+goal_2 = [(-0.00696444511414,0.193625003099,0.707766802897,0.706446142829)]
 
 # 抓取点上方
 pick_top = [
@@ -246,18 +261,232 @@ def pub_vel(x, y , theta):
     twist.angular.z = theta
     pub.publish(twist)
 
+def picking_finished():
+    pub_vel(0,0,0)
+    time.sleep(2)
+    pub_vel(-0.1,0,0)
+    time.sleep(2)
+    pub_vel(0,0.1,0)
+    time.sleep(2)
+
+
+def go_to_unload():
+    for goal in goal_2:
+        x_goal, y_goal, orientation_z, orientation_w = goal
+        flag_unload_goalReached = map_navigation.navigate(x_goal, y_goal, orientation_z, orientation_w)
+        if flag_unload_goalReached:
+            time.sleep(0.1)
+            print("python agv_aruco")
+            os.system('python agv_aruco.py')
+            #agv_aruco_1.main()
+            time.sleep(2)
+            map_navigation.set_pose_1()
+            time.sleep(3)
+            print("pick")
+            pick()
+            socket_res = 'placed_finished'
+        else:
+            print("failed")
+
+def go_to_feed():
+    for goal in goal_1:
+        x_goal, y_goal, orientation_z, orientation_w = goal
+        flag_feed_goalReached = map_navigation.navigate(x_goal, y_goal, orientation_z, orientation_w)
+        if flag_feed_goalReached:
+            time.sleep(0.1)
+            print("start agv_aruco")
+            os.system('python agv_aruco.py')
+            arrive_feed_flag=True
+            socket_res = None
+        else:
+            print("failed")
+
+def placed_finished():
+    pub_vel(0,0,0)
+    time.sleep(2)
+    pub_vel(-0.1,0,0)
+    time.sleep(2)
+    pub_vel(0,0,-0.1)
+    time.sleep(2)
+
+
+
+def data_actions(socket_data):
+
+    socket_res=socket_data
+    socket_data_stop=socket_data
+    agv_stop=False
+
+    print("in in aaa",socket_data)
+
+    try:
+        if socket_res == 'go_to_feed':
+            # print("1111")
+            go_to_feed()
+    #         # for goal in goal_1:
+    #         #     x_goal, y_goal, orientation_z, orientation_w = goal
+    #         #     flag_feed_goalReached = map_navigation.navigate(x_goal, y_goal, orientation_z, orientation_w)
+    #         #     if flag_feed_goalReached:
+    #         #         time.sleep(0.1)
+    #         #         print("start agv_aruco")
+    #         #         os.system('python agv_aruco.py')
+
+    #         #         arrive_feed_flag=True
+
+    #         #         socket_res = None
+    #         #     else:
+    #         #         print("failed")
+
+        
+        if socket_res == 'picking_finished':
+            # print("2222")
+    #         # pub_vel(0,0,0)
+    #         # time.sleep(2)
+    #         # pub_vel(-0.1,0,0)
+    #         # time.sleep(2)
+    #         # pub_vel(0,0.1,0)
+    #         # time.sleep(2)
+    #         # socket_res = 'go_to_unload'
+
+            picking_finished()
+            go_to_unload()
+
+
+ 
+        if socket_res == 'go_to_unload':
+            # print("3333")
+            go_to_unload()
+            placed_finished()
+
+    #         # for goal in goal_2:
+    #         #     x_goal, y_goal, orientation_z, orientation_w = goal
+    #         #     flag_unload_goalReached = map_navigation.navigate(x_goal, y_goal, orientation_z, orientation_w)
+    #         #     if flag_unload_goalReached:
+    #         #         time.sleep(0.1)
+    #         #         print("python agv_aruco")
+    #         #         os.system('python agv_aruco.py')
+    #         #         #agv_aruco_1.main()
+    #         #         time.sleep(2)
+    #         #         map_navigation.set_pose_1()
+    #         #         time.sleep(3)
+    #         #         print("pick")
+    #         #         pick()
+    #         #         socket_res = 'placed_finished'
+    #         #     else:
+    #         #         print("failed")
+        
+        if socket_res == 'placed_finished':
+            # print("4444")
+            placed_finished()
+    #         go_to_feed()
+    #         # pub_vel(0,0,0)
+    #         # time.sleep(2)
+    #         # pub_vel(-0.1,0,0)
+    #         # time.sleep(2)
+    #         # pub_vel(0,0,-0.1)
+    #         # time.sleep(2)
+    #         # socket_res = 'go_to_feed'
+
+    #     # single
+        if socket_res == 'single_go_to_feed':
+            # print("5555")
+
+            for goal in goal_1:
+                x_goal, y_goal, orientation_z, orientation_w = goal
+                flag_feed_goalReached = map_navigation.navigate(x_goal, y_goal, orientation_z, orientation_w)
+                if flag_feed_goalReached:
+                    time.sleep(0.1)
+                    print("start agv_aruco")
+                    os.system('python agv_aruco.py')         
+                    map_navigation.set_pose()
+                    socket_res = None
+                else:
+                    print("failed")
+
+        if socket_res == 'single_picking_finished':
+            # print("6666")
+            pub_vel(0,0,0)
+            time.sleep(2)
+            pub_vel(-0.1,0,0)
+            time.sleep(2)
+            pub_vel(0,0.1,0)
+            time.sleep(2)
+            pub_vel(0,0,0)
+            socket_res = None
+
+        if socket_res == 'single_go_to_unload':
+            for goal in goal_2:
+                x_goal, y_goal, orientation_z, orientation_w = goal
+                flag_unload_goalReached = map_navigation.navigate(x_goal, y_goal, orientation_z, orientation_w)
+                if flag_unload_goalReached:
+                    time.sleep(0.1)
+                    print("python agv_aruco")
+                    os.system('python agv_aruco.py')
+                    time.sleep(2)
+                    map_navigation.set_pose_1()
+                    time.sleep(3)
+                    pick()
+                    socket_res = None
+                else:
+                    print("failed")
+
+        if socket_res == 'single_placed_finished':
+            pub_vel(0,0,0)
+            time.sleep(2)
+            pub_vel(-0.1,0,0)
+            time.sleep(2)
+            pub_vel(0,0,-0.1)
+            time.sleep(2)
+            pub_vel(0,0,0)
+            socket_res = None
+
+
+        
+        if socket_stop_res == "stop":
+            agv_stop = True
+        
+        if socket_stop_res == "Resume_Stop":
+            agv_stop = False
+
+        if agv_stop:
+            goal_id = GoalID()
+            pub_cancel.publish(goal_id)
+            twist = Twist()
+            twist.linear.x = 0.0
+            twist.linear.y = 0.0
+            twist.linear.z = 0.0
+            twist.angular.x = 0.0
+            twist.angular.y = 0.0
+            twist.angular.z = 0.0
+            pub.publish(twist)
+            rospy.sleep(0.1)
+
+    except Exception:
+        print("Data action error!")
+
+
+
+
+
+
 if __name__ == '__main__':
+
    
     goal_1 = [(1.14674675465,-0.2211885452272,-0.194474697331,0.980907534938)]
     goal_2 = [(-0.00696444511414,0.193625003099,0.707766802897,0.706446142829)]
 
+
     map_navigation = MapNavigation()
-    #server_ip = '192.168.1.101'
-    #server_port = 9005
+
+    server_ip = '192.168.1.101'
+    server_port = 9005
+
+
+    # IP address get
 
     ifname = "wlan0"
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    HOST = socket.inet_ntoa(fcntl.ioctl(s.fileno(), 0x8915, struct.pack('256s', ifname))[20:24])
+    HOST = socket.inet_ntoa(fcntl.ioctl(s.fileno(), 0x8915, struct.pack('256s', bytes(ifname,'utf-8')))[20:24])
     PORT = 9000
     print("ip: {} port: {}".format(HOST, PORT))
 
@@ -270,11 +499,13 @@ if __name__ == '__main__':
     result = server_socket.accept()
     conn = result[0] 
     address = result[1]
+
     t = threading.Thread(target=get_res)
     t.start()
     # get stop res
     stop_thread = threading.Thread(target=get_stop_res)
     stop_thread.start()
+    
      
     while 1:
         #loop

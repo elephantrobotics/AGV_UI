@@ -5,16 +5,36 @@ import socket
 import struct
 import sys
 import threading
-#import fcntl
+import fcntl
+import time
+import json
+import subprocess
 from PyQt5 import QtCore, QtGui
-from PyQt5.QtCore import pyqtSlot, Qt, QPoint
+from PyQt5.QtCore import pyqtSlot, Qt, QPoint,pyqtSignal
 from PyQt5.QtGui import QPixmap, QEnterEvent
 from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QMessageBox
 
 from libraries.pyqtfile.INagv_UI import Ui_AGV_UI as AGV_Window
+from netifaces import interfaces, ifaddresses, AF_INET
+
+
+from scripts.agv_socket_server import MapNavigation
+import scripts.agv_socket_server as socket_server
+from scripts.socket_connection import socket_connection
+
+
+if os.name == "posix":
+    import RPi.GPIO as GPIO
+
+
 
 
 class AGV_APP(AGV_Window, QMainWindow, QWidget):
+
+    data_recieve=pyqtSignal(str)
+    data_point1=pyqtSignal(list)
+    data_point2=pyqtSignal(list)
+
     def __init__(self):
         super(AGV_APP, self).__init__()
         super(AGV_APP, self).__init__()
@@ -32,6 +52,20 @@ class AGV_APP(AGV_Window, QMainWindow, QWidget):
         self.close_btn.clicked.connect(self.close_clicked)  # close
         self.language_btn.clicked.connect(self.set_language)
         self.agv_connect_btn.clicked.connect(self.open_socket)
+        self.save_point.clicked.connect(self.save_points)
+
+        self.pushButton.clicked.connect(self.point_obtain)
+        # self._init_point_info()
+        self.data_recieve.connect(self.socket_data)
+        self.data_point1.connect(self.set_points1)
+        self.data_point2.connect(self.set_points2)
+
+        self.cap=None
+        # self.mapNavi=MapNavigation()
+        self.mapNavi=self.server_socket=None
+
+        self.all_point1=self.all_points2=[]
+        self.flag_point=False
 
         # Initialize window borders
     def _init_main_window(self):
@@ -79,6 +113,18 @@ class AGV_APP(AGV_Window, QMainWindow, QWidget):
         self.min_btn.setStyleSheet("border-image: url({}/images/min.ico);".format(libraries_path))
         self.max_btn.setStyleSheet("border-image: url({}/images/max.ico);".format(libraries_path))
         self.close_btn.setStyleSheet("border-image: url({}/images/close.ico);".format(libraries_path))
+    
+    def _init_point_info(self):
+        goal_list1=[self.X_text,self.Y_text,self.Z_text,self.W_text]
+        goal_list2=[self.X_text_3,self.Y_text_3,self.Z_text_3,self.W_text_3]
+
+        try:
+            for index,value in enumerate(zip(goal_list1,goal_list2)):
+                value[0][index]=socket_server.goal_1[index]
+                value[0][index]=socket_server.goal_2[index]
+        except Exception:
+            print("value is null")
+
 
     @pyqtSlot()
     def min_clicked(self):
@@ -185,46 +231,320 @@ class AGV_APP(AGV_Window, QMainWindow, QWidget):
     @pyqtSlot()
     def close_clicked(self):
         # turn off an app
-        self.cap.release()
+        if self.cap:
+            self.cap.release()
+        
+        if self.server_socket:
+            self.server_socket.close()
+        
+        if self.flag_point:
+            self.close_terminal()
+
+        
+
         self.close()
         QApplication.exit()
 
+
+    def close_terminal(self):
+
+        def close_radar():
+            GPIO.setmode(GPIO.BCM)
+            time.sleep(0.1)
+            GPIO.setup(20, GPIO.OUT)
+            GPIO.output(20, GPIO.LOW)
+
+            time.sleep(0.05)
+
+            run_cmd="myagv_active.launch"
+            close_command = "ps -ef | grep -E " + run_cmd + " | grep -v 'grep' | awk '{print $2}' | xargs kill -9"
+            subprocess.run(close_command, shell=True)
+        
+        def close_navi():
+
+            run_cmd="navigation_active.launch"
+            # close_command = "ps -ef | grep -E " + run_cmd + " | grep -v 'grep' | awk '{print $2}' | xargs kill -9"
+
+            os.system("ps -ef | grep -E rviz" +
+                    " | grep -v 'grep' | awk '{print $2}' | xargs kill -9")
+
+            time.sleep(0.2)
+
+            os.system("ps -ef | grep -E " + run_cmd +
+                    " | grep -v 'grep' | awk '{print $2}' | xargs kill -9")
+        
+        close_radar()
+        time.sleep(0.2)
+        close_navi()
+
+    
+
     def get_IP(self):
-        # 获取本地计算机的主机名
-        host_name = socket.gethostname()
-        # 根据主机名获取本地IP地址
-        ip_address = socket.gethostbyname(host_name)
-        print(ip_address)
-        return ip_address
+            # IP address get
 
-    def open_socket(self):
-        ip_address = self.agv_IP_text.text()
-        port = self.agv_port_text.text()
+        ifname = "wlan0"
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        HOST = socket.inet_ntoa(fcntl.ioctl(s.fileno(), 0x8915, struct.pack('256s', bytes(ifname,'utf-8')))[20:24])
+        PORT = 9000 #default
+
+        print("ip: {} port: {}".format(HOST, PORT))
+        print(type(HOST),"Host")
+
+        return HOST
+    
+    def point_obtain(self):
+        
+        points=threading.Thread(target=self.open_points,daemon=True)
+        points.start()
+    
+    def open_points(self):
+        self.flag_point=True
+
+        def radar_open():
+            GPIO.setmode(GPIO.BCM)
+            time.sleep(0.1)
+            GPIO.setup(20, GPIO.OUT)
+            GPIO.output(20, GPIO.HIGH)
+
+            launch_command = "cd ~/myagv_ros | roslaunch myagv_odometry myagv_active.launch"  # 使用ros 打开
+            subprocess.run(['gnome-terminal', '-e', f"bash -c '{launch_command}; exec $SHELL'"])
+
+        def navi_open():
+            # os.system("gnome-terminal -e 'bash -c \"cd /home/ubuntu; roslaunch ~/myagv_ros/src/myagv_navigation/launch/navigation_active.launch; exec bash\"'")
+            launch_command = "roslaunch myagv_navigation navigation_active.launch"  # 使用ros 打开
+            subprocess.run(['gnome-terminal', '-e', f"bash -c '{launch_command}; exec $SHELL'"])
+
+
+        
+        
+        def get_points():
+
+            all_points_tmp=[]
+            position_values = []
+            orientation_values = []
+
+            # path='/home/er/Desktop/outout.json'
+            
+
+            command = "rostopic echo /initialpose"
+            process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+            point_count=1
+            while True:
+                # print(point_count,"iiii first")
+                output_line = process.stdout.readline().decode().strip()
+            
+                if not output_line:
+                    break  
+
+                # print("Output:", output_line) 
+                all_points_tmp.append(output_line)
+
+                if output_line=="---":
+                    # print(point_count,"iii in ---")
+                    print(all_points_tmp,"all for now")
+
+                    index_position=all_points_tmp.index("position:")
+                    index_orientation=all_points_tmp.index("orientation:")
+                    index_con=index_orientation+5
+
+                    # print(raw_data[index_position],raw_data[index_orientation],raw_data[index_con])
+
+                    for i in range(index_position+1,index_orientation):
+                        # print(raw_data[i],"i")
+                        value1=all_points_tmp[i].split(":")[1].strip()
+                        # print(value,"vv")
+                        position_values.append(value1)
+
+
+                    for j in range(index_orientation+1,index_con):
+                        value2=all_points_tmp[j].split(":")[1].strip()
+                        #print(value2,"vvvj")
+                        orientation_values.append(value2)
+                        # print(raw_data[j])
+
+                    deal_data=position_values[:2]+orientation_values[2:]
+                    print(point_count,"count") 
+                    if point_count%2==0:
+                        self.data_point2.emit(deal_data)
+                        
+
+                    elif point_count%2==1:
+                        self.data_point1.emit(deal_data)
+
+                    all_points_tmp.clear()
+                    position_values.clear()
+                    orientation_values.clear()
+
+                    point_count+=1
+                    # print(point_count,"pp")
+
+
+            return_code = process.poll()
+            if return_code is not None:
+                print(f"Command exited with return code: {return_code}")
+
+            stderr_output = process.stderr.read().decode()
+            if stderr_output:
+                print("Error:", stderr_output)
+
+            
+            
+        radar_open()
+        time.sleep(5)
+        navi_open()
+        time.sleep(5)
+        print("start text")
+        get_points()
+
+
+
+    def save_points(self):
+        dir_path = os.path.dirname(os.path.realpath(__file__))
+
+        path=dir_path+"/points.json"
+
+        print(path,"save_path")
+
+        datas={
+            "point1": self.all_point1,
+            "point2": self.all_point2
+        }
+
+
         try:
-            if ip_address and port is not None:
-                self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                server_address = (ip_address, int(port))
-                self.client_socket.connect(server_address)
-                t = threading.Thread(target=self.get_res)
-                t.start()
-                if self.language == 1:
-                    QMessageBox.information(self, "communication", "Successfully connected", QMessageBox.Ok)
-                else:
-                    QMessageBox.information(self, "提示", "连接成功", QMessageBox.Ok)
-            else:
-                if self.language == 1:
-                    QMessageBox.information(self, "prompt", "The connection failed, please check the IP address and confirm that the AGV has started the server", QMessageBox.Ok)
-                else:
-                    QMessageBox.information(self, "提示", "连接失败，请检查IP地址以及确认AGV已经启动服务端", QMessageBox.Ok)
-                self.agv_IP_text.setText(self.get_IP())
+        # if datas:
+            print(datas,"datas",self.all_point1,self.all_point2)
+            with open(path,'w') as f:
+                json.dump(datas,f,indent=4)
+            
 
-        except Exception as e:
-            print(str(e))
             if self.language == 1:
-                QMessageBox.information(self, "prompt", "The connection failed, please check the IP address and confirm that the AGV has started the server", QMessageBox.Ok)
+                QMessageBox.information(self, "communication", "Save points file successfully", QMessageBox.Ok)
             else:
-                QMessageBox.information(self, "提示", "连接失败，请检查IP地址以及确认AGV已经启动服务端", QMessageBox.Ok)
+                QMessageBox.information(self, "提示", "保存点位文件成功",QMessageBox.Ok)
+
+        except Exception:
+
+            if self.language == 1:
+                QMessageBox.information(self, "communication", "Fail to Save the points file", QMessageBox.Ok)
+            else:
+                QMessageBox.information(self, "提示", "点位文件保存失败",QMessageBox.Ok)
+
+   
+    def open_socket(self):
+        print("socket_test")
+        ip_add=self.agv_IP_text.text()
+        port=self.agv_port_text.text()
+
+
+        if ip_add and port:
+
+            server_address = (ip_add, int(port))
+            self.server_socket=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+            self.server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+            time.sleep(0.1)
+            self.server_socket.bind(server_address)
+
+            run_msg=threading.Thread(target=self.receive_msg)
+            run_msg.start()
+
+
+            if self.language == 1:
+                QMessageBox.information(self, "communication", "Successfully openserver", QMessageBox.Ok)
+            else:
+                    QMessageBox.information(self, "提示", "服务端打开成功",QMessageBox.Ok)
+        else:
+            if self.language == 1:
+                QMessageBox.information(self, "prompt", "The connectionfailed, please check the IP address and confirm that the AGVhas started the server", QMessageBox.Ok)
+            else:
+                QMessageBox.information(self, "提示", "连接失败，请检查IP地址以确认AGV已经启动服务端", QMessageBox.Ok)
+
             self.agv_IP_text.setText(self.get_IP())
+    
+
+    def socket_data(self,data):
+        # print(data,"data-- in emit and signal")
+        socket_server.data_actions(data)
+    
+    def socket_send_msg(msg):
+        print("send")
+        self.connection.send(msg.encode())
+
+
+    def receive_msg(self):
+        self.server_socket.listen(3)
+        print("Waitting for connection...")
+        self.connection, client_address = self.server_socket.accept()
+        print("connected")
+
+        while 1:
+            try:
+                data = self.connection.recv(1024)
+                if not data:
+                    break
+
+                print("Get the message", data.decode())
+
+                self.data_recieve.emit(data.decode())
+
+                reply="Reply to"+str(client_address)
+                print("flag",socket_server.arrive_feed_flag)
+                # self.connection.send(reply.encode())
+
+                if data.decode()=="go_to_feed":
+                    time.sleep(1)
+                    print(socket_server.arrive_feed_flag,"in bbbb")
+                    #  socket_server.arrive_feed_flag==True:
+                    reply="arrive_feed"
+
+                    time.sleep(1)
+                else:pass
+                    # print("1111")
+                self.connection.send(reply.encode())
+            except Exception:
+                self.connection, client_address = self.server_socket.accept()
+                print("Error occured")
+
+        print("End")
+        self.connection.close()
+        self.server_socket.close()
+    
+    def set_points1(self,points):
+
+        socket_server.goal_1= [tuple(i for i in points)]
+        self.all_point1=points
+        print(socket_server.goal_1,"goal_1")
+
+
+        goal_list1=[self.X_text,self.Y_text,self.Z_text,self.W_text]
+
+        try:
+            for index,value in enumerate(points):
+                goal_list1[index].setText(value)
+                
+        except Exception:
+            print("value is null")
+
+
+    def set_points2(self,points):
+
+        socket_server.goal_2= [tuple(i for i in points)]
+        self.all_point2=points
+        print(socket_server.goal_2,"goal_2")
+
+        goal_list2=[self.X_text_3,self.Y_text_3,self.Z_text_3,self.W_text_3]
+
+        try:
+            for index,value in enumerate(points):
+                goal_list2[index].setText(value)
+                
+        except Exception:
+            print("value is null")
+
+
+
+
 
     def btn_color(self, btn, color):
         if color == 'red':
@@ -282,7 +602,7 @@ class AGV_APP(AGV_Window, QMainWindow, QWidget):
             self.agv_port.setText(_translate("AGV_UI", "端口"))
             self.agv_connect_btn.setText(_translate("AGV_UI", "开启"))
             self.agv_con_lab.setText(_translate("AGV_UI", "定点导航位置"))
-            self.agv_connect_btn_2.setText(_translate("AGV_UI", "保存"))
+            #self.agv_connect_btn_2.setText(_translate("AGV_UI", "保存"))
             self.label_3.setText(_translate("AGV_UI", "目标点1"))
             self.X_lab.setText(_translate("AGV_UI", "X"))
             self.Y_lab.setText(_translate("AGV_UI", "Y"))
@@ -308,7 +628,7 @@ class AGV_APP(AGV_Window, QMainWindow, QWidget):
             self.agv_port.setText(_translate("AGV_UI", "Port"))
             self.agv_connect_btn.setText(_translate("AGV_UI", "Open"))
             self.agv_con_lab.setText(_translate("AGV_UI", "point navigation position"))
-            self.agv_connect_btn_2.setText(_translate("AGV_UI", "Save"))
+            #self.agv_connect_btn_2.setText(_translate("AGV_UI", "Save"))
             self.label_3.setText(_translate("AGV_UI", "target point 1"))
             self.X_lab.setText(_translate("AGV_UI", "X"))
             self.Y_lab.setText(_translate("AGV_UI", "Y"))
@@ -341,6 +661,7 @@ if __name__ == '__main__':
         print(libraries_path)
         app = QApplication(sys.argv)
         PC_Window = AGV_APP()
+        # PC_Window.open_socket()
         PC_Window.show()
 
     except Exception as e:
