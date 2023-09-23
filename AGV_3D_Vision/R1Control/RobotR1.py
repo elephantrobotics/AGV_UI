@@ -7,6 +7,7 @@ import logging
 
 
 class RobotR1(MechArmController):
+
     def status_check(self):
         # 检查270是否已上电，未上电则上电
         if not self.ma.is_power_on():
@@ -44,6 +45,7 @@ class RobotR1(MechArmController):
         time.sleep(1)
 
     def robot_check(self):
+        
         self.status_check()
         self.move_start(default_speed, 3)
 
@@ -74,7 +76,12 @@ class RobotR1(MechArmController):
         # self.camera_pos = np.array([-99.6, -134.5, 185.6])
         self.end_coords   = np.array([0.0, 0.0, 0.0])          # 根据相机坐标转换后的实际世界坐标点
         self.i = -1                  # 控制果子放置区域
-        self.robot_check()
+        
+        if self.ma:
+            self.robot_check()
+        else:
+            print("in r r1 no ")
+            pass
 
     # 获取真实相机世界坐标x, y, z
     def get_camera_coord(self):

@@ -1,8 +1,10 @@
 from enum import Enum
 from pymycobot.mycobotsocket import MyCobotSocket
 from pymycobot import MyCobot
+from pymycobot import MechArm
 from R1Control.Common import *
 import time
+import serial.tools.list_ports
 
 
 # MechArm270控制器
@@ -24,13 +26,33 @@ class MechArmController:
         RZ = 5
 
     def __init__(self):
+
+        ports = serial.tools.list_ports.comports()
+
+        try:
+            if ports:
+                for port in ports:
+                    pd=port.device
+                
+                if pd:
+                    self.ma=MechArm(pd,115200) #TODO open
+                    self.ma.set_fresh_mode(0)
+            else:
+                self.ma=None
+        except Exception:
+            print("NO connection")
+
         #self.ma = MyCobotSocket('192.168.1.102',9000)
         # self.ma.connect('/dev/ttyAMA0', '1000000')
-        self.ma = MyCobot("COM7",115200)
+        # self.ma = MyCobot("COM25",115200)
+
+        
+        # self.ma=None
+
         # self.ma = MyCobot("COM8", 115200)
         #self.ma.set_gripper_calibration()
         # M5 吸泵引脚参数
-        self.ma.set_fresh_mode(0)
+        
         time.sleep(1)
         # self.ma.set_tool_reference([0, 0 , 90,0 ,0 ,0])
         # self.ma.set_end_type(1)
