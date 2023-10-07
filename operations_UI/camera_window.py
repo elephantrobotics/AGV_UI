@@ -5,6 +5,7 @@ from PySide6.QtCore import Qt, QThread, QTimer, Signal
 from PySide6.QtGui import QImage, QPixmap
 from PySide6.QtWidgets import QApplication, QMainWindow, QLabel, QVBoxLayout, QWidget
 
+finish_flag=False
 
 class CameraThread(QThread):
     image_ready = Signal(QImage)
@@ -17,7 +18,8 @@ class CameraThread(QThread):
             ret, frame = cap.read()
 
             print(time.time() - start_time, "time--")
-            if time.time() - start_time >= 8:
+            if time.time() - start_time >= 5:
+                # finish_flag=True
                 break
             height, width, channel = frame.shape
             bytes_per_line = 3 * width
@@ -27,7 +29,10 @@ class CameraThread(QThread):
         self.thread_finished.emit()
 
 
-class CameraWindow(QMainWindow):
+class CameraWindow(QMainWindow, QThread):
+
+    camera_finish=Signal(str)
+
     def __init__(self):
         super().__init__()
         self.initUI()
@@ -38,6 +43,7 @@ class CameraWindow(QMainWindow):
         self.label = QLabel()
         layout.addWidget(self.label)
         central_widget.setLayout(layout)
+
         self.setCentralWidget(central_widget)
 
         self.camera_thread = CameraThread()
@@ -50,7 +56,13 @@ class CameraWindow(QMainWindow):
         self.label.setPixmap(pixmap)
 
     def close_window(self):
+        self.camera_finish.emit("2D Camera")
+        self.camera_thread.quit()
         self.close()  # 在窗口关闭槽函数中关闭窗口
+        
+        # from operations import myAGV_windows
+        # myAGV_windows.prrr("sssss")
+        # myAGV_windows.testing_finished("2D Camera")
 
 
 if __name__ == '__main__':
