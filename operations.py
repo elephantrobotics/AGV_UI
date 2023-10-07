@@ -58,8 +58,8 @@ class myAGV_windows(QMainWindow):
 
         self.camera=None
 
-        self.pix = QPixmap(os.getcwd() + 'operations_UI/img_UI/logo.ico')
-        print(self.pix.size())
+        # self.pix = QPixmap(os.getcwd() + 'operations_UI/img_UI/logo.ico')
+        # print(self.pix.size())
 
         self.red_button = """
             background-color: rgb(198, 61, 47);
@@ -121,8 +121,18 @@ class myAGV_windows(QMainWindow):
         self.ui_set()
 
         self.status_detecting() #TODO open
-
         self.language_initial()
+
+
+        # try:
+        #     GPIO.cleanup()
+        # except Exception:pass
+
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setup(2, GPIO.OUT)
+        GPIO.setup(3, GPIO.OUT)
+
         # self.ui.comboBox_language_selection.currentTextChanged.connect(self.language_change)
 
         if not self.radar_flag:
@@ -266,8 +276,9 @@ class myAGV_windows(QMainWindow):
             # self.myagv.set_led(1, 255, 0, 0)
         if item == "Pump" or item == "吸泵":
             # stop testing to close pump
-            GPIO.output(2, 1)
-            GPIO.output(3, 1)
+            GPIO.output(2, GPIO.HIGH)
+            GPIO.output(3, GPIO.HIGH)
+            # GPIO.cleanup()
 
         if item == "Motor" or item == "电机":
             self.myagv.stop()
@@ -611,6 +622,12 @@ class myAGV_windows(QMainWindow):
             self.flag_all = True
             save_map = threading.Thread(target=self.save_map_file, daemon=True)
             save_map.start()
+
+
+            # QMessageBox.information(None, "",
+            #         f"Save successfully! \n Save Path:\n /home/ubuntu/myagv_ros/src/myagv_navigation/map/my_map.pgm\n /home/ubuntu/myagv_ros/src/myagv_navigation/map/my_map.yaml",
+            #                     QMessageBox.Ok)
+
             self.flag_all = False
 
     def open_build_map(self):
@@ -740,7 +757,7 @@ class myAGV_windows(QMainWindow):
             #                                                    "Please turn off mapping before using this function."),
             #                         QMessageBox.Ok)
 
-            if not self.radar_flag:
+            if not self.radar_flag: 
                 QMessageBox.warning(None, "Warning", QCoreApplication.translate("myAGV", "Radar not open!"),
                                     QMessageBox.Ok)
 
@@ -769,22 +786,19 @@ class myAGV_windows(QMainWindow):
             self.ui.navigation_3d_button.setText(QCoreApplication.translate("myAGV", "3D Navigation"))
             self.ui.navigation_3d_button.setStyleSheet(self.blue_button)
 
-            self.msg_log(QCoreApplication.translate("myAGV", "Close 3D navigation", ), current_time)
+            self.msg_log(QCoreApplication.translate("myAGV", "Close 3D navigation"), current_time)
 
             close_launch = "navigation_active.launch"
             close_navigation = threading.Thread(target=self.navigation_close, args=(close_launch,), daemon=True)
             close_navigation.start()
             self.flag_all = False
 
+
     def map_navigation(self):
         current_time = self.get_current_time()
 
         if self.ui.navigation_button.isChecked():
-            # if self.flag_build:
-            #     QMessageBox.warning("",
-            #                         QCoreApplication.translate("myAGV", "Warning"),
-            #                         QCoreApplication.translate("myAGV", "Please turn off mapping before using this function."),
-            #                         QMessageBox.Ok)
+
             if not self.radar_flag:
                 QMessageBox.warning(None, "Warning", QCoreApplication.translate("myAGV", "Radar not open!"),
                                     QMessageBox.Ok)
@@ -814,9 +828,10 @@ class myAGV_windows(QMainWindow):
 
             self.ui.navigation_button.setText(QCoreApplication.translate("myAGV", "Navigation"))
             self.ui.navigation_button.setStyleSheet(self.blue_button)
-            self.msg_log(QCoreApplication.translate("myAGV", "Close navigation", current_time))
+            self.msg_log(QCoreApplication.translate("myAGV", "Close navigation"), current_time)
             close_launch = "navigation_active.launch"
             close_navigation = threading.Thread(target=self.navigation_close, args=(close_launch,), daemon=True)
+            # print("navagation_start_close ---iiii")
             close_navigation.start()
             self.flag_all = False
 
@@ -955,7 +970,7 @@ class myAGV_windows(QMainWindow):
 
         radar_high()
         time.sleep(0.05)
-        launch_command = "cd ~/myagv_ros | roslaunch myagv_odometry myagv_active.launch"  # 使用ros 打开
+        launch_command = "roslaunch myagv_odometry myagv_active.launch"  # 使用ros 打开
         subprocess.run(['gnome-terminal', '-e', f"bash -c '{launch_command}; exec $SHELL'"])
 
 
@@ -975,7 +990,7 @@ class myAGV_windows(QMainWindow):
 
     def keyboard_open(self):
         # self.flag_all=True
-        launch_command = "cd ~/myagv_ros | roslaunch myagv_teleop myagv_teleop.launch"
+        launch_command = "roslaunch myagv_teleop myagv_teleop.launch"
         # subprocess.run(['gnome-terminal', '-e', f"bash -c '{launch_command}; exec $SHELL'"])
         os.system(
             "gnome-terminal -e 'bash -c \"cd /home/ubuntu; roslaunch ~/myagv_ros/src/myagv_teleop/launch/myagv_teleop.launch; exec bash\"'")
@@ -988,7 +1003,7 @@ class myAGV_windows(QMainWindow):
 
 
     def joystick_open(self):
-        launch_command = "cd ~/myagv_ros | roslaunch myagv_ps2 myagv_ps2.launch"
+        launch_command = "roslaunch myagv_ps2 myagv_ps2.launch"
         # launch_command="roslaunch myagv_ps2 myagv_ps2.launch"
         subprocess.run(['gnome-terminal', '-e', f"bash -c '{launch_command}; exec $SHELL'"])
 
@@ -999,7 +1014,7 @@ class myAGV_windows(QMainWindow):
 
 
     def joystick_open_number(self):
-        launch_command = "cd ~/myagv_ros | roslaunch myagv_ps2 myagv_ps2_number.launch"
+        launch_command = "roslaunch myagv_ps2 myagv_ps2_number.launch"
         subprocess.run(['gnome-terminal', '-e', f"bash -c '{launch_command}; exec $SHELL'"])
 
 
@@ -1009,7 +1024,7 @@ class myAGV_windows(QMainWindow):
 
 
     def gmapping_build_open(self):
-        launch_command = "cd ~/myagv_ros | roslaunch myagv_navigation myagv_slam_laser.launch"
+        launch_command = "roslaunch myagv_navigation myagv_slam_laser.launch"
 
         os.system(
             "gnome-terminal -e 'bash -c \"cd /home/ubuntu; roslaunch ~/myagv_ros/src/myagv_navigation/launch/myagv_slam_laser.launch; exec bash\"'")
@@ -1029,7 +1044,7 @@ class myAGV_windows(QMainWindow):
 
 
     def cartographer_build_open(self):
-        launch_command = "cd ~/myagv_ros | roslaunch cartographer_ros demo_myagv.launch"
+        launch_command = "roslaunch cartographer_ros demo_myagv.launch"
         subprocess.run(['gnome-terminal', '-e', f"bash -c '{launch_command}; exec $SHELL'"])
 
 
@@ -1046,27 +1061,34 @@ class myAGV_windows(QMainWindow):
         # cd_command=""
         launch_command = "rosrun map_server map_saver"
         subprocess.run(['gnome-terminal', '-e', f"bash -c '{launch_command}; exec $SHELL'"])
+
+        time.sleep(1)
+
         subprocess.run(
             "cp /home/ubuntu/map.pgm /home/ubuntu/myagv_ros/src/myagv_navigation/map/my_map.pgm && cp /home/ubuntu/map.yaml /home/ubuntu/myagv_ros/src/myagv_navigation/map/my_map.yaml")
 
         current_time = self.get_current_time()
         self.msg_log(QCoreApplication.translate("myAGV", "Save successfully!"), current_time)
 
-        QMessageBox.information(None, "",
-                                f"Save successfully! \n Save Path:\n /home/ubuntu/myagv_ros/src/myagv_navigation/map/my_map.pgm\n /home/ubuntu/myagv_ros/src/myagv_navigation/map/my_map.yaml")
+        # QMessageBox.information(None, "",
+        #                         f"Save successfully! \n Save Path:\n /home/ubuntu/myagv_ros/src/myagv_navigation/map/my_map.pgm\n /home/ubuntu/myagv_ros/src/myagv_navigation/map/my_map.yaml",
+        #                         QMessageBox.Ok)
 
 
     def navigation_open(self):
-        launch_command = "cd ~/myagv_ros | roslaunch myagv_navigation navigation_active.launch"
+        # launch_command = "cd ~/myagv_ros | roslaunch myagv_navigation navigation_active.launch"
+        launch_command="roslaunch myagv_navigation navigation_active.launch"
 
-        os.system(
-            "gnome-terminal -e 'bash -c \"cd /home/ubuntu; roslaunch ~/myagv_ros/src/myagv_navigation/launch/navigation_active.launch; exec bash\"'")
+        # os.system(
+        #     "gnome-terminal -e 'bash -c \"cd /home/ubuntu; roslaunch ~/myagv_ros/src/myagv_navigation/launch/navigation_active.launch; exec bash\"'")
 
-        # subprocess.run(launch_command, shell=True)
+        subprocess.run(['gnome-terminal', '-e', f"bash -c '{launch_command}; exec $SHELL'"])
 
 
     def navigation_close(self, run_launch):
         close_command = "ps -ef | grep -E " + run_launch + " | grep -v 'grep' | awk '{print $2}' | xargs kill -9"
+
+        print("dededeclose")
 
         os.system("ps -ef | grep -E rviz" +
                   " | grep -v 'grep' | awk '{print $2}' | xargs kill -9")
@@ -1078,7 +1100,9 @@ class myAGV_windows(QMainWindow):
 
     def closeEvent(self, event):
         print("Closed")
+        GPIO.cleanup()
         self.status.terminate()
+        
 
 
 class Start_testing(QThread):  
@@ -1103,7 +1127,7 @@ class Start_testing(QThread):
         self.agv.stop()
         time.sleep(0.05)
 
-        self.agv.pan_left(100)
+        self.agv.pan_right(100) 
         time.sleep(4)
         self.agv.stop()
         time.sleep(0.05)
@@ -1173,22 +1197,26 @@ class Start_testing(QThread):
 
         print("pump")
         # initialize
-        GPIO.setmode(GPIO.BCM)
 
-        GPIO.cleanup()
-        GPIO.setup(2, GPIO.OUT)
-        GPIO.setup(3, GPIO.OUT)
+        # try:
+        #     GPIO.cleanup()
+        # except Exception:pass
 
+        # GPIO.setmode(GPIO.BCM)
+        # GPIO.setmode(GPIO.BCM)
+        # GPIO.setup(2, GPIO.OUT)
+        # GPIO.setup(3, GPIO.OUT)
         # open pump
-        GPIO.output(2, 0)
-        GPIO.output(3, 0)
+
+        GPIO.output(2, GPIO.LOW)
+        GPIO.output(3, GPIO.LOW)  
 
         # wait 4s
         time.sleep(4)
 
         # close pump
-        GPIO.output(2, 1)
-        GPIO.output(3, 1)
+        GPIO.output(2, GPIO.HIGH)
+        GPIO.output(3, GPIO.HIGH)
 
         self.testing_finish.emit(self.test)
 
@@ -1247,7 +1275,7 @@ class status_detect(QThread):
         b_1_voltage = data[1]
         b_2_voltage = data[2]
 
-        print(data, batterys, battery_1, battery_2, "batterys")
+        #print(data, batterys, battery_1, battery_2, "batterys")
         self.battery.emit(int(battery_1), int(battery_2))  
 
         # voltage
@@ -1274,7 +1302,7 @@ class status_detect(QThread):
             power_2=0.00
             b_2_voltage=0.00
 
-        print(power_2, power_1, "power 1/ power 2")
+        # print(power_2, power_1, "power 1/ power 2")
            
         
         time.sleep(0.2)
@@ -1287,7 +1315,7 @@ class status_detect(QThread):
         electicity = self.agv.get_motors_current()
 
 
-        print(electicity,"electricity")
+        # print(electicity,"electricity")
 
 
         if electicity:
