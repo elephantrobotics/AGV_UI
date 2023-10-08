@@ -33,7 +33,7 @@ Select Chinese and English to switch the corresponding language.
 
 ![Basic Control](img_depict/../operations_UI/img_depict/basic_control_en.png "Basic Control")
 
-**前置条件：** The radar needs to be turned on before turning on the basic control. If it is not turned on, a prompt box will pop up showing "Radar is not turned on".
+**Predictions：** The radar needs to be turned on before turning on the basic control. If it is not turned on, a prompt box will pop up showing "Radar is not turned on".
 
 Click the drop-down box to select the required control method, and click the button on the left to open. At this time, a new terminal will open on the desktop.
 
@@ -112,7 +112,10 @@ Click the drop-down box to select the Gmapping mapping method, and click the "Op
 ![Save Map](img_depict/../operations_UI/img_depict/save_map_en.png "Save Map")
 
 Click the "Save Map" button, and a new terminal will appear on the desktop to display the saved map information, as shown in the figure. The red circled part in the picture is the saved map file:
+
 ![Save map terminal](operations_UI/img_depict/save_map.png)
+
+
 **The default save path is in the software running directory.**
 
 ### 4.2 Navigation
