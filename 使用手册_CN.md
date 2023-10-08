@@ -18,7 +18,8 @@
 1. 点击按钮，打开雷达。按钮变成红色，文字显示为“关”。
 2. myAgv的雷达开始转动。
 3. 桌面出现新的终端如图示，说明雷达打开成功。
-   ![Radar Open](img_depict/../operations_UI/img_depict/radar_open_terminal.png "Open Radar")
+
+![Radar Open](img_depict/../operations_UI/img_depict/radar_open_terminal.png "Open Radar")
 
 **限制:**  
 
@@ -129,8 +130,8 @@
 
 #### 2.修改launch文件
 
-1. 双击打开左上角的Visual Studio Code 打开代码编辑器，
-![vscode Icon](operations_UI/img_depict/vscode_icon.png)
+1. 双击打开左上角的Visual Studio Code 打开代码编辑器
+  ![vscode Icon](operations_UI/img_depict/vscode_icon.png)
 
 2. 打开/home/ubuntu/myagv_ros/src/myagv_navigation/launch/路径下的 navigation_active.launch文件
 ![modify launchfile1](operations_UI/img_depict/modify_launch1.png)
