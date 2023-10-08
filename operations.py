@@ -135,12 +135,14 @@ class myAGV_windows(QMainWindow):
 
         # self.ui.comboBox_language_selection.currentTextChanged.connect(self.language_change)
 
+        
+
         if not self.radar_flag:
             self.status.start()
 
     def connections_agv(self):
         if self.radar_flag:  # open radar
-            QMessageBox(None, "Warning", "Please turn off the radar before using this function.")
+            QMessageBox(None, QCoreApplication.translate("myAGV", "Warning"),QCoreApplication.translate("myAGV", "Please turn off the radar before using this function."))
             return False
         else:
             self.myagv = MyAgv("/dev/ttyAMA2", 115200)
@@ -318,10 +320,11 @@ class myAGV_windows(QMainWindow):
         if self.radar_flag :  # open radar
             print("radar open in lighter sed")
 
-            QMessageBox.warning(self, "Warning", "Please turn off the radar before using this function.",QMessageBox.Ok)
+            
+            QMessageBox.warning(self, QCoreApplication.translate("myAGV", "Warning"),QCoreApplication.translate("myAGV","Please turn off the radar before using this function.") ,QMessageBox.Ok)
         elif self.flag_led:
                 print("ssss in flag_led")
-                QMessageBox.warning(self, "Warning", "Please stop the detection before using the led.",QMessageBox.Ok)
+                QMessageBox.warning(self, QCoreApplication.translate("myAGV", "Warning"),QCoreApplication.translate("myAGV","Please stop the detection before using the led." ) ,QMessageBox.Ok)
         
         else:
             if not self.flag_led:
@@ -490,7 +493,7 @@ class myAGV_windows(QMainWindow):
         if self.ui.basic_control_button.isChecked():
 
             if not self.radar_flag:
-                QMessageBox.warning(None, "Warning", QCoreApplication.translate("myAGV", "Radar not open!"),
+                QMessageBox.warning(None, QCoreApplication.translate("myAGV", "Warning"), QCoreApplication.translate("myAGV", "Radar not open!"),
 
                                     QMessageBox.Ok)
                 self.ui.basic_control_button.setChecked(False)
@@ -618,7 +621,7 @@ class myAGV_windows(QMainWindow):
     def save_map(self):
         if not self.radar_flag:
 
-            QMessageBox.warning(None, "Warning", QCoreApplication.translate("myAGV", "Radar not open!"),
+            QMessageBox.warning(None, QCoreApplication.translate("myAGV", "Warning"), QCoreApplication.translate("myAGV", "Radar not open!"),
 
                                 QMessageBox.Ok)
             self.ui.save_map_button.setChecked(False)
@@ -663,7 +666,7 @@ class myAGV_windows(QMainWindow):
         if self.ui.open_build_map.isChecked():
 
             if not self.radar_flag:  # 检测雷达
-                QMessageBox.warning(None, "Warning", QCoreApplication.translate("myAGV", "Radar not open!"),
+                QMessageBox.warning(None, QCoreApplication.translate("myAGV", "Warning"), QCoreApplication.translate("myAGV", "Radar not open!"),
 
                                     QMessageBox.Ok)
                 self.ui.open_build_map.setChecked(False)
@@ -763,7 +766,7 @@ class myAGV_windows(QMainWindow):
             #                         QMessageBox.Ok)
 
             if not self.radar_flag: 
-                QMessageBox.warning(None, "Warning", QCoreApplication.translate("myAGV", "Radar not open!"),
+                QMessageBox.warning(None, QCoreApplication.translate("myAGV", "Warning"), QCoreApplication.translate("myAGV", "Radar not open!"),
                                     QMessageBox.Ok)
 
                 self.ui.navigation_3d_button.setChecked(False)
@@ -805,7 +808,7 @@ class myAGV_windows(QMainWindow):
         if self.ui.navigation_button.isChecked():
 
             if not self.radar_flag:
-                QMessageBox.warning(None, "Warning", QCoreApplication.translate("myAGV", "Radar not open!"),
+                QMessageBox.warning(None, QCoreApplication.translate("myAGV", "Warning"), QCoreApplication.translate("myAGV", "Radar not open!"),
                                     QMessageBox.Ok)
 
                 self.ui.navigation_button.setChecked(False)
@@ -853,7 +856,7 @@ class myAGV_windows(QMainWindow):
             print(self.radar_flag,"radar-flag")  #TODO check the radar open for testing
             if self.radar_flag:
                 print("11111")
-                QMessageBox.warning(self, "Warning", QCoreApplication.translate("myAGV","Please turn off the radar before using this function."),QMessageBox.Ok)
+                QMessageBox.warning(self, QCoreApplication.translate("myAGV", "Warning"), QCoreApplication.translate("myAGV","Please turn off the radar before using this function."),QMessageBox.Ok)
                 # self.ui.start_detection_button.setChecked(False)
                 # return
 
