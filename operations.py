@@ -178,6 +178,8 @@ class myAGV_windows(QMainWindow):
         self.ui.horizontal_Slider.valueChanged.connect((lambda x: color.setValue(x / 511)))
         self.ui.horizontalLayout_palette.addWidget(self.label_color)
 
+
+
     def ui_set(self):
 
         def ui_params():
@@ -261,11 +263,39 @@ class myAGV_windows(QMainWindow):
 
             self.ui.start_detection_button.clicked.connect(self.start_testing)
 
+            self.ui.Restore_btn.pressed.connect(self.restore_btn)
+            self.ui.Restore_btn.released.connect(self.release_style)
+
         ui_params()
         ui_functions()
         ui_buttons()
     
-    def testing_finished_camera(self):pass
+    def release_style(self):
+
+        self.ui.Restore_btn.setStyleSheet("""
+                background-color: rgb(39, 174, 96);
+                color: rgb(255, 255, 255);
+                border-radius: 7px;
+                border: 2px groove gray;
+                border-style: outset;
+                font: 75 9pt "Arial";
+            """)
+
+    def restore_btn(self):
+
+        current_time=self.get_current_time()
+        self.msg_log(QCoreApplication.translate("myAGV","Motor Restor"),current_time)
+
+        if self.connections_agv():
+            self.ui.Restore_btn.setStyleSheet("""
+                background-color: rgb(31, 140, 77);
+                color: rgb(255, 255, 255);
+                border-radius: 7px;
+                border: 2px groove gray;
+                border-style: outset;
+                font: 75 9pt "Arial";
+            """)
+            self.myagv.restore()
 
 
     def testing_finished(self, item):
@@ -318,7 +348,7 @@ class myAGV_windows(QMainWindow):
         self.ui.lineEdit_RGB.setText(rgb_color)
 
         if self.radar_flag :  # open radar
-            print("radar open in lighter sed")
+            print("radar open in lighter set")
 
             
             QMessageBox.warning(self, QCoreApplication.translate("myAGV", "Warning"),QCoreApplication.translate("myAGV","Please turn off the radar before using this function.") ,QMessageBox.Ok)
@@ -855,10 +885,7 @@ class myAGV_windows(QMainWindow):
         if self.ui.start_detection_button.isChecked():
             print(self.radar_flag,"radar-flag")  #TODO check the radar open for testing
             if self.radar_flag:
-                print("11111")
                 QMessageBox.warning(self, QCoreApplication.translate("myAGV", "Warning"), QCoreApplication.translate("myAGV","Please turn off the radar before using this function."),QMessageBox.Ok)
-                # self.ui.start_detection_button.setChecked(False)
-                # return
 
             else:
 
@@ -950,7 +977,7 @@ class myAGV_windows(QMainWindow):
             self.ui.lineEdit_power.setText(str(power_1))
             self.ui.lineEdit_power_backup.setText(str(power_2))
 
-        def motors_set(status):
+        def motors_set(status,curr):
             if status:
                 self.ui.status_motor_1.setStyleSheet(
                     """
@@ -958,6 +985,7 @@ class myAGV_windows(QMainWindow):
                     border-radius: 9px;
                     border: 1px solid
                     """)
+                self.ui.electricity_display.setText(curr)
             else:
                 self.ui.status_motor_1.setStyleSheet(
                     """
@@ -965,6 +993,7 @@ class myAGV_windows(QMainWindow):
                     border-radius: 9px;
                     border: 1px solid
                     """)
+                self.ui.electricity_display.setText(curr)
 
         self.status = status_detect()
         self.status.ipaddress.connect(ip_set)
@@ -1258,7 +1287,7 @@ class status_detect(QThread):
     voltages = Signal(float, float)
     battery = Signal(bool, bool)
     powers = Signal(float, float)
-    motors = Signal(bool)
+    motors = Signal(bool,str)
 
     def __init__(self):
         super().__init__()
@@ -1331,14 +1360,12 @@ class status_detect(QThread):
 
         electicity = self.agv.get_motors_current()
 
-
         # print(electicity,"electricity")
 
-
         if electicity:
-            self.motors.emit(True)
+            self.motors.emit(True,str(electicity))
         else:
-            self.motors.emit(False)
+            self.motors.emit(False,str(electicity))
 
     def run(self):
 
@@ -1359,41 +1386,9 @@ class status_detect(QThread):
                 pass
 
 
-def resource_path(relative_path):
-    # check if Bundle Resource
-    if getattr(sys, 'frozen', False):
-        base_path = sys._MEIPASS
-    else:
-        base_path = os.path.abspath(".")
-    return os.path.join(base_path, relative_path)
-
-
-class CameraThread(QThread):
-    image_ready = Signal(QImage)
-    camera_finish = Signal(bool)
-
-    def run(self):
-        start_time = time.time()
-        cap = cv2.VideoCapture(0)
-        while True:
-            ret, frame = cap.read()
-            if not ret:
-                break
-            if time.time() - start_time >= 4:
-                # print("camer breask")
-
-                self.camera_finish.emit(True)
-                break
-            height, width, channel = frame.shape
-            bytes_per_line = 3 * width
-            q_image = QImage(frame.data, width, height, bytes_per_line, QImage.Format_RGB888)
-            self.image_ready.emit(q_image)
-
-
 # 程序入口
 if __name__ == "__main__":
-    libraries_path = resource_path('operations_UI')
-    libraries_path = libraries_path.replace("\\", "/")
+
     app = QApplication(sys.argv)
 
     window = myAGV_windows()

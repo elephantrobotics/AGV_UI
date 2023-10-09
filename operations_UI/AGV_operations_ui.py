@@ -123,7 +123,7 @@ class Ui_myAGV(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 1047, 774))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 1047, 792))
         self.horizontalLayout = QHBoxLayout(self.scrollAreaWidgetContents)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.horizontalLayout.setContentsMargins(2, 8, 2, -1)
@@ -423,6 +423,19 @@ class Ui_myAGV(object):
 
         self.widget_23 = QWidget(self.widget_22)
         self.widget_23.setObjectName(u"widget_23")
+        self.verticalLayout_8 = QVBoxLayout(self.widget_23)
+        self.verticalLayout_8.setObjectName(u"verticalLayout_8")
+        self.Restore_btn = QPushButton(self.widget_23)
+        self.Restore_btn.setObjectName(u"Restore_btn")
+        self.Restore_btn.setStyleSheet(u"background-color: rgb(39, 174, 96);\n"
+"color: rgb(255, 255, 255);\n"
+"border-radius: 7px;\n"
+"border: 2px groove gray;\n"
+"border-style: outset;\n"
+"font: 75 9pt \"Arial\";")
+
+        self.verticalLayout_8.addWidget(self.Restore_btn)
+
 
         self.horizontalLayout_27.addWidget(self.widget_23)
 
@@ -544,9 +557,8 @@ class Ui_myAGV(object):
         self.widget_18 = QWidget(self.widget_4)
         self.widget_18.setObjectName(u"widget_18")
         self.widget_18.setStyleSheet(u"")
-        self.horizontalLayout_34 = QHBoxLayout(self.widget_18)
-        self.horizontalLayout_34.setObjectName(u"horizontalLayout_34")
-        self.horizontalLayout_34.setContentsMargins(0, 3, 0, 11)
+        self.horizontalLayout_8 = QHBoxLayout(self.widget_18)
+        self.horizontalLayout_8.setObjectName(u"horizontalLayout_8")
         self.verticalLayout_5 = QVBoxLayout()
         self.verticalLayout_5.setObjectName(u"verticalLayout_5")
         self.horizontalLayout_21 = QHBoxLayout()
@@ -604,7 +616,7 @@ class Ui_myAGV(object):
         self.verticalLayout_5.addLayout(self.horizontalLayout_23)
 
 
-        self.horizontalLayout_34.addLayout(self.verticalLayout_5)
+        self.horizontalLayout_8.addLayout(self.verticalLayout_5)
 
         self.verticalLayout_13 = QVBoxLayout()
         self.verticalLayout_13.setObjectName(u"verticalLayout_13")
@@ -663,10 +675,10 @@ class Ui_myAGV(object):
         self.verticalLayout_13.addLayout(self.horizontalLayout_33)
 
 
-        self.horizontalLayout_34.addLayout(self.verticalLayout_13)
+        self.horizontalLayout_8.addLayout(self.verticalLayout_13)
 
-        self.verticalLayout_11 = QVBoxLayout()
-        self.verticalLayout_11.setObjectName(u"verticalLayout_11")
+        self.verticalLayout_7 = QVBoxLayout()
+        self.verticalLayout_7.setObjectName(u"verticalLayout_7")
         self.horizontalLayout_25 = QHBoxLayout()
         self.horizontalLayout_25.setObjectName(u"horizontalLayout_25")
         self.status_motor_1 = QLabel(self.widget_18)
@@ -685,20 +697,31 @@ class Ui_myAGV(object):
         self.horizontalLayout_25.addWidget(self.motor_1)
 
 
-        self.verticalLayout_11.addLayout(self.horizontalLayout_25)
+        self.verticalLayout_7.addLayout(self.horizontalLayout_25)
 
-        self.widget_25 = QWidget(self.widget_18)
-        self.widget_25.setObjectName(u"widget_25")
+        self.horizontalLayout_7 = QHBoxLayout()
+        self.horizontalLayout_7.setObjectName(u"horizontalLayout_7")
+        self.electricity_name = QLabel(self.widget_18)
+        self.electricity_name.setObjectName(u"electricity_name")
+        self.electricity_name.setStyleSheet(u"font: 10pt \"Arial\";")
 
-        self.verticalLayout_11.addWidget(self.widget_25)
+        self.horizontalLayout_7.addWidget(self.electricity_name)
+
+        self.electricity_display = QLabel(self.widget_18)
+        self.electricity_display.setObjectName(u"electricity_display")
+
+        self.horizontalLayout_7.addWidget(self.electricity_display)
+
+
+        self.verticalLayout_7.addLayout(self.horizontalLayout_7)
 
         self.widget_21 = QWidget(self.widget_18)
         self.widget_21.setObjectName(u"widget_21")
 
-        self.verticalLayout_11.addWidget(self.widget_21)
+        self.verticalLayout_7.addWidget(self.widget_21)
 
 
-        self.horizontalLayout_34.addLayout(self.verticalLayout_11)
+        self.horizontalLayout_8.addLayout(self.verticalLayout_7)
 
         self.verticalLayout_12 = QVBoxLayout()
         self.verticalLayout_12.setObjectName(u"verticalLayout_12")
@@ -733,7 +756,7 @@ class Ui_myAGV(object):
         self.verticalLayout_12.addWidget(self.widget_27)
 
 
-        self.horizontalLayout_34.addLayout(self.verticalLayout_12)
+        self.horizontalLayout_8.addLayout(self.verticalLayout_12)
 
 
         self.verticalLayout_14.addWidget(self.widget_18)
@@ -793,6 +816,7 @@ class Ui_myAGV(object):
         self.label_luminance.setText(QCoreApplication.translate("myAGV", u"Luminance", None))
         self.label_value.setText(QCoreApplication.translate("myAGV", u"value", None))
         self.label_15.setText(QCoreApplication.translate("myAGV", u"Test", None))
+        self.Restore_btn.setText(QCoreApplication.translate("myAGV", u"Restore", None))
         self.start_detection_button.setText(QCoreApplication.translate("myAGV", u"Start Detection", None))
         self.comboBox_testing.setItemText(0, QCoreApplication.translate("myAGV", u"Motor", None))
         self.comboBox_testing.setItemText(1, QCoreApplication.translate("myAGV", u"LED", None))
@@ -816,6 +840,8 @@ class Ui_myAGV(object):
         self.lineEdit_voltage_backup.setText("")
         self.status_motor_1.setText("")
         self.motor_1.setText(QCoreApplication.translate("myAGV", u"Motor", None))
+        self.electricity_name.setText(QCoreApplication.translate("myAGV", u"Electricity", None))
+        self.electricity_display.setText("")
         self.status_radar.setText("")
         self.Radar.setText(QCoreApplication.translate("myAGV", u"Radar", None))
     # retranslateUi
