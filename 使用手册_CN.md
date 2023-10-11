@@ -219,14 +219,14 @@
 
 ## 8. 状态监测
 
-![Status Detecting](img_depict/../operations_UI/img_depict/status_info_cn.png "Status Information")
+![Status Detecting](img_depict/../operations_UI/img_depict/status_add_cn.png "Status Information")
 
 **1. IP地址显示:** 显示当前的IP地址  
 **2. 电池信息:** 显示当前接入的电池信息  
 （1） 接入后显示绿灯以及对应的电量和电压；未接入显示灰色，数值为0  
 
-**3. 电机电流:** 显示是否有电流通过  
-（1） 电机在运动情况下有电流通过，此时电机会亮绿灯；否则为灰色。  
+**3. 电机电流:** 显示电机电流信息  
+（1） 电机在运动情况下有电流通过，此时电机会亮绿灯否有电流通过并显示当前电流数值；否则为灰色。  
 
 **4. 雷达信息:** 显示雷达是否打开。  
 （1） 雷达按钮打开时，绿灯亮起；雷达按钮关闭时，灯熄灭，转为灰色。
