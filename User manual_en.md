@@ -1,6 +1,19 @@
 
 # myAgv software user manual
 
+## Running Programme
+1. CLone the github's repository：` https://github.com/elephantrobotics/AiKit_3D_UI.git`
+2. Switch to the branch **Visualize_OP**
+3. Install all dependences：
+`
+pip install -r requirements.txt 
+`
+
+3. Running the command in the termial：
+`
+python operations.py  
+`
+
 ![Softeware Page](img_depict/../operations_UI/img_depict/main_page_en.png "Software Page")
 
 ## 1. Language Switch
@@ -224,14 +237,14 @@ All the above operations will be displayed in the log area. Click the "Clear But
 
 ## 8. Status Detection
 
-![Status Detecting](img_depict/../operations_UI/img_depict/status_info_en.png "Status Information")
+![Status Detecting](img_depict/../operations_UI/img_depict/status_add_en.png "Status Information")
 
 **1. IP Address:** Show current IP address  
 **2. Battery Information:** Display the currently connected battery information  
 （1） When connected, the green light and the corresponding power and voltage are displayed; when not connected, the display is gray and the value is 0.  
 
-**3. Motor Current:** Shows whether there is current flowing through  
-（1） When the motor is in motion and there is current flowing through it, the motor will light up green; otherwise it will be gray.  
+**3. Motor Current:** Shows whether there is current flowing through and the electricity value  
+（1） When the motor is in motion and there is current flowing through it, the motor will light up green and the page will display the current value; otherwise it will be gray.  
 
 **4. Radar Detection:** Shows whether radar is on  
 （1） When the radar button is turned on, the green light turns on; when the radar button is turned off, the light turns off and turns gray.

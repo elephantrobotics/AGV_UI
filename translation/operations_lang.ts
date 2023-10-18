@@ -113,6 +113,11 @@
     </message>
     <message>
         <location filename="AGV_operations_ui.py" line="813"/>
+        <source>Restore</source>
+        <translation>堵转恢复</translation>
+    </message>
+    <message>
+        <location filename="AGV_operations_ui.py" line="813"/>
         <location filename="AGV_operations_ui.py" line="807"/>
         <source>Voltage</source>
         <translation>电压</translation>
@@ -121,6 +126,11 @@
         <location filename="AGV_operations_ui.py" line="818"/>
         <source>Radar</source>
         <translation>雷达</translation>
+    </message>
+    <message>
+        <location filename="AGV_operations_ui.py" line="837"/>
+        <source>Electricity</source>
+        <translation>电流</translation>
     </message>
     <message>
         <location filename="operations.py" line="163"/>
@@ -157,6 +167,11 @@
         <location filename="AGV_operations_ui.py" line="799"/>
         <source>Pump</source>
         <translation>吸泵</translation>
+    </message>
+    <message>
+        <location filename="operations.py" line="287"/>
+        <source>Motor Restor</source>
+        <translation>堵转恢复</translation>
     </message>
     <message>
         <location filename="operations.py" line="243"/>

@@ -248,7 +248,7 @@ border:None;</string>
          <x>0</x>
          <y>0</y>
          <width>1047</width>
-         <height>774</height>
+         <height>792</height>
         </rect>
        </property>
        <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,2">
@@ -678,7 +678,25 @@ font: 75 9pt &quot;Arial&quot;;</string>
                </widget>
               </item>
               <item>
-               <widget class="QWidget" name="widget_23" native="true"/>
+               <widget class="QWidget" name="widget_23" native="true">
+                <layout class="QVBoxLayout" name="verticalLayout_8">
+                 <item>
+                  <widget class="QPushButton" name="Restore_btn">
+                   <property name="styleSheet">
+                    <string notr="true">background-color: rgb(39, 174, 96);
+color: rgb(255, 255, 255);
+border-radius: 7px;
+border: 2px groove gray;
+border-style: outset;
+font: 75 9pt &quot;Arial&quot;;</string>
+                   </property>
+                   <property name="text">
+                    <string>Restore</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
               </item>
              </layout>
             </widget>
@@ -906,19 +924,7 @@ font: 75 9pt &quot;Arial&quot;;</string>
                 <property name="styleSheet">
                  <string notr="true"/>
                 </property>
-                <layout class="QHBoxLayout" name="horizontalLayout_34">
-                 <property name="leftMargin">
-                  <number>0</number>
-                 </property>
-                 <property name="topMargin">
-                  <number>3</number>
-                 </property>
-                 <property name="rightMargin">
-                  <number>0</number>
-                 </property>
-                 <property name="bottomMargin">
-                  <number>11</number>
-                 </property>
+                <layout class="QHBoxLayout" name="horizontalLayout_8">
                  <item>
                   <layout class="QVBoxLayout" name="verticalLayout_5">
                    <item>
@@ -1098,7 +1104,7 @@ border: 1px solid</string>
                   </layout>
                  </item>
                  <item>
-                  <layout class="QVBoxLayout" name="verticalLayout_11">
+                  <layout class="QVBoxLayout" name="verticalLayout_7">
                    <item>
                     <layout class="QHBoxLayout" name="horizontalLayout_25">
                      <item>
@@ -1137,7 +1143,25 @@ border: 1px solid</string>
                     </layout>
                    </item>
                    <item>
-                    <widget class="QWidget" name="widget_25" native="true"/>
+                    <layout class="QHBoxLayout" name="horizontalLayout_7">
+                     <item>
+                      <widget class="QLabel" name="electricity_name">
+                       <property name="styleSheet">
+                        <string notr="true">font: 10pt &quot;Arial&quot;;</string>
+                       </property>
+                       <property name="text">
+                        <string>Electricity</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QLabel" name="electricity_display">
+                       <property name="text">
+                        <string/>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
                    </item>
                    <item>
                     <widget class="QWidget" name="widget_21" native="true"/>
