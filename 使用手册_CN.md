@@ -3,7 +3,7 @@
 
 ## 运行程序：
 1. 克隆github 仓库地址：` https://github.com/elephantrobotics/AiKit_3D_UI.git`
-2. 切换**Visualize_OP**分支
+2. 切换**Visualize_OP**分支:  `git checkout Visualize_OP`  
 3. 安装所需要的依赖：
 `
 pip install -r requirements.txt 
@@ -14,7 +14,7 @@ pip install -r requirements.txt
 python operations.py  
 `
 
-![Softeware Page](img_depict/../operations_UI/img_depict/main_page_cn.png "Software Page")
+![Softeware Page](img_depict/../operations_UI/img_depict/software_page_cn.png "Software Page")
 
 ## 1. 语言切换
 
@@ -224,6 +224,12 @@ python operations.py
 
 1. 下拉框选择吸泵，点击开始测试
 2. 吸泵打开，运行4s后自动关闭；此时检测完毕
+
+### 6.6 堵转恢复
+![Restore Function](img_depict/../operations_UI/img_depict/restore_cn.png "Restore Function")
+
+**功能：** 使堵转状态下的电机恢复正常，可继续运动  
+**运行：**  点击图示按钮后即可恢复
 
 ## 7. 日志区域
 

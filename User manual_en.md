@@ -3,7 +3,7 @@
 
 ## Running Programme
 1. CLone the github's repository：` https://github.com/elephantrobotics/AiKit_3D_UI.git`
-2. Switch to the branch **Visualize_OP**
+2. Switch to the branch **Visualize_OP** : `git checkout Visualize_OP`  
 3. Install all dependences：
 `
 pip install -r requirements.txt 
@@ -14,7 +14,7 @@ pip install -r requirements.txt
 python operations.py  
 `
 
-![Softeware Page](img_depict/../operations_UI/img_depict/main_page_en.png "Software Page")
+![Softeware Page](img_depict/../operations_UI/img_depict/software_page_en.png "Software Page")
 
 ## 1. Language Switch
 
@@ -229,6 +229,13 @@ To update.
 1. Select the 'Pump' from the drop-down box and click to start testing
 2. The suction pump is turned on and turns off automatically after running for 4 seconds; at this time the detection is completed
 
+### 6.6 Restore
+![Restore Function](img_depict/../operations_UI/img_depict/restore_en.png "Restore FUnction")  
+**Functions：**   Return the stalled motor to normal operation.
+**Running：**  Clicked the button as the picture shows above.
+
+1. Select the 'Pump' from the drop-down box and click to start testing
+2. The suction pump is turned on and turns off automatically after running for 4 seconds; at this time the detection is completed
 ## 7. Log Area
 
 ![Log Area](img_depict/../operations_UI/img_depict/log_area_en.png "Log Area")
