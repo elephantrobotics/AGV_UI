@@ -1168,6 +1168,12 @@ class Start_testing(QThread):
         self.agv.stop()
         time.sleep(0.05)
 
+
+        self.agv.retreat(100)
+        time.sleep(4)
+        self.agv.stop()
+        time.sleep(0.05)
+
         self.agv.pan_left(100)
         time.sleep(4)
         self.agv.stop()

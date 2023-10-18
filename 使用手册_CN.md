@@ -1,6 +1,18 @@
 
 # myAgv 上位机软件使用手册
 
+## 运行程序：
+1. 克隆github 仓库地址：` https://github.com/elephantrobotics/AiKit_3D_UI.git`
+2. 安装所有依赖：
+`
+pip install -r requirements.txt 
+`
+
+3. 在终端运行该文件：
+`
+python operations.py  
+`
+
 ![Softeware Page](img_depict/../operations_UI/img_depict/main_page_cn.png "Software Page")
 
 ## 1. 语言切换
