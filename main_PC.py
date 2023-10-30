@@ -7,6 +7,7 @@ import threading
 import time
 import select
 import cv2
+from pathlib import Path
 from PyQt5 import QtCore, QtGui
 from PyQt5.QtCore import QPoint
 from PyQt5.QtCore import QUrl
@@ -15,6 +16,9 @@ from PyQt5.QtGui import QEnterEvent, QPixmap, QImage
 from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QMessageBox, QDialog, QLabel
 
 from libraries.pyqtfile.agv_UI import Ui_AGV_UI as PC_Window
+
+sys.path.append(str(Path(os.path.dirname(__file__)) / Path("Ob_libs").resolve()))
+os.add_dll_directory(str(Path(os.path.dirname(__file__)) / Path("Ob_libs").resolve()))
 
 sys.path.append(os.getcwd() + "/AGV_3D_Vision")
 from CvDetection.detection import Detector

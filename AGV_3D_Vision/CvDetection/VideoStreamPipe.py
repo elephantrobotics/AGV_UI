@@ -1,17 +1,17 @@
 
-# from ObTypes import *
-# from Property import *
-# from Error import ObException
-from AGV_3D_Vision.libs import *
-from .utli import *
-# from detection import Detector
-# import Frame
-# import Pipeline
-# import StreamProfile
-import cv2
-import numpy as np
 import sys
+
 import time
+import numpy as np
+import cv2
+import Pipeline
+import Frame
+from AGV_3D_Vision.CvDetection.detection import Detector
+from .utli import *
+from AGV_3D_Vision.libs import *
+from Error import ObException
+from Property import *
+from ObTypes import *
 
 
 class VideoStreamPipe:
@@ -183,16 +183,16 @@ class VideoStreamPipe:
                             newColorData = colorData
                             # 将彩色帧数据大小调整为(height,width,3)
                             newColorData.resize(
-                                (colorHeight,colorWidth, 3)
+                                (colorHeight, colorWidth, 3)
                             )
                             # newColorData = cv2.flip(newColorData,1)
                             # 将彩色帧数据BGR转RGB
                             newColorData = cv2.cvtColor(
                                 newColorData, cv2.COLOR_BGR2RGB)
-                            
 
                             # 将深度帧数据大小调整为(height,width,2)
-                            depthData = np.resize(depthData, (depthHeight,depthWidth,2))
+                            depthData = np.resize(
+                                depthData, (depthHeight, depthWidth, 2))
                             # # 分辨率不一致，多余的部分填0
                             # if colorHeight != depthHeight:
                             #     depthData[depthHeight:colorHeight-1,:]=0
@@ -263,7 +263,7 @@ def test():
             for obj in objs:
                 x = obj["x"]
                 y = obj["y"]
-                z = newDepthData[int(y-40)/2,int(x-40)/2]
+                z = newDepthData[int(y-40)/2, int(x-40)/2]
                 print(y - 40, x - 40, z)
         # 将深度帧数据16bit转8bit，用于渲染
         newDepthData = newDepthData.astype(np.uint8)
