@@ -20,12 +20,10 @@ from netifaces import interfaces, ifaddresses, AF_INET
 
 from scripts.agv_socket_server import MapNavigation
 import scripts.agv_socket_server as socket_server
-from scripts.socket_connection import socket_connection
 
 
 if os.name == "posix":
     import RPi.GPIO as GPIO
-
 
 
 
@@ -467,7 +465,7 @@ class AGV_APP(AGV_Window, QMainWindow, QWidget):
         # print(data,"data-- in emit and signal")
         socket_server.data_actions(data)
     
-    def socket_send_msg(msg):
+    def socket_send_msg(self,msg):
         print("send")
         self.connection.send(msg.encode())
 
