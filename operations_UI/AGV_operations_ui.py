@@ -785,7 +785,7 @@ class Ui_myAGV(object):
     # setupUi
 
     def retranslateUi(self, myAGV):
-        myAGV.setWindowTitle(QCoreApplication.translate("myAGV", u"MainWindow", None))
+        myAGV.setWindowTitle(QCoreApplication.translate("myAGV", u"myAGV 2023 UI", None))
         self.title.setText(QCoreApplication.translate("myAGV", u"myAGV", None))
         self.logo_lab.setText("")
         self.min_btn.setText("")
