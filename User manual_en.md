@@ -2,13 +2,8 @@
 # myAgv software user manual
 
 ## Running Programme
-1. CLone the github's repository：` https://github.com/elephantrobotics/AiKit_3D_UI.git`
+1. CLone the github's repository：` https://github.com/elephantrobotics/AGV_UI`
 2. Switch to the branch **Visualize_OP** : `git checkout Visualize_OP`  
-3. Install all dependences：
-`
-pip install -r requirements.txt 
-`
-
 3. Running the command in the termial：
 `
 python operations.py  
