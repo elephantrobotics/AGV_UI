@@ -24,6 +24,7 @@ if os.name == "posix":
     import RPi.GPIO as GPIO
 
 lock = False
+Ros_flag=False
 
 
 class myAGV_windows(QMainWindow):
@@ -138,6 +139,9 @@ class myAGV_windows(QMainWindow):
         
 
         if not self.radar_flag:
+            # global Ros_flag
+            # Ros_flag=False
+            print(Ros_flag,"flag_in start")
             self.status.start()
 
     def connections_agv(self):
@@ -439,11 +443,13 @@ class myAGV_windows(QMainWindow):
         self.ui.textBrowser.append(msg_error)
 
     def radar_control(self):
-
+        global Ros_flag
         if self.ui.radar_button.isChecked():
+            
+            Ros_flag=True
             self.status.quit()
             print("quit")
-            time.sleep(0.1)
+            time.sleep(0.2)
 
             self.ui.start_detection_button.setCheckable(False)  # 雷达打开时检测按钮不可使用
 
@@ -504,6 +510,9 @@ class myAGV_windows(QMainWindow):
                     radar_close.start()
 
                     self.radar_flag = False
+
+                    Ros_flag=False
+
                     time.sleep(4)  # 等待2s后，释放检测按钮（可用）
                     ComponentsSet.radar_open_close(self.ui, True) 
                     self.ui.start_detection_button.setCheckable(True)
@@ -1374,10 +1383,16 @@ class status_detect(QThread):
             self.motors.emit(False,str(electicity))
 
     def run(self):
+        global Ros_flag
 
         while self.agv:
+            
+            if Ros_flag==True:
+                # print("11111break")
+                break
 
             try:
+                # if self.
 
                 ip = self.get_ipaddress()
                 if ip:
