@@ -1119,11 +1119,11 @@ class myAGV_windows(QMainWindow):
 
         time.sleep(1)
 
-        subprocess.run(
-            "cp /home/ubuntu/map.pgm /home/ubuntu/myagv_ros/src/myagv_navigation/map/my_map.pgm && cp /home/ubuntu/map.yaml /home/ubuntu/myagv_ros/src/myagv_navigation/map/my_map.yaml")
+        # subprocess.run(
+        #     "cp /home/ubuntu/map.pgm /home/ubuntu/myagv_ros/src/myagv_navigation/map/my_map.pgm && cp /home/ubuntu/map.yaml /home/ubuntu/myagv_ros/src/myagv_navigation/map/my_map.yaml")
 
-        current_time = self.get_current_time()
-        self.msg_log(QCoreApplication.translate("myAGV", "Save successfully!"), current_time)
+        # current_time = self.get_current_time()
+        # self.msg_log(QCoreApplication.translate("myAGV", "Save successfully!"), current_time)
 
         # QMessageBox.information(None, "",
         #                         f"Save successfully! \n Save Path:\n /home/ubuntu/myagv_ros/src/myagv_navigation/map/my_map.pgm\n /home/ubuntu/myagv_ros/src/myagv_navigation/map/my_map.yaml",
