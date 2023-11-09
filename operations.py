@@ -1039,7 +1039,7 @@ class myAGV_windows(QMainWindow):
         radar_low()
         time.sleep(0.05)
 
-        close_command = "ps -ef | grep -E " + run_launch + " | grep -v 'grep' | awk '{print $2}' | xargs kill -9"
+        close_command = "ps -ef | grep -E " + run_launch + " | grep -v 'grep' | awk '{print $2}' | xargs kill -2"
         subprocess.run(close_command, shell=True)
 
 
@@ -1052,7 +1052,7 @@ class myAGV_windows(QMainWindow):
 
 
     def keyboard_close(self, run_launch):
-        close_command = "ps -ef | grep -E " + run_launch + " | grep -v 'grep' | awk '{print $2}' | xargs kill -9"
+        close_command = "ps -ef | grep -E " + run_launch + " | grep -v 'grep' | awk '{print $2}' | xargs kill -2"
         subprocess.run(close_command, shell=True)
         # self.flag_all=False
 
@@ -1064,7 +1064,7 @@ class myAGV_windows(QMainWindow):
 
 
     def joystick_close(self, run_launch):
-        close_command = "ps -ef | grep -E " + run_launch + " | grep -v 'grep' | awk '{print $2}' | xargs kill -9"
+        close_command = "ps -ef | grep -E " + run_launch + " | grep -v 'grep' | awk '{print $2}' | xargs kill -2"
         subprocess.run(close_command, shell=True)
 
 
@@ -1074,7 +1074,7 @@ class myAGV_windows(QMainWindow):
 
 
     def joystick_close_number(self, run_launch):
-        close_command = "ps -ef | grep -E " + run_launch + " | grep -v 'grep' | awk '{print $2}' | xargs kill -9"
+        close_command = "ps -ef | grep -E " + run_launch + " | grep -v 'grep' | awk '{print $2}' | xargs kill -2"
         subprocess.run(close_command, shell=True)
 
 
@@ -1088,14 +1088,14 @@ class myAGV_windows(QMainWindow):
 
 
     def gmapping_build_close(self, run_launch):
-        close_command = "ps -ef | grep -E " + run_launch + " | grep -v 'grep' | awk '{print $2}' | xargs kill -9"
+        close_command = "ps -ef | grep -E " + run_launch + " | grep -v 'grep' | awk '{print $2}' | xargs kill -2"
         # subprocess.run(close_command, shell=True)
 
         os.system("ps -ef | grep -E rviz" +
-                  " | grep -v 'grep' | awk '{print $2}' | xargs kill -9")
+                  " | grep -v 'grep' | awk '{print $2}' | xargs kill -2")
 
         os.system("ps -ef | grep -E " + run_launch +
-                  " | grep -v 'grep' | awk '{print $2}' | xargs kill -9")
+                  " | grep -v 'grep' | awk '{print $2}' | xargs kill -2")
 
 
     def cartographer_build_open(self):
@@ -1105,10 +1105,10 @@ class myAGV_windows(QMainWindow):
 
     def cartographer_build_close(self):  # TODO 内置ros 未更新，无相关文件；未检测
 
-        close_command = "ps -ef | grep -E " + "demo_myagv.launch" + " | grep -v 'grep' | awk '{print $2}' | xargs kill -9"
+        close_command = "ps -ef | grep -E " + "demo_myagv.launch" + " | grep -v 'grep' | awk '{print $2}' | xargs kill -2"
 
         os.system("ps -ef | grep -E rviz" +
-                  " | grep -v 'grep' | awk '{print $2}' | xargs kill -9")
+                  " | grep -v 'grep' | awk '{print $2}' | xargs kill -2")
         subprocess.run(close_command, shell=True)
 
 
@@ -1141,15 +1141,15 @@ class myAGV_windows(QMainWindow):
 
 
     def navigation_close(self, run_launch):
-        close_command = "ps -ef | grep -E " + run_launch + " | grep -v 'grep' | awk '{print $2}' | xargs kill -9"
+        close_command = "ps -ef | grep -E " + run_launch + " | grep -v 'grep' | awk '{print $2}' | xargs kill -2"
 
         print("dededeclose")
 
         os.system("ps -ef | grep -E rviz" +
-                  " | grep -v 'grep' | awk '{print $2}' | xargs kill -9")
+                  " | grep -v 'grep' | awk '{print $2}' | xargs kill -2")
 
         os.system("ps -ef | grep -E " + run_launch +
-                  " | grep -v 'grep' | awk '{print $2}' | xargs kill -9")
+                  " | grep -v 'grep' | awk '{print $2}' | xargs kill -2")
         # subprocess.run(close_command, shell=True)
 
 
