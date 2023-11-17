@@ -134,6 +134,17 @@ class myAGV_windows(QMainWindow):
         GPIO.setup(2, GPIO.OUT)
         GPIO.setup(3, GPIO.OUT)
 
+
+        #close pump
+        GPIO.output(3, GPIO.LOW)
+        time.sleep(0.05)
+        GPIO.output(2, GPIO.HIGH)
+        time.sleep(0.05)
+        GPIO.output(2, GPIO.LOW)
+        time.sleep(0.05)
+        GPIO.output(2, GPIO.HIGH)
+        time.sleep(0.05)
+
         # self.ui.comboBox_language_selection.currentTextChanged.connect(self.language_change)
 
         
@@ -1257,7 +1268,6 @@ class Start_testing(QThread):
     def Pump_testing(self):
 
         print("pump")
-        # initialize
 
         # try:
         #     GPIO.cleanup()
@@ -1269,15 +1279,22 @@ class Start_testing(QThread):
         # GPIO.setup(3, GPIO.OUT)
         # open pump
 
-        GPIO.output(2, GPIO.LOW)
-        GPIO.output(3, GPIO.LOW)  
+        GPIO.output(3, GPIO.HIGH)
+        # GPIO.output(3, GPIO.LOW)
 
         # wait 4s
         time.sleep(4)
 
         # close pump
+        GPIO.output(3, GPIO.LOW)
+        time.sleep(0.05)
         GPIO.output(2, GPIO.HIGH)
-        GPIO.output(3, GPIO.HIGH)
+        time.sleep(0.05)
+        GPIO.output(2, GPIO.LOW)
+        time.sleep(0.05)
+        GPIO.output(2, GPIO.HIGH)
+        time.sleep(0.05)
+
 
         self.testing_finish.emit(self.test)
 
