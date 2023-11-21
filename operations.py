@@ -8,11 +8,12 @@ import traceback
 import socket
 import json
 
-from PySide6.QtCore import Signal, QCoreApplication, QObject, QThread, Qt, QSize, QPoint, QTranslator
-from PySide6.QtWidgets import QWidget, QApplication, QMessageBox, QFileDialog, QPushButton, QSizePolicy, QLabel, \
+from PyQt5.QtCore import Signal, QCoreApplication, QObject, QThread, Qt, QSize, QPoint, QTranslator
+from PyQt5.QtWidgets import QWidget, QApplication, QMessageBox, QFileDialog, QPushButton, QSizePolicy, QLabel, \
     QMainWindow, QSizeGrip
-from PySide6.QtGui import QPixmap, QIcon, QEventPoint, QEnterEvent, QImage
-from operations_UI.AGV_operations_ui import Ui_myAGV
+from PyQt5.QtGui import QPixmap, QIcon, QEventPoint, QEnterEvent, QImage
+# from operations_UI.AGV_operations_ui import Ui_myAGV
+from operations_UI.Ui_AGV_operations import Ui_myAGV
 from pymycobot.myagv import MyAgv
 from operations_UI.color_picker import ColorCircle
 from operations_UI.camera_window import CameraWindow
