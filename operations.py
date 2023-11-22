@@ -8,10 +8,10 @@ import traceback
 import socket
 import json
 
-from PyQt5.QtCore import Signal, QCoreApplication, QObject, QThread, Qt, QSize, QPoint, QTranslator
+from PyQt5.QtCore import pyqtSignal, QCoreApplication, QObject, QThread, Qt, QSize, QPoint, QTranslator
 from PyQt5.QtWidgets import QWidget, QApplication, QMessageBox, QFileDialog, QPushButton, QSizePolicy, QLabel, \
     QMainWindow, QSizeGrip
-from PyQt5.QtGui import QPixmap, QIcon, QEventPoint, QEnterEvent, QImage
+from PyQt5.QtGui import QPixmap, QIcon, QImage
 # from operations_UI.AGV_operations_ui import Ui_myAGV
 from operations_UI.Ui_AGV_operations import Ui_myAGV
 from pymycobot.myagv import MyAgv
@@ -1197,8 +1197,8 @@ class myAGV_windows(QMainWindow):
 
 
 class Start_testing(QThread):
-    testing_finish = Signal(str)
-    testing_stop = Signal()
+    testing_finish = pyqtSignal(str)
+    testing_stop = pyqtSignal()
 
     def __init__(self, testing, myagv):
         super().__init__()  # TODO 断开雷达后会会有延迟，需多尝试几次
@@ -1339,11 +1339,11 @@ class Start_testing(QThread):
 
 
 class status_detect(QThread):
-    ipaddress = Signal(str)
-    voltages = Signal(float, float)
-    battery = Signal(bool, bool)
-    powers = Signal(float, float)
-    motors = Signal(bool, str)
+    ipaddress = pyqtSignal(str)
+    voltages = pyqtSignal(float, float)
+    battery = pyqtSignal(bool, bool)
+    powers = pyqtSignal(float, float)
+    motors = pyqtSignal(bool, str)
 
     def __init__(self):
         super().__init__()
