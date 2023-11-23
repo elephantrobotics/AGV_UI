@@ -43,7 +43,7 @@ class myAGV_windows(QMainWindow):
         self.led_default = [255, 0, 0]  # red light
 
         self.myagv = None
-        self.myagv = MyAgv("/dev/ttyAMA2", 115200)
+        self.myagv = MyAgv("/dev/ttyS0", 115200)
         self.st = None
         self.status = None
 
@@ -158,12 +158,12 @@ class myAGV_windows(QMainWindow):
                 "myAGV", "Please turn off the radar before using this function."))
             return False
         else:
-            self.myagv = MyAgv("/dev/ttyAMA2", 115200)
+            self.myagv = MyAgv("/dev/ttyS0", 115200)
             return self.myagv
 
     def connections(self):
         time.sleep(2)
-        self.myagv = MyAgv("/dev/ttyAMA2", 115200)
+        self.myagv = MyAgv("/dev/ttyS0", 115200)
 
     def set_button_status(self, button_ui, status, color):
         button_ui.setEnabled(status)
@@ -370,7 +370,7 @@ class myAGV_windows(QMainWindow):
 
         else:
             if not self.flag_led:
-                self.myagv = MyAgv("/dev/ttyAMA2", 115200)
+                self.myagv = MyAgv("/dev/ttyS0", 115200)
                 self.myagv.set_led(1, r, g, b)
 
     def get_current_time(self):
@@ -1204,7 +1204,7 @@ class Start_testing(QThread):
         super().__init__()  # TODO 断开雷达后会会有延迟，需多尝试几次
 
         self.test = testing
-        self.agv = MyAgv("/dev/ttyAMA2", 115200)
+        self.agv = MyAgv("/dev/ttyS0", 115200)
 
     def motor_testing(self):
 
@@ -1347,7 +1347,7 @@ class status_detect(QThread):
 
     def __init__(self):
         super().__init__()
-        self.agv = MyAgv("/dev/ttyAMA2", 115200)
+        self.agv = MyAgv("/dev/ttyS0", 115200)
 
     def get_ipaddress(self):
         st = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
