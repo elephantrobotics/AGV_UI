@@ -22,6 +22,7 @@ class CameraThread(QThread):
             if time.time() - start_time >= 5:
                 # finish_flag=True
                 break
+            frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             height, width, channel = frame.shape
             bytes_per_line = 3 * width
             q_image = QImage(frame.data, width, height,
