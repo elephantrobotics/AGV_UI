@@ -129,19 +129,9 @@ class myAGV_windows(QMainWindow):
         # except Exception:pass
 
         GPIO.setmode(GPIO.BCM)
-        GPIO.setmode(GPIO.BCM)
-        GPIO.setup(2, GPIO.OUT)
-        GPIO.setup(3, GPIO.OUT)
-
-        # close pump
-        GPIO.output(3, GPIO.LOW)
-        time.sleep(0.05)
-        GPIO.output(2, GPIO.HIGH)
-        time.sleep(0.05)
-        GPIO.output(2, GPIO.LOW)
-        time.sleep(0.05)
-        GPIO.output(2, GPIO.HIGH)
-        time.sleep(0.05)
+        # GPIO.setmode(GPIO.BCM)
+        # GPIO.setup(2, GPIO.OUT)
+        # GPIO.setup(3, GPIO.OUT)
 
         # self.ui.comboBox_language_selection.currentTextChanged.connect(self.language_change)
 
@@ -325,8 +315,19 @@ class myAGV_windows(QMainWindow):
             # self.myagv.set_led(1, 255, 0, 0)
         if item == "Pump" or item == "吸泵":
             # stop testing to close pump
+
+            # GPIO.output(2, GPIO.HIGH)
+            # GPIO.output(3, GPIO.HIGH)
+
+            GPIO.output(3, GPIO.LOW)
+            time.sleep(0.05)
             GPIO.output(2, GPIO.HIGH)
-            GPIO.output(3, GPIO.HIGH)
+            time.sleep(0.05)
+            GPIO.output(2, GPIO.LOW)
+            time.sleep(0.05)
+            GPIO.output(2, GPIO.HIGH)
+            time.sleep(0.05)
+
             # GPIO.cleanup()
 
         if item == "Motor" or item == "电机":
@@ -1297,11 +1298,9 @@ class Start_testing(QThread):
         #     GPIO.cleanup()
         # except Exception:pass
 
-        # GPIO.setmode(GPIO.BCM)
-        # GPIO.setmode(GPIO.BCM)
-        # GPIO.setup(2, GPIO.OUT)
-        # GPIO.setup(3, GPIO.OUT)
         # open pump
+        GPIO.setup(2, GPIO.OUT)
+        GPIO.setup(3, GPIO.OUT)
 
         GPIO.output(3, GPIO.HIGH)
         # GPIO.output(3, GPIO.LOW)
