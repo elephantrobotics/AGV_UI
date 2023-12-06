@@ -63,6 +63,22 @@ class myAGV_windows(QMainWindow):
         # self.pix = QPixmap(os.getcwd() + 'operations_UI/img_UI/logo.ico')
         # print(self.pix.size())
 
+        Qcombobox_style = """
+            QComboBox QAbstractItemView {
+                border: 1px solid grey;
+                background: white;
+                # selection-background-color: blue;
+                color: black;
+                }
+            QComboBox {
+                background: white;
+            }
+            """
+
+        self.ui.comboBox_testing.setStyleSheet(Qcombobox_style)
+        self.ui.comboBox_language_selection.setStyleSheet(Qcombobox_style)
+        self.ui.basic_control_selection.setStyleSheet(Qcombobox_style)
+
         self.red_button = """
             background-color: rgb(198, 61, 47);
             color: rgb(255, 255, 255);
