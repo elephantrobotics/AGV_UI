@@ -64,15 +64,9 @@ class myAGV_windows(QMainWindow):
         # print(self.pix.size())
 
         Qcombobox_style = """
-            QComboBox QAbstractItemView {
-                border: 1px solid grey;
+                border: 0.5px solid grey;
                 background: white;
-                # selection-background-color: blue;
                 color: black;
-                }
-            QComboBox {
-                background: white;
-            }
             """
 
         self.ui.comboBox_testing.setStyleSheet(Qcombobox_style)
