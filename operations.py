@@ -1081,7 +1081,7 @@ class myAGV_windows(QMainWindow):
         launch_command = "roslaunch myagv_teleop myagv_teleop.launch"
         # subprocess.run(['gnome-terminal', '-e', f"bash -c '{launch_command}; exec $SHELL'"])
         os.system(
-            "gnome-terminal -e 'bash -c \"cd /home/ubuntu; roslaunch ~/myagv_ros/src/myagv_teleop/launch/myagv_teleop.launch; exec bash\"'")
+            "gnome-terminal -e 'bash -c \"roslaunch ~/myagv_ros/src/myagv_teleop/launch/myagv_teleop.launch; exec bash\"'")
 
     def keyboard_close(self, run_launch):
         close_command = "ps -ef | grep -E " + run_launch + \
@@ -1114,7 +1114,7 @@ class myAGV_windows(QMainWindow):
         launch_command = "roslaunch myagv_navigation myagv_slam_laser.launch"
 
         os.system(
-            "gnome-terminal -e 'bash -c \"cd /home/ubuntu; roslaunch ~/myagv_ros/src/myagv_navigation/launch/myagv_slam_laser.launch; exec bash\"'")
+            "gnome-terminal -e 'bash -c \"roslaunch ~/myagv_ros/src/myagv_navigation/launch/myagv_slam_laser.launch; exec bash\"'")
 
         # subprocess.run(['gnome-terminal', '-e', f"bash -c '{launch_command}; exec $SHELL'"])
 
