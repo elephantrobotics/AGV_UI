@@ -129,6 +129,8 @@ class myAGV_windows(QMainWindow):
         # except Exception:pass
 
         GPIO.setmode(GPIO.BCM)
+        GPIO.setup(21,GPIO.OUT)
+        GPIO.output(21,GPIO.HIGH)
         # GPIO.setmode(GPIO.BCM)
         # GPIO.setup(2, GPIO.OUT)
         # GPIO.setup(3, GPIO.OUT)
