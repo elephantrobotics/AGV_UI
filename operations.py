@@ -130,19 +130,6 @@ class myAGV_windows(QMainWindow):
         # except Exception:pass
 
         GPIO.setmode(GPIO.BCM)
-        GPIO.setmode(GPIO.BCM)
-        GPIO.setup(7, GPIO.OUT)
-        GPIO.setup(8, GPIO.OUT)
-
-        # close pump
-        GPIO.output(8, GPIO.LOW)
-        time.sleep(0.05)
-        GPIO.output(7, GPIO.HIGH)
-        time.sleep(0.05)
-        GPIO.output(7, GPIO.LOW)
-        time.sleep(0.05)
-        GPIO.output(7, GPIO.HIGH)
-        time.sleep(0.05)
 
         # self.ui.comboBox_language_selection.currentTextChanged.connect(self.language_change)
 
@@ -326,9 +313,16 @@ class myAGV_windows(QMainWindow):
             # self.myagv.set_led(1, 255, 0, 0)
         if item == "Pump" or item == "吸泵":
             # stop testing to close pump
-            GPIO.output(7, GPIO.HIGH)
-            GPIO.output(8, GPIO.HIGH)
+            # GPIO.output(26, GPIO.HIGH)
+            # GPIO.output(19, GPIO.HIGH)
             # GPIO.cleanup()
+
+            GPIO.output(26, GPIO.HIGH)  # 关闭吸泵
+            time.sleep(0.05)
+            GPIO.output(19, GPIO.LOW)  # 关闭气阀
+            time.sleep(0.05)
+            GPIO.output(19, GPIO.HIGH)  # 气阀状态还原
+            time.sleep(0.05)
 
         if item == "Motor" or item == "电机":
             self.myagv.stop()
@@ -1295,29 +1289,27 @@ class Start_testing(QThread):
         print("pump")
 
         # try:
-        #     GPIO.cleanup()
+        # GPIO.cleanup()
         # except Exception:pass
 
-        # GPIO.setmode(GPIO.BCM)
-        # GPIO.setmode(GPIO.BCM)
-        # GPIO.setup(2, GPIO.OUT)
-        # GPIO.setup(3, GPIO.OUT)
-        # open pump
+        GPIO.setup(19, GPIO.OUT)
+        GPIO.setup(26, GPIO.OUT)
 
-        GPIO.output(8, GPIO.HIGH)
-        # GPIO.output(3, GPIO.LOW)
+        time.sleep(0.1)
+
+        GPIO.output(26, GPIO.LOW)  # 打开吸泵
+        time.sleep(0.05)
+        GPIO.output(19, GPIO.HIGH)  # 打开气阀
 
         # wait 4s
         time.sleep(4)
 
         # close pump
-        GPIO.output(8, GPIO.LOW)
+        GPIO.output(26, GPIO.HIGH)  # 关闭吸泵
         time.sleep(0.05)
-        GPIO.output(7, GPIO.HIGH)
+        GPIO.output(19, GPIO.LOW)  # 关闭气阀
         time.sleep(0.05)
-        GPIO.output(7, GPIO.LOW)
-        time.sleep(0.05)
-        GPIO.output(7, GPIO.HIGH)
+        GPIO.output(19, GPIO.HIGH)  # 气阀状态还原
         time.sleep(0.05)
 
         self.testing_finish.emit(self.test)
