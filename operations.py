@@ -318,17 +318,10 @@ class myAGV_windows(QMainWindow):
         if item == "Pump" or item == "吸泵":
             # stop testing to close pump
 
-            # GPIO.output(2, GPIO.HIGH)
-            # GPIO.output(3, GPIO.HIGH)
-
-            GPIO.output(3, GPIO.LOW)
-            time.sleep(0.05)
-            GPIO.output(2, GPIO.HIGH)
-            time.sleep(0.05)
+            GPIO.output(3, GPIO.HIGH)
             GPIO.output(2, GPIO.LOW)
             time.sleep(0.05)
             GPIO.output(2, GPIO.HIGH)
-            time.sleep(0.05)
 
             # GPIO.cleanup()
 
@@ -1293,32 +1286,23 @@ class Start_testing(QThread):
         self.testing_finish.emit(self.test)
 
     def Pump_testing(self):
-
-        print("pump")
-
-        # try:
-        #     GPIO.cleanup()
-        # except Exception:pass
-
-        # open pump
+        
+        GPIO.setmode(GPIO.BCM)
         GPIO.setup(2, GPIO.OUT)
         GPIO.setup(3, GPIO.OUT)
-
-        GPIO.output(3, GPIO.HIGH)
-        # GPIO.output(3, GPIO.LOW)
-
-        # wait 4s
-        time.sleep(4)
-
-        # close pump
+        
+        #open
         GPIO.output(3, GPIO.LOW)
-        time.sleep(0.05)
         GPIO.output(2, GPIO.HIGH)
-        time.sleep(0.05)
+        
+        time.sleep(4)
+        
+        #close
+        GPIO.output(3, GPIO.HIGH)
         GPIO.output(2, GPIO.LOW)
         time.sleep(0.05)
         GPIO.output(2, GPIO.HIGH)
-        time.sleep(0.05)
+
 
         self.testing_finish.emit(self.test)
 
