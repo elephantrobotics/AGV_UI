@@ -10,7 +10,7 @@ import json
 
 from PyQt5.QtCore import pyqtSignal, QCoreApplication, QObject, QThread, Qt, QSize, QPoint, QTranslator
 from PyQt5.QtWidgets import QWidget, QApplication, QMessageBox, QFileDialog, QPushButton, QSizePolicy, QLabel, \
-    QMainWindow, QSizeGrip
+    QMainWindow, QSizeGrip,QHBoxLayout
 from PyQt5.QtGui import QPixmap, QIcon, QImage
 # from operations_UI.AGV_operations_ui import Ui_myAGV
 from operations_UI.Ui_AGV_operations import Ui_myAGV
@@ -131,8 +131,9 @@ class myAGV_windows(QMainWindow):
         self.ui.logo_lab.setVisible(False)
         self.ui.menu_widget.setVisible(False)
         self.ui_set()
+        self.ui_motors_electricity()
 
-        self.status_detecting()  # TODO open
+        self.status_detecting()
         self.language_initial()
 
         view = self.ui.comboBox_testing.view()
@@ -283,6 +284,49 @@ class myAGV_windows(QMainWindow):
         ui_functions()
         ui_buttons()
 
+    def ui_motors_electricity(self):
+
+        self.ui.electricity_name.setVisible(False)
+        self.ui.widget_21.setVisible(False)
+        self.ui.electricity_display.setVisible(False)
+        self.ui.widget_26.setVisible(False)
+        self.ui.widget_27.setVisible(False)
+
+
+        label_1 = QLabel(QCoreApplication.translate("myAGV","Electricity1"), objectName="electricity_name1")
+        self.label_motor_1 = QLabel("", objectName="electricity_motor1")
+
+        layout1 = QHBoxLayout()
+        layout1.addWidget(label_1)
+        layout1.addWidget(self.label_motor_1)
+
+        label_2 = QLabel(QCoreApplication.translate("myAGV","Electricity2"), objectName="electricity_name2")
+        self.label_motor_2 = QLabel("", objectName="electricity_motor2")
+
+        layout2 = QHBoxLayout()
+        layout2.addWidget(label_2)
+        layout2.addWidget(self.label_motor_2)
+
+        self.ui.verticalLayout_7.addLayout(layout1)
+        self.ui.verticalLayout_7.addLayout(layout2)
+
+
+        label_3 = QLabel(QCoreApplication.translate("myAGV","Electricity3"), objectName="electricity_name3")
+        self.label_motor_3 = QLabel("", objectName="electricity_motor3")
+
+        layout3 = QHBoxLayout()
+        layout3.addWidget(label_3)
+        layout3.addWidget(self.label_motor_3)
+
+        label_4 = QLabel(QCoreApplication.translate("myAGV","Electricity4"), objectName="electricity_name4")
+        self.label_motor_4 = QLabel("", objectName="electricity_motor4")
+
+        layout4 = QHBoxLayout()
+        layout4.addWidget(label_4)
+        layout4.addWidget(self.label_motor_4)
+
+        self.ui.verticalLayout_12.addLayout(layout3)
+        self.ui.verticalLayout_12.addLayout(layout4)
     def release_style(self):
 
         self.ui.Restore_btn.setStyleSheet("""
@@ -1034,6 +1078,9 @@ class myAGV_windows(QMainWindow):
             self.ui.lineEdit_power_backup.setText(str(power_2))
 
         def motors_set(status, curr):
+            ui_motors=[self.label_motor_1,self.label_motor_2,
+                       self.label_motor_3,self.label_motor_4]
+
             if status:
                 self.ui.status_motor_1.setStyleSheet(
                     """
@@ -1041,7 +1088,7 @@ class myAGV_windows(QMainWindow):
                     border-radius: 9px;
                     border: 1px solid
                     """)
-                self.ui.electricity_display.setText(curr)
+                # self.ui.electricity_display.setText(curr)
             else:
                 self.ui.status_motor_1.setStyleSheet(
                     """
@@ -1049,7 +1096,10 @@ class myAGV_windows(QMainWindow):
                     border-radius: 9px;
                     border: 1px solid
                     """)
-                self.ui.electricity_display.setText(curr)
+                # self.ui.electricity_display.setText(curr)
+
+            for el, val in enumerate(zip(ui_motors, curr)):
+                val[0].setText(str(val[1]))
 
         self.status = status_detect()
         self.status.ipaddress.connect(ip_set)
@@ -1348,7 +1398,7 @@ class status_detect(QThread):
     voltages = pyqtSignal(float, float)
     battery = pyqtSignal(bool, bool)
     powers = pyqtSignal(float, float)
-    motors = pyqtSignal(bool, str)
+    motors = pyqtSignal(bool, list)
 
     def __init__(self):
         super().__init__()
@@ -1369,21 +1419,27 @@ class status_detect(QThread):
     def get_info(self):
 
         # battery
-        data = self.agv.get_battery_info()
+        # data = self.agv.get_battery_info()
         # for i in range(5):
         #     data = self.agv.get_battery_info()
         #     if data:
         #         break
 
+        data=self.agv.get_mcu_info()
+
         batterys = data[0]
         battery_1 = batterys[1]
         battery_2 = batterys[0]
+        self.battery.emit(int(battery_1), int(battery_2))
 
-        b_1_voltage = data[1]
-        b_2_voltage = data[2]
+        motors = data[-4:]
+        status = all(motor for motor in motors)
+        self.motors.emit(status,motors)
+
+        b_1_voltage = data[-6]
+        b_2_voltage = data[-5]
 
         # print(data, batterys, battery_1, battery_2, "batterys")
-        self.battery.emit(int(battery_1), int(battery_2))
 
         # voltage
         power_1 = power_2 = 0
@@ -1442,12 +1498,12 @@ class status_detect(QThread):
                 ip = self.get_ipaddress()
                 if ip:
                     self.ipaddress.emit(ip)
-                time.sleep(0.5)
+                time.sleep(0.2)
 
                 self.get_info()
-                time.sleep(0.1)
-                self.get_motors_run()
-                time.sleep(0.1)
+                time.sleep(0.2)
+                # self.get_motors_run()
+                # time.sleep(0.1)
             except Exception as e:
                 pass
 
