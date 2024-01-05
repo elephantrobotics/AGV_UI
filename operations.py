@@ -1067,8 +1067,8 @@ class myAGV_windows(QMainWindow):
                     border: 1px solid
                     """)
                 # self.ui.electricity_display.setText(curr)
-            for el, val in enumerate(zip(ui_motors, curr)):
-                val[0].setText(str(val[1]))
+            for el, val in enumerate(ui_motors, curr):
+                el.setText(str(val))
 
         self.status = status_detect()
         self.status.ipaddress.connect(ip_set)
@@ -1458,6 +1458,9 @@ class status_detect(QThread):
                 time.sleep(0.2)
 
                 self.get_info()
+                # time.sleep(0.1)
+                # self.get_motors_run()
+                # time.sleep(0.1)
                 time.sleep(0.2)
 
             except Exception as e:
