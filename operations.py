@@ -137,7 +137,7 @@ class myAGV_windows(QMainWindow):
         self.language_initial()
 
         view = self.ui.comboBox_testing.view()
-        view.setRowHidden(2, True)
+        # view.setRowHidden(2, True)
         view.setRowHidden(3, True)
         # try:
         #     GPIO.cleanup()
