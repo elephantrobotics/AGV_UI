@@ -151,7 +151,7 @@ class myAGV_windows(QMainWindow):
         if not self.radar_flag:
             # global Ros_flag
             # Ros_flag=False
-            print(Ros_flag, "flag_in start")
+            # print(Ros_flag, "flag_in start")
             self.status.start()
 
     def connections_agv(self):
@@ -414,12 +414,12 @@ class myAGV_windows(QMainWindow):
         self.ui.lineEdit_RGB.setText(rgb_color)
 
         if self.radar_flag:  # open radar
-            print("radar open in lighter set")
+            # print("radar open in lighter set")
 
             QMessageBox.warning(self, QCoreApplication.translate("myAGV", "Warning"), QCoreApplication.translate(
                 "myAGV", "Please turn off the radar before using this function."), QMessageBox.Ok)
         elif self.flag_led:
-            print("ssss in flag_led")
+            # print("ssss in flag_led")
             QMessageBox.warning(self, QCoreApplication.translate("myAGV", "Warning"), QCoreApplication.translate(
                 "myAGV", "Please stop the detection before using the led."), QMessageBox.Ok)
 
@@ -437,7 +437,7 @@ class myAGV_windows(QMainWindow):
         with open("translation/language.json", "r", encoding='utf-8') as f:
             language = json.loads(f.read())
         lang = language["language"]
-        print("read")
+        # print("read")
         self.language_selection(lang)
 
     def language_change(self):
@@ -456,7 +456,7 @@ class myAGV_windows(QMainWindow):
         }
         with open("translation/language.json", "w") as f:
             json.dump(data, f, indent=4)
-        print("write")
+        # print("write")
         self.language_initial()
 
     def language_selection(self, lang):
@@ -465,14 +465,14 @@ class myAGV_windows(QMainWindow):
         :return:
         """
 
-        print("set lang")
+        # print("set lang")
 
         if lang == "en" or lang == "英文":
-            print("----English")
+            # print("----English")
             self._app.removeTranslator(self.translator)
             self.ui.retranslateUi(self)
         if lang == "zh_CN" or lang == "中文":
-            print("=====Chinese")
+            # print("=====Chinese")
             self.translator.load("translation/operations_lang.qm")
             self._app.installTranslator(self.translator)
             self.ui.retranslateUi(self)
@@ -510,7 +510,7 @@ class myAGV_windows(QMainWindow):
 
             Ros_flag = True
             self.status.quit()
-            print("quit")
+            # print("quit")
             time.sleep(0.2)
 
             self.ui.start_detection_button.setCheckable(False)  # 雷达打开时检测按钮不可使用
@@ -605,9 +605,9 @@ class myAGV_windows(QMainWindow):
                                     QMessageBox.Ok)
                 self.ui.basic_control_button.setChecked(False)
                 return
-                print(self.radar_flag, "basic_control radar not")
+                # print(self.radar_flag, "basic_control radar not")
             else:
-                print(self.radar_flag, "basic_control radar yes")
+                # print(self.radar_flag, "basic_control radar yes")
                 self.ui.basic_control_button.setStyleSheet(self.red_button)
                 self.ui.basic_control_button.setText(
                     QCoreApplication.translate("myAGV", "OFF"))
@@ -689,7 +689,7 @@ class myAGV_windows(QMainWindow):
                                                       daemon=True)
                     keyboard_close.start()
                     self.keyboard_flag = False
-                    print("close key")
+                    # print("close key")
                     # lock=False
                 except Exception as e:
                     e = traceback.format_exc()
@@ -762,7 +762,7 @@ class myAGV_windows(QMainWindow):
             close_launch = "myagv_slam_laser.launch"
             close_gmapping_build = threading.Thread(
                 target=self.gmapping_build_close, args=(close_launch,), daemon=True)
-            print("quiuii build map")
+            # print("quiuii build map")
             close_gmapping_build.start()
 
         def cartographer_build():
@@ -975,16 +975,15 @@ class myAGV_windows(QMainWindow):
             close_navigation.start()
             self.flag_all = False
 
-    def ss(self, item):
-        print(item, "iii")
+    def ss(self, item):pass
+        # print(item, "iii")
 
     def start_testing(self):
         current_time = self.get_current_time()
         item = self.ui.comboBox_testing.currentText()
 
         if self.ui.start_detection_button.isChecked():
-            # TODO check the radar open for testing
-            print(self.radar_flag, "radar-flag")
+            # print(self.radar_flag, "radar-flag")
             if self.radar_flag:
                 QMessageBox.warning(self, QCoreApplication.translate("myAGV", "Warning"), QCoreApplication.translate(
                     "myAGV", "Please turn off the radar before using this function."), QMessageBox.Ok)
@@ -1202,7 +1201,7 @@ class myAGV_windows(QMainWindow):
         subprocess.run(
             ['gnome-terminal', '-e', f"bash -c '{launch_command}; exec $SHELL'"])
 
-    def cartographer_build_close(self):  # TODO 内置ros 未更新，无相关文件；未检测
+    def cartographer_build_close(self): 
 
         close_command = "ps -ef | grep -E " + "demo_myagv.launch" + \
             " | grep -v 'grep' | awk '{print $2}' | xargs kill -2"
@@ -1243,7 +1242,6 @@ class myAGV_windows(QMainWindow):
         close_command = "ps -ef | grep -E " + run_launch + \
             " | grep -v 'grep' | awk '{print $2}' | xargs kill -2"
 
-        print("dededeclose")
 
         os.system("ps -ef | grep -E rviz" +
                   " | grep -v 'grep' | awk '{print $2}' | xargs kill -2")
@@ -1253,7 +1251,7 @@ class myAGV_windows(QMainWindow):
         # subprocess.run(close_command, shell=True)
 
     def closeEvent(self, event):
-        print("Closed")
+        # print("Closed")
         GPIO.cleanup()
         self.status.terminate()
 
@@ -1302,7 +1300,7 @@ class Start_testing(QThread):
         self.testing_finish.emit(self.test)
 
     def LED_testing(self):
-        print("LED Testing...")
+        # print("LED Testing...")
         color_list = ["#ff0000", "ff7f00", "ffff00",
                       "00ff00", "00ffff", "0000ff", "8b0ff"]
 
@@ -1358,7 +1356,7 @@ class Start_testing(QThread):
 
     def Pump_testing(self):
 
-        print("pump")
+        # print("pump")
 
         # try:
         # GPIO.cleanup()
