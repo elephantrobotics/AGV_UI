@@ -10,7 +10,7 @@ import json
 
 from PyQt5.QtCore import pyqtSignal, QCoreApplication, QObject, QThread, Qt, QSize, QPoint, QTranslator
 from PyQt5.QtWidgets import QWidget, QApplication, QMessageBox, QFileDialog, QPushButton, QSizePolicy, QLabel, \
-    QMainWindow, QSizeGrip,QHBoxLayout
+    QMainWindow, QSizeGrip, QHBoxLayout
 from PyQt5.QtGui import QPixmap, QIcon, QImage
 # from operations_UI.AGV_operations_ui import Ui_myAGV
 from operations_UI.Ui_AGV_operations import Ui_myAGV
@@ -72,6 +72,7 @@ class myAGV_windows(QMainWindow):
         self.ui.comboBox_testing.setStyleSheet(Qcombobox_style)
         self.ui.comboBox_language_selection.setStyleSheet(Qcombobox_style)
         self.ui.basic_control_selection.setStyleSheet(Qcombobox_style)
+        self.ui.build_map_selection.setStyleSheet(Qcombobox_style)
 
         self.red_button = """
             background-color: rgb(198, 61, 47);
@@ -292,15 +293,16 @@ class myAGV_windows(QMainWindow):
         self.ui.widget_26.setVisible(False)
         self.ui.widget_27.setVisible(False)
 
-
-        label_1 = QLabel(QCoreApplication.translate("myAGV","Electricity1"), objectName="electricity_name1")
+        label_1 = QLabel(QCoreApplication.translate(
+            "myAGV", "Electricity1"), objectName="electricity_name1")
         self.label_motor_1 = QLabel("", objectName="electricity_motor1")
 
         layout1 = QHBoxLayout()
         layout1.addWidget(label_1)
         layout1.addWidget(self.label_motor_1)
 
-        label_2 = QLabel(QCoreApplication.translate("myAGV","Electricity2"), objectName="electricity_name2")
+        label_2 = QLabel(QCoreApplication.translate(
+            "myAGV", "Electricity2"), objectName="electricity_name2")
         self.label_motor_2 = QLabel("", objectName="electricity_motor2")
 
         layout2 = QHBoxLayout()
@@ -310,15 +312,16 @@ class myAGV_windows(QMainWindow):
         self.ui.verticalLayout_7.addLayout(layout1)
         self.ui.verticalLayout_7.addLayout(layout2)
 
-
-        label_3 = QLabel(QCoreApplication.translate("myAGV","Electricity3"), objectName="electricity_name3")
+        label_3 = QLabel(QCoreApplication.translate(
+            "myAGV", "Electricity3"), objectName="electricity_name3")
         self.label_motor_3 = QLabel("", objectName="electricity_motor3")
 
         layout3 = QHBoxLayout()
         layout3.addWidget(label_3)
         layout3.addWidget(self.label_motor_3)
 
-        label_4 = QLabel(QCoreApplication.translate("myAGV","Electricity4"), objectName="electricity_name4")
+        label_4 = QLabel(QCoreApplication.translate(
+            "myAGV", "Electricity4"), objectName="electricity_name4")
         self.label_motor_4 = QLabel("", objectName="electricity_motor4")
 
         layout4 = QHBoxLayout()
@@ -327,6 +330,7 @@ class myAGV_windows(QMainWindow):
 
         self.ui.verticalLayout_12.addLayout(layout3)
         self.ui.verticalLayout_12.addLayout(layout4)
+
     def release_style(self):
 
         self.ui.Restore_btn.setStyleSheet("""
@@ -1010,7 +1014,8 @@ class myAGV_windows(QMainWindow):
                 # self.camera_thread()
                 # camera_thread=threading.Thread(target=self.camera_open,daemon=True)
                 # camera_thread.start()
-                if 0:pass
+                if 0:
+                    pass
                 else:
                     self.st = Start_testing(item, None)
                     self.st.testing_finish.connect(
@@ -1078,8 +1083,8 @@ class myAGV_windows(QMainWindow):
             self.ui.lineEdit_power_backup.setText(str(power_2))
 
         def motors_set(status, curr):
-            ui_motors=[self.label_motor_1,self.label_motor_2,
-                       self.label_motor_3,self.label_motor_4]
+            ui_motors = [self.label_motor_1, self.label_motor_2,
+                         self.label_motor_3, self.label_motor_4]
 
             if status:
                 self.ui.status_motor_1.setStyleSheet(
@@ -1429,7 +1434,7 @@ class status_detect(QThread):
         #     if data:
         #         break
 
-        data=self.agv.get_mcu_info()
+        data = self.agv.get_mcu_info()
 
         batterys = data[0]
         battery_1 = batterys[1]
@@ -1438,7 +1443,7 @@ class status_detect(QThread):
 
         motors = data[-4:]
         status = all(motor for motor in motors)
-        self.motors.emit(status,motors)
+        self.motors.emit(status, motors)
 
         b_1_voltage = data[-6]
         b_2_voltage = data[-5]

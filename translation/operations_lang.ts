@@ -11,6 +11,11 @@
         <translation>警告</translation>
     </message>
     <message>
+        <location filename="operations.py" line="766"/>
+        <source>Stop </source>
+        <translation>停止</translation>
+    </message>
+    <message>
         <location filename="operations.py" line="818"/>
         <source>Please turn off the radar before using this function.</source>
         <translation>请关闭雷达后进行该操作</translation>
@@ -24,6 +29,16 @@
         <location filename="Ui_AGV_operations.py" line="601"/>
         <source>Chinese</source>
         <translation>中文</translation>
+    </message>
+    <message>
+        <location filename="Ui_AGV_operations.py" line="602"/>
+        <source>Laser Radar</source>
+        <translation>激光雷达</translation>
+    </message>
+    <message>
+        <location filename="Ui_AGV_operations.py" line="604"/>
+        <source>Basic Control</source>
+        <translation>基本控制</translation>
     </message>
     <message>
         <location filename="Ui_AGV_operations.py" line="606"/>
@@ -81,9 +96,9 @@
         <translation>测试</translation>
     </message>
     <message>
-        <location filename="Ui_AGV_operations.py" line="624"/>
-        <source>2D Camera</source>
-        <translation>2D 相机</translation>
+        <location filename="Ui_AGV_operations.py" line="620"/>
+        <source>Restore</source>
+        <translation>堵转恢复</translation>
     </message>
     <message>
         <location filename="Ui_AGV_operations.py" line="627"/>
@@ -111,24 +126,19 @@
         <translation>电量</translation>
     </message>
     <message>
-        <location filename="Ui_AGV_operations.py" line="620"/>
-        <source>Restore</source>
-        <translation>堵转恢复</translation>
-    </message>
-    <message>
         <location filename="Ui_AGV_operations.py" line="634"/>
         <source>Voltage</source>
         <translation>电压</translation>
     </message>
     <message>
-        <location filename="Ui_AGV_operations.py" line="637"/>
-        <source>Radar</source>
-        <translation>雷达</translation>
-    </message>
-    <message>
         <location filename="Ui_AGV_operations.py" line="636"/>
         <source>Electricity</source>
         <translation>电流</translation>
+    </message>
+    <message>
+        <location filename="Ui_AGV_operations.py" line="637"/>
+        <source>Radar</source>
+        <translation>雷达</translation>
     </message>
     <message>
         <location filename="operations.py" line="163"/>
@@ -156,6 +166,21 @@
         <translation>LED</translation>
     </message>
     <message>
+        <location filename="Ui_AGV_operations.py" line="597"/>
+        <source>MainWindow</source>
+        <translation>MainWindow</translation>
+    </message>
+    <message>
+        <location filename="Ui_AGV_operations.py" line="598"/>
+        <source>myAGV</source>
+        <translation>myAGV</translation>
+    </message>
+    <message>
+        <location filename="Ui_AGV_operations.py" line="599"/>
+        <source>language</source>
+        <translation>语言</translation>
+    </message>
+    <message>
         <location filename="Ui_AGV_operations.py" line="625"/>
         <source>3D Camera</source>
         <translation>3D 相机</translation>
@@ -164,6 +189,26 @@
         <location filename="Ui_AGV_operations.py" line="626"/>
         <source>Pump</source>
         <translation>吸泵</translation>
+    </message>
+    <message>
+        <location filename="operations.py" line="297"/>
+        <source>Electricity1</source>
+        <translation>电流1</translation>
+    </message>
+    <message>
+        <location filename="operations.py" line="304"/>
+        <source>Electricity2</source>
+        <translation>电流2</translation>
+    </message>
+    <message>
+        <location filename="operations.py" line="315"/>
+        <source>Electricity3</source>
+        <translation>电流3</translation>
+    </message>
+    <message>
+        <location filename="operations.py" line="322"/>
+        <source>Electricity4</source>
+        <translation>电流4</translation>
     </message>
     <message>
         <location filename="operations.py" line="287"/>
@@ -264,6 +309,16 @@
         <translation>请打开键盘控制后再建图</translation>
     </message>
     <message>
+        <location filename="operations.py" line="855"/>
+        <source>Save successfully!</source>
+        <translation>保存成功</translation>
+    </message>
+    <message>
+        <location filename="operations.py" line="964"/>
+        <source>Camera</source>
+        <translation>相机</translation>
+    </message>
+    <message>
         <location filename="operations.py" line="568"/>
         <source>Close Build Map</source>
         <translation>关闭建图</translation>
@@ -355,44 +410,9 @@
         <translation>测试中……</translation>
     </message>
     <message>
-        <location filename="operations.py" line="766"/>
-        <source>Stop </source>
-        <translation>停止</translation>
-    </message>
-    <message>
-        <location filename="operations.py" line="855"/>
-        <source>Save successfully!</source>
-        <translation>保存成功</translation>
-    </message>
-    <message>
-        <location filename="operations.py" line="964"/>
-        <source>Camera</source>
-        <translation>相机</translation>
-    </message>
-    <message>
-        <location filename="Ui_AGV_operations.py" line="597"/>
-        <source>MainWindow</source>
-        <translation>MainWindow</translation>
-    </message>
-    <message>
-        <location filename="Ui_AGV_operations.py" line="598"/>
-        <source>myAGV</source>
-        <translation>myAGV</translation>
-    </message>
-    <message>
-        <location filename="Ui_AGV_operations.py" line="599"/>
-        <source>language</source>
-        <translation>语言</translation>
-    </message>
-    <message>
-        <location filename="Ui_AGV_operations.py" line="602"/>
-        <source>Laser Radar</source>
-        <translation>激光雷达</translation>
-    </message>
-    <message>
-        <location filename="Ui_AGV_operations.py" line="604"/>
-        <source>Basic Control</source>
-        <translation>基本控制</translation>
+        <location filename="Ui_AGV_operations.py" line="624"/>
+        <source>2D Camera</source>
+        <translation>2D 相机</translation>
     </message>
 </context>
 </TS>
