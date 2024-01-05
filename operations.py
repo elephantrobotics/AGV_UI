@@ -370,9 +370,6 @@ class myAGV_windows(QMainWindow):
             # self.myagv.set_led(1, 255, 0, 0)
         if item == "Pump" or item == "吸泵":
             # stop testing to close pump
-            # GPIO.output(26, GPIO.HIGH)
-            # GPIO.output(19, GPIO.HIGH)
-            # GPIO.cleanup()
 
             GPIO.output(26, GPIO.HIGH)  # 关闭吸泵
             time.sleep(0.05)
@@ -385,7 +382,10 @@ class myAGV_windows(QMainWindow):
             self.myagv.stop()
 
         if item == "2D Camera" or item == "2D 相机":
-            self.camera.close()
+            # self.camera.close()
+            cmd = 'camera_testing.py'
+            os.system("ps -ef | grep -E " + cmd +
+                      " | grep -v 'grep' | awk '{print $2}' | xargs kill -9")
 
         testing_status = self.ui.start_detection_button.isEnabled()
         self.ui.start_detection_button.setChecked(not testing_status)
@@ -1014,7 +1014,7 @@ class myAGV_windows(QMainWindow):
                 else:
                     self.st = Start_testing(item, None)
                     self.st.testing_finish.connect(
-                        self.testing_finished)  # TODO NOt
+                        self.testing_finished)
                     self.button_status_switch(False)
 
                     if item == "LED" or item == "LED灯":
@@ -1258,7 +1258,7 @@ class Start_testing(QThread):
     testing_stop = pyqtSignal()
 
     def __init__(self, testing, myagv):
-        super().__init__()  # TODO 断开雷达后会会有延迟，需多尝试几次
+        super().__init__()
 
         self.test = testing
         self.agv = MyAgv("/dev/ttyS0", 115200)
@@ -1322,7 +1322,11 @@ class Start_testing(QThread):
         self.testing_finish.emit(self.test)
 
     def Camera_testing(self):
-        pass  # todo camera testing...
+        os.system(
+            "gnome-terminal -e 'bash -c \"sudo python /home/er/AGV_UI/operations_UI/camera_testing.py; exec bash\"'")
+
+        time.sleep(5)
+        self.testing_finish.emit(self.test)
 
     def Camera_2D_testing(self):
 
