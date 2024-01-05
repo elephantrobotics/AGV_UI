@@ -999,18 +999,18 @@ class myAGV_windows(QMainWindow):
                 # self.flag_all=True
                 # if self.connections_agv():
                 # self.connections()
-                if item == "2D Camera" or item == "2D 相机":
-                    self.camera = CameraWindow()
-                    self.camera.camera_finish.connect(self.testing_finished)
-                    # self.camera.camera_finish.connect(self.ss)
-                    self.camera.show()
-
-                    print("finished camera testing")
+                # if item == "2D Camera" or item == "2D 相机":
+                #     self.camera = CameraWindow()
+                #     self.camera.camera_finish.connect(self.testing_finished)
+                #     # self.camera.camera_finish.connect(self.ss)
+                #     self.camera.show()
+                #
+                #     print("finished camera testing")
 
                 # self.camera_thread()
                 # camera_thread=threading.Thread(target=self.camera_open,daemon=True)
                 # camera_thread.start()
-
+                if 0:pass
                 else:
                     self.st = Start_testing(item, None)
                     self.st.testing_finish.connect(
@@ -1325,7 +1325,7 @@ class Start_testing(QThread):
         os.system(
             "gnome-terminal -e 'bash -c \"sudo python /home/er/AGV_UI/operations_UI/camera_testing.py; exec bash\"'")
 
-        time.sleep(5)
+        time.sleep(6)
         self.testing_finish.emit(self.test)
 
     def Camera_2D_testing(self):
@@ -1390,7 +1390,7 @@ class Start_testing(QThread):
         elif self.test == QCoreApplication.translate("myAGV", "LED"):
             self.LED_testing()
 
-        elif self.test == QCoreApplication.translate("myAGV", "Camera"):
+        elif self.test == QCoreApplication.translate("myAGV", "2D Camera"):
             self.Camera_testing()
 
         elif self.test == QCoreApplication.translate("myAGV", "Pump"):
