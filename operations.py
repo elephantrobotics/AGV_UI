@@ -1434,17 +1434,17 @@ class status_detect(QThread):
 
         data = self.agv.get_mcu_info()
 
-        batterys = data[0]
+        batterys = data[-8]
         battery_1 = batterys[1]
         battery_2 = batterys[0]
         self.battery.emit(int(battery_1), int(battery_2))
 
-        motors = data[-4:]
+        motors = data[-5:-1]
         status = all(motor for motor in motors)
         self.motors.emit(status, motors)
 
-        b_1_voltage = data[-6]
-        b_2_voltage = data[-5]
+        b_1_voltage = data[-7]
+        b_2_voltage = data[-6]
 
         # print(data, batterys, battery_1, battery_2, "batterys")
 
