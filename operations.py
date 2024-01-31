@@ -10,7 +10,7 @@ import json
 
 from PySide6.QtCore import Signal, QCoreApplication, QObject, QThread, Qt, QSize, QPoint, QTranslator
 from PySide6.QtWidgets import QWidget, QApplication, QMessageBox, QFileDialog, QPushButton, QSizePolicy, QLabel, \
-    QMainWindow, QSizeGrip,QHBoxLayout
+    QMainWindow, QSizeGrip, QHBoxLayout
 from PySide6.QtGui import QPixmap, QIcon, QEventPoint, QEnterEvent, QImage
 from operations_UI.AGV_operations_ui import Ui_myAGV
 from pymycobot.myagv import MyAgv
@@ -127,7 +127,6 @@ class myAGV_windows(QMainWindow):
             # print(Ros_flag, "flag_in start")
             self.status.start()
 
-
     def connections_agv(self):
         if self.radar_flag:  # open radar
             QMessageBox(None, QCoreApplication.translate("myAGV", "Warning"), QCoreApplication.translate(
@@ -187,7 +186,7 @@ class myAGV_windows(QMainWindow):
 
             map_nav_params = [
                 QCoreApplication.translate("myAGV", "Gmapping"),
-                QCoreApplication.translate("myAGV", "Cartographer"),
+                # QCoreApplication.translate("myAGV", "Cartographer"),
                 QCoreApplication.translate("myAGV", "3D Mapping")
             ]
 
@@ -197,6 +196,9 @@ class myAGV_windows(QMainWindow):
                 QCoreApplication.translate("myAGV", "3D Camera"),
                 QCoreApplication.translate("myAGV", "Pump")
             ]
+
+            self.ui.comboBox_testing.view().setRowHidden(3, True)
+            # self.ui.
 
             # self.ui.comboBox_language_selection.addItems(language_params)
             # self.ui.basic_control_selection.addItems(basic_control_params)
@@ -1001,8 +1003,8 @@ class myAGV_windows(QMainWindow):
             self.ui.lineEdit_power_backup.setText(str(power_2))
 
         def motors_set(status, curr):
-            ui_motors=[self.ui.electricity_motor1,self.ui.electricity_motor2,
-                       self.ui.electricity_motor3,self.ui.electricity_motor4]
+            ui_motors = [self.ui.electricity_motor1, self.ui.electricity_motor2,
+                         self.ui.electricity_motor3, self.ui.electricity_motor4]
             if status:
                 self.ui.status_motor_1.setStyleSheet(
                     """
@@ -1337,12 +1339,11 @@ class status_detect(QThread):
 
         motors = data[-4:]
         status = all(motor for motor in motors)
-        print("status for 4 motors:",status)
-        self.motors.emit(status,motors)
+        print("status for 4 motors:", status)
+        self.motors.emit(status, motors)
 
         b_1_voltage = data[-6]
         b_2_voltage = data[-5]
-
 
         # voltage
         power_1 = power_2 = 0
@@ -1373,7 +1374,6 @@ class status_detect(QThread):
         time.sleep(0.2)
         self.voltages.emit(b_1_voltage, b_2_voltage)
         self.powers.emit(round(power_1, 2), round(power_2, 2))
-
 
     def run(self):
         global Ros_flag
