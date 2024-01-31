@@ -1145,17 +1145,17 @@ border: 1px solid</string>
                    <item>
                     <layout class="QHBoxLayout" name="horizontalLayout_7">
                      <item>
-                      <widget class="QLabel" name="electricity_name">
+                      <widget class="QLabel" name="electricity_name1">
                        <property name="styleSheet">
                         <string notr="true">font: 10pt &quot;Arial&quot;;</string>
                        </property>
                        <property name="text">
-                        <string>Electricity</string>
+                        <string>Electricity1</string>
                        </property>
                       </widget>
                      </item>
                      <item>
-                      <widget class="QLabel" name="electricity_display">
+                      <widget class="QLabel" name="electricity_motor1">
                        <property name="text">
                         <string/>
                        </property>
@@ -1164,7 +1164,25 @@ border: 1px solid</string>
                     </layout>
                    </item>
                    <item>
-                    <widget class="QWidget" name="widget_21" native="true"/>
+                    <layout class="QHBoxLayout" name="horizontalLayout_11">
+                     <item>
+                      <widget class="QLabel" name="electricity_name_2">
+                       <property name="styleSheet">
+                        <string notr="true">font: 10pt &quot;Arial&quot;;</string>
+                       </property>
+                       <property name="text">
+                        <string>Electricity2</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QLabel" name="electricity_motor2">
+                       <property name="text">
+                        <string/>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
                    </item>
                   </layout>
                  </item>
@@ -1208,10 +1226,46 @@ border: 1px solid</string>
                     </layout>
                    </item>
                    <item>
-                    <widget class="QWidget" name="widget_26" native="true"/>
+                    <layout class="QHBoxLayout" name="horizontalLayout_16">
+                     <item>
+                      <widget class="QLabel" name="electricity_name_3">
+                       <property name="styleSheet">
+                        <string notr="true">font: 10pt &quot;Arial&quot;;</string>
+                       </property>
+                       <property name="text">
+                        <string>Electricity3</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QLabel" name="electricity_motor3">
+                       <property name="text">
+                        <string/>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
                    </item>
                    <item>
-                    <widget class="QWidget" name="widget_27" native="true"/>
+                    <layout class="QHBoxLayout" name="horizontalLayout_18">
+                     <item>
+                      <widget class="QLabel" name="electricity_name_4">
+                       <property name="styleSheet">
+                        <string notr="true">font: 10pt &quot;Arial&quot;;</string>
+                       </property>
+                       <property name="text">
+                        <string>Electricity4</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QLabel" name="electricity_motor4">
+                       <property name="text">
+                        <string/>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
                    </item>
                   </layout>
                  </item>

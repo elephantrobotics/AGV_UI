@@ -132,7 +132,7 @@ class myAGV_windows(QMainWindow):
         self.ui.logo_lab.setVisible(False)
         self.ui.menu_widget.setVisible(False)
         self.ui_set()
-        self.ui_motors_electricity()
+        # self.ui_motors_electricity()
 
         self.status_detecting()
         self.language_initial()
@@ -975,8 +975,8 @@ class myAGV_windows(QMainWindow):
             close_navigation.start()
             self.flag_all = False
 
-    def ss(self, item):pass
-        # print(item, "iii")
+    def ss(self, item): pass
+    # print(item, "iii")
 
     def start_testing(self):
         current_time = self.get_current_time()
@@ -1082,8 +1082,8 @@ class myAGV_windows(QMainWindow):
             self.ui.lineEdit_power_backup.setText(str(power_2))
 
         def motors_set(status, curr):
-            ui_motors = [self.label_motor_1, self.label_motor_2,
-                         self.label_motor_3, self.label_motor_4]
+            ui_motors = [self.ui.electricity_motor1, self.ui.electricity_motor2,
+                         self.ui.electricity_motor3, self.ui.electricity_motor4]
 
             if status:
                 self.ui.status_motor_1.setStyleSheet(
@@ -1201,7 +1201,7 @@ class myAGV_windows(QMainWindow):
         subprocess.run(
             ['gnome-terminal', '-e', f"bash -c '{launch_command}; exec $SHELL'"])
 
-    def cartographer_build_close(self): 
+    def cartographer_build_close(self):
 
         close_command = "ps -ef | grep -E " + "demo_myagv.launch" + \
             " | grep -v 'grep' | awk '{print $2}' | xargs kill -2"
@@ -1241,7 +1241,6 @@ class myAGV_windows(QMainWindow):
     def navigation_close(self, run_launch):
         close_command = "ps -ef | grep -E " + run_launch + \
             " | grep -v 'grep' | awk '{print $2}' | xargs kill -2"
-
 
         os.system("ps -ef | grep -E rviz" +
                   " | grep -v 'grep' | awk '{print $2}' | xargs kill -2")
@@ -1441,6 +1440,7 @@ class status_detect(QThread):
 
         motors = data[-5:-1]
         status = all(motor for motor in motors)
+        print("status:", status)
         self.motors.emit(status, motors)
 
         b_1_voltage = data[-7]
@@ -1478,25 +1478,13 @@ class status_detect(QThread):
         self.voltages.emit(b_1_voltage, b_2_voltage)
         self.powers.emit(round(power_1, 2), round(power_2, 2))
 
-    def get_motors_run(self):
-        #     motors
-
-        electicity = self.agv.get_motors_current()
-
-        # print(electicity,"electricity")
-
-        if electicity:
-            self.motors.emit(True, str(electicity))
-        else:
-            self.motors.emit(False, str(electicity))
-
     def run(self):
         global Ros_flag
 
         while self.agv:
 
             if Ros_flag == True:
-                # print("11111break")
+                # print("break")
                 break
 
             try:
@@ -1509,8 +1497,6 @@ class status_detect(QThread):
 
                 self.get_info()
                 time.sleep(0.2)
-                # self.get_motors_run()
-                # time.sleep(0.1)
             except Exception as e:
                 pass
 
