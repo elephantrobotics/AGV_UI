@@ -1001,8 +1001,8 @@ class myAGV_windows(QMainWindow):
             self.ui.lineEdit_power_backup.setText(str(power_2))
 
         def motors_set(status, curr):
-            ui_motors=[self.label_motor_1,self.label_motor_2,
-                       self.label_motor_3,self.label_motor_4]
+            ui_motors=[self.ui.electricity_motor1,self.ui.electricity_motor2,
+                       self.ui.electricity_motor3,self.ui.electricity_motor4]
             if status:
                 self.ui.status_motor_1.setStyleSheet(
                     """
@@ -1327,13 +1327,6 @@ class status_detect(QThread):
 
     def get_info(self):
 
-        # all infos of battery and motors
-        # data = self.agv.get_battery_info()
-        # for i in range(5):
-        #     data = self.agv.get_battery_info()
-        #     if data:
-        #         break
-
         data = self.agv.get_mcu_info()
 
         batterys = data[-7]
@@ -1344,6 +1337,7 @@ class status_detect(QThread):
 
         motors = data[-4:]
         status = all(motor for motor in motors)
+        print("status for 4 motors:",status)
         self.motors.emit(status,motors)
 
         b_1_voltage = data[-6]
@@ -1380,18 +1374,6 @@ class status_detect(QThread):
         self.voltages.emit(b_1_voltage, b_2_voltage)
         self.powers.emit(round(power_1, 2), round(power_2, 2))
 
-
-    def get_motors_run(self):
-        #     motors
-
-        electicity = self.agv.get_motors_current()
-
-        # print(electicity,"electricity")
-
-        if electicity:
-            self.motors.emit(True, str(electicity))
-        else:
-            self.motors.emit(False, str(electicity))
 
     def run(self):
         global Ros_flag
