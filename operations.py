@@ -115,7 +115,6 @@ class myAGV_windows(QMainWindow):
         self.ui.logo_lab.setVisible(False)
         self.ui.menu_widget.setVisible(False)
         self.ui_set()
-        self.ui_motors_electricity()
 
         self.status_detecting()
         self.language_initial()
@@ -127,52 +126,6 @@ class myAGV_windows(QMainWindow):
         if not self.radar_flag:
             # print(Ros_flag, "flag_in start")
             self.status.start()
-
-
-    def ui_motors_electricity(self):
-
-        self.ui.electricity_name.setVisible(False)
-        self.ui.widget_21.setVisible(False)
-        self.ui.electricity_display.setVisible(False)
-        self.ui.widget_26.setVisible(False)
-        self.ui.widget_27.setVisible(False)
-
-
-        label_1 = QLabel(QCoreApplication.translate("myAGV","Electricity1"), objectName="electricity_name1")
-        self.label_motor_1 = QLabel("", objectName="electricity_motor1")
-
-        layout1 = QHBoxLayout()
-        layout1.addWidget(label_1)
-        layout1.addWidget(self.label_motor_1)
-
-        label_2 = QLabel(QCoreApplication.translate("myAGV","Electricity2"), objectName="electricity_name2")
-        self.label_motor_2 = QLabel("", objectName="electricity_motor2")
-
-        layout2 = QHBoxLayout()
-        layout2.addWidget(label_2)
-        layout2.addWidget(self.label_motor_2)
-
-        self.ui.verticalLayout_7.addLayout(layout1)
-        self.ui.verticalLayout_7.addLayout(layout2)
-
-
-        label_3 = QLabel(QCoreApplication.translate("myAGV","Electricity3"), objectName="electricity_name3")
-        self.label_motor_3 = QLabel("", objectName="electricity_motor3")
-
-        layout3 = QHBoxLayout()
-        layout3.addWidget(label_3)
-        layout3.addWidget(self.label_motor_3)
-
-        label_4 = QLabel(QCoreApplication.translate("myAGV","Electricity4"), objectName="electricity_name4")
-        self.label_motor_4 = QLabel("", objectName="electricity_motor4")
-
-        layout4 = QHBoxLayout()
-        layout4.addWidget(label_4)
-        layout4.addWidget(self.label_motor_4)
-
-
-        self.ui.verticalLayout_12.addLayout(layout3)
-        self.ui.verticalLayout_12.addLayout(layout4)
 
 
     def connections_agv(self):

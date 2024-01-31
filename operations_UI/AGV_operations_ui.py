@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'AGV_operations.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.5.0
+## Created by: Qt User Interface Compiler version 6.5.2
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -701,24 +701,35 @@ class Ui_myAGV(object):
 
         self.horizontalLayout_7 = QHBoxLayout()
         self.horizontalLayout_7.setObjectName(u"horizontalLayout_7")
-        self.electricity_name = QLabel(self.widget_18)
-        self.electricity_name.setObjectName(u"electricity_name")
-        self.electricity_name.setStyleSheet(u"font: 10pt \"Arial\";")
+        self.electricity_name1 = QLabel(self.widget_18)
+        self.electricity_name1.setObjectName(u"electricity_name1")
+        self.electricity_name1.setStyleSheet(u"font: 10pt \"Arial\";")
 
-        self.horizontalLayout_7.addWidget(self.electricity_name)
+        self.horizontalLayout_7.addWidget(self.electricity_name1)
 
-        self.electricity_display = QLabel(self.widget_18)
-        self.electricity_display.setObjectName(u"electricity_display")
+        self.electricity_motor1 = QLabel(self.widget_18)
+        self.electricity_motor1.setObjectName(u"electricity_motor1")
 
-        self.horizontalLayout_7.addWidget(self.electricity_display)
+        self.horizontalLayout_7.addWidget(self.electricity_motor1)
 
 
         self.verticalLayout_7.addLayout(self.horizontalLayout_7)
 
-        self.widget_21 = QWidget(self.widget_18)
-        self.widget_21.setObjectName(u"widget_21")
+        self.horizontalLayout_11 = QHBoxLayout()
+        self.horizontalLayout_11.setObjectName(u"horizontalLayout_11")
+        self.electricity_name_2 = QLabel(self.widget_18)
+        self.electricity_name_2.setObjectName(u"electricity_name_2")
+        self.electricity_name_2.setStyleSheet(u"font: 10pt \"Arial\";")
 
-        self.verticalLayout_7.addWidget(self.widget_21)
+        self.horizontalLayout_11.addWidget(self.electricity_name_2)
+
+        self.electricity_motor2 = QLabel(self.widget_18)
+        self.electricity_motor2.setObjectName(u"electricity_motor2")
+
+        self.horizontalLayout_11.addWidget(self.electricity_motor2)
+
+
+        self.verticalLayout_7.addLayout(self.horizontalLayout_11)
 
 
         self.horizontalLayout_8.addLayout(self.verticalLayout_7)
@@ -745,15 +756,37 @@ class Ui_myAGV(object):
 
         self.verticalLayout_12.addLayout(self.horizontalLayout_24)
 
-        self.widget_26 = QWidget(self.widget_18)
-        self.widget_26.setObjectName(u"widget_26")
+        self.horizontalLayout_16 = QHBoxLayout()
+        self.horizontalLayout_16.setObjectName(u"horizontalLayout_16")
+        self.electricity_name_3 = QLabel(self.widget_18)
+        self.electricity_name_3.setObjectName(u"electricity_name_3")
+        self.electricity_name_3.setStyleSheet(u"font: 10pt \"Arial\";")
 
-        self.verticalLayout_12.addWidget(self.widget_26)
+        self.horizontalLayout_16.addWidget(self.electricity_name_3)
 
-        self.widget_27 = QWidget(self.widget_18)
-        self.widget_27.setObjectName(u"widget_27")
+        self.electricity_motor3 = QLabel(self.widget_18)
+        self.electricity_motor3.setObjectName(u"electricity_motor3")
 
-        self.verticalLayout_12.addWidget(self.widget_27)
+        self.horizontalLayout_16.addWidget(self.electricity_motor3)
+
+
+        self.verticalLayout_12.addLayout(self.horizontalLayout_16)
+
+        self.horizontalLayout_18 = QHBoxLayout()
+        self.horizontalLayout_18.setObjectName(u"horizontalLayout_18")
+        self.electricity_name_4 = QLabel(self.widget_18)
+        self.electricity_name_4.setObjectName(u"electricity_name_4")
+        self.electricity_name_4.setStyleSheet(u"font: 10pt \"Arial\";")
+
+        self.horizontalLayout_18.addWidget(self.electricity_name_4)
+
+        self.electricity_motor4 = QLabel(self.widget_18)
+        self.electricity_motor4.setObjectName(u"electricity_motor4")
+
+        self.horizontalLayout_18.addWidget(self.electricity_motor4)
+
+
+        self.verticalLayout_12.addLayout(self.horizontalLayout_18)
 
 
         self.horizontalLayout_8.addLayout(self.verticalLayout_12)
@@ -785,7 +818,7 @@ class Ui_myAGV(object):
     # setupUi
 
     def retranslateUi(self, myAGV):
-        myAGV.setWindowTitle(QCoreApplication.translate("myAGV", u"myAGV 2023 UI", None))
+        myAGV.setWindowTitle(QCoreApplication.translate("myAGV", u"MainWindow", None))
         self.title.setText(QCoreApplication.translate("myAGV", u"myAGV", None))
         self.logo_lab.setText("")
         self.min_btn.setText("")
@@ -840,9 +873,15 @@ class Ui_myAGV(object):
         self.lineEdit_voltage_backup.setText("")
         self.status_motor_1.setText("")
         self.motor_1.setText(QCoreApplication.translate("myAGV", u"Motor", None))
-        self.electricity_name.setText(QCoreApplication.translate("myAGV", u"Electricity", None))
-        self.electricity_display.setText("")
+        self.electricity_name1.setText(QCoreApplication.translate("myAGV", u"Electricity1", None))
+        self.electricity_motor1.setText("")
+        self.electricity_name_2.setText(QCoreApplication.translate("myAGV", u"Electricity2", None))
+        self.electricity_motor2.setText("")
         self.status_radar.setText("")
         self.Radar.setText(QCoreApplication.translate("myAGV", u"Radar", None))
+        self.electricity_name_3.setText(QCoreApplication.translate("myAGV", u"Electricity3", None))
+        self.electricity_motor3.setText("")
+        self.electricity_name_4.setText(QCoreApplication.translate("myAGV", u"Electricity4", None))
+        self.electricity_motor4.setText("")
     # retranslateUi
 
