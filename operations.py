@@ -1440,7 +1440,7 @@ class status_detect(QThread):
 
         motors = data[-5:-1]
         status = all(motor for motor in motors)
-        print("status:", status)
+        # print("status:", status)
         self.motors.emit(status, motors)
 
         b_1_voltage = data[-7]
