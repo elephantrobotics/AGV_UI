@@ -213,7 +213,7 @@ class myAGV_windows(QMainWindow):
 
             map_nav_params = [
                 QCoreApplication.translate("myAGV", "Gmapping"),
-                QCoreApplication.translate("myAGV", "Cartographer"),
+                # QCoreApplication.translate("myAGV", "Cartographer"),
                 QCoreApplication.translate("myAGV", "3D Mapping")
             ]
 
