@@ -1354,7 +1354,7 @@ class status_detect(QThread):
             if b_1_voltage:
                 # print("vol--1")
                 # voltage_1 = b_1_voltage
-                power_1 = b_1_voltage / (12.2) * 100
+                power_1 = (b_1_voltage-9) / (12-9) * 100
         else:
             power_1 = 0.00
             b_1_voltage = 0.00
@@ -1364,7 +1364,7 @@ class status_detect(QThread):
             if b_2_voltage:
                 # print("vol--2")
                 # voltage_2 = b_2_voltage
-                power_2 = b_2_voltage / (12.2) * 100
+                power_2 = (b_2_voltage-9) / (12-9) * 100
         else:
             power_2 = 0.00
             b_2_voltage = 0.00
@@ -1381,7 +1381,7 @@ class status_detect(QThread):
         while self.agv:
 
             if Ros_flag == True:
-                # print("11111break")
+                # print("break")
                 break
 
             try:
