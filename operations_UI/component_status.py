@@ -3,8 +3,8 @@ class ComponentsSet:
     @classmethod
     def led_control(cls,ui,status):
         # lighter set --slider
-        ui.widget_19.setEnabled(status)
-
+        # ui.widget_19.setEnabled(status)
+        pass
     
     @classmethod
     def laser_radar(cls,ui,status):
