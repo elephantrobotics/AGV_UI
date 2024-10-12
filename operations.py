@@ -141,6 +141,7 @@ class MyAGVTesttoolApplication(QMainWindow):   # 测试工具
 
         running = CommandExecutor.check_radar_running()     # 检测雷达是否打开
         if running:
+            radar_style = "background-color:green;border-radius: 9px;border: 1px solid;"
             print(" * isChecked", self.ui.radar_button.isChecked())
             self.ui.radar_button.setChecked(True)
             print(" * isChecked", self.ui.radar_button.isChecked())
@@ -150,6 +151,7 @@ class MyAGVTesttoolApplication(QMainWindow):   # 测试工具
             self.ui.Restore_btn.setStyleSheet(self.grey_button)
             self.ui.radar_button.setStyleSheet(self.red_button)
             self.ui.radar_button.setText(QCoreApplication.translate("myAGV", "OFF"))
+            self.ui.status_radar.setStyleSheet(radar_style)
         else:
             self.try_connect_agv()
             if self.agv_status_detector is not None:
@@ -369,6 +371,7 @@ class MyAGVTesttoolApplication(QMainWindow):   # 测试工具
         self.button_status_switch(True)
         self.is_function_testing = False
         ComponentsSet.testing_open_close(self.ui, True)
+        self.ui.start_detection_button.setStyleSheet(self.blue_button)
 
     def lighter_set(self, color):
         r = color.red()
@@ -484,7 +487,7 @@ class MyAGVTesttoolApplication(QMainWindow):   # 测试工具
     def radar_control(self):
         global Ros_flag
         if self.ui.radar_button.isChecked():
-            self.agv_status_detector.quit()
+            self.agv_status_detector.stop_detection()
 
             Ros_flag = True
             time.sleep(0.2)
@@ -874,35 +877,32 @@ class MyAGVTesttoolApplication(QMainWindow):   # 测试工具
             else:
                 self.ui.build_map_selection.setEnabled(False)  # 建图下拉框不可选
                 self.ui.open_build_map.setEnabled(False)  # 打开建图不可选
+                self.ui.open_build_map.setStyleSheet(self.grey_button)
                 self.ui.navigation_button.setEnabled(False)  # 导航不可选
+                self.ui.navigation_button.setStyleSheet(self.grey_button)
 
-                self.ui.navigation_3d_button.setText(
-                    QCoreApplication.translate("myAGV", "Close 3D Navigation"))
+                self.ui.navigation_3d_button.setText(QCoreApplication.translate("myAGV", "Close 3D Navigation"))
                 self.ui.navigation_3d_button.setStyleSheet(self.red_button)
 
-                self.msg_log(QCoreApplication.translate(
-                    "myAGV", "Open 3D navigation"), current_time)
+                self.msg_log(QCoreApplication.translate("myAGV", "Open 3D navigation"), current_time)
 
                 self.flag_all = True
-                open_navigation = threading.Thread(
-                    target=self.navigation_open, daemon=True)
+                open_navigation = threading.Thread(target=self.navigation_open, daemon=True)
                 open_navigation.start()
 
         else:
             self.ui.build_map_selection.setEnabled(True)
             self.ui.open_build_map.setEnabled(True)
+            self.ui.open_build_map.setStyleSheet(self.blue_button)
             self.ui.navigation_button.setEnabled(True)
+            self.ui.navigation_button.setStyleSheet(self.blue_button)
 
-            self.ui.navigation_3d_button.setText(
-                QCoreApplication.translate("myAGV", "3D Navigation"))
+            self.ui.navigation_3d_button.setText(QCoreApplication.translate("myAGV", "3D Navigation"))
             self.ui.navigation_3d_button.setStyleSheet(self.blue_button)
 
-            self.msg_log(QCoreApplication.translate(
-                "myAGV", "Close 3D navigation"), current_time)
-
+            self.msg_log(QCoreApplication.translate("myAGV", "Close 3D navigation"), current_time)
             close_launch = "navigation_active.launch"
-            close_navigation = threading.Thread(
-                target=self.navigation_close, args=(close_launch,), daemon=True)
+            close_navigation = threading.Thread(target=self.navigation_close, args=(close_launch,), daemon=True)
             close_navigation.start()
             self.flag_all = False
 
@@ -989,6 +989,7 @@ class MyAGVTesttoolApplication(QMainWindow):   # 测试工具
             else:
                 self.is_function_testing = True
                 self.ui.start_detection_button.setText(QCoreApplication.translate("myAGV", "Stop Detection"))
+                self.ui.start_detection_button.setStyleSheet(self.red_button)
 
                 self.ui.comboBox_testing.setDisabled(True)
 
@@ -1014,11 +1015,14 @@ class MyAGVTesttoolApplication(QMainWindow):   # 测试工具
 
             if item == "2D Camera":
                 self.testing_finished("2D Camera")
+
             elif self.function_controller:
-                self.function_controller.terminate()
+                # self.function_controller.terminate()
+                self.function_controller.stop_check()
                 self.testing_finished(item, is_stop=True)  # 更新延迟
             else:
                 pass
+
 
     def status_detecting(self):  # TODO add status radar-flag
         def ip_set(ip_str):
@@ -1353,6 +1357,14 @@ class FunctionCheckController(QThread):   # 功能检测控制器
         elif self.test == QCoreApplication.translate("myAGV", "Pump"):
             self.Pump_testing()
 
+    def stop_check(self):
+        self.terminate()
+        if self.test in ("Motor", "电机"):
+            print("Stop Motor Testing...")
+            self.agv.stop()
+            self.agv._mesg(128, 128, 128)
+        self.testing_finish.emit(self.test)
+
 
 class AGVStatusDetector(QThread):
     """
@@ -1416,6 +1428,13 @@ class AGVStatusDetector(QThread):
 
         self.voltages.emit(battery_voltage_1, battery_voltage_2)
         self.powers.emit(battery_level_1, battery_level_2)
+
+    def stop_detection(self):
+        self.battery.emit(0, 0)
+        self.voltages.emit(0, 0)
+        self.powers.emit(0, 0)
+        self.motors.emit(False, [0, 0, 0, 0])
+        self.quit()
 
     def run(self):
         global Ros_flag
