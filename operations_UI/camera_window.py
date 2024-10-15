@@ -5,34 +5,40 @@ from PySide6.QtCore import Qt, QThread, QTimer, Signal
 from PySide6.QtGui import QImage, QPixmap
 from PySide6.QtWidgets import QApplication, QMainWindow, QLabel, QVBoxLayout, QWidget
 
-finish_flag=False
+finish_flag = False
+
 
 class CameraThread(QThread):
     image_ready = Signal(QImage)
     thread_finished = Signal()
 
+    def __init__(self):
+        super().__init__()
+        self.__running = True
+
+    def stop_running(self):
+        self.__running = False
+
     def run(self):
         start_time = time.time()
         cap = cv2.VideoCapture(0)
-        while True:
+        while time.time() - start_time < 10:
             ret, frame = cap.read()
 
             print(time.time() - start_time, "time--")
-            if time.time() - start_time >= 5:
-                # finish_flag=True
+            if self.__running is False:
                 break
             frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             height, width, channel = frame.shape
             bytes_per_line = 3 * width
             q_image = QImage(frame.data, width, height, bytes_per_line, QImage.Format_RGB888)
             self.image_ready.emit(q_image)
-
-        self.thread_finished.emit()
+        else:
+            self.thread_finished.emit()
 
 
 class CameraWindow(QMainWindow, QThread):
-
-    camera_finish=Signal(str)
+    camera_finish = Signal(str, bool)
 
     def __init__(self):
         super().__init__()
@@ -56,14 +62,14 @@ class CameraWindow(QMainWindow, QThread):
         pixmap = QPixmap.fromImage(image)
         self.label.setPixmap(pixmap)
 
-    def close_window(self):
-        self.camera_finish.emit("2D Camera")
+    def close_window(self, is_stop=False):
+        if is_stop:
+            self.camera_thread.thread_finished.disconnect(self.close_window)
+            self.camera_thread.stop_running()
+            # self.camera_thread.terminate()
+        self.camera_finish.emit("2D Camera", is_stop)
         self.camera_thread.quit()
-        self.close()  # 在窗口关闭槽函数中关闭窗口
-        
-        # from operations import myAGV_windows
-        # myAGV_windows.prrr("sssss")
-        # myAGV_windows.testing_finished("2D Camera")
+        self.close()
 
 
 if __name__ == '__main__':

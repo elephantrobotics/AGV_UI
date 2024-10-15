@@ -40,6 +40,6 @@ class ComponentsSet:
         ComponentsSet.laser_radar(ui, status)
         ComponentsSet.basic_control(ui, status)
         ComponentsSet.map_nav(ui, status)
-        ComponentsSet.led_control(ui, status)
+        # ComponentsSet.led_control(ui, status)
     
 
