@@ -1,11 +1,12 @@
 
-from PySide6.QtWidgets import QWidget, QSlider, QHBoxLayout, QSizePolicy,QLabel
-from PySide6.QtCore import Qt, QRect, QPointF, QLineF, Signal
-from PySide6.QtGui import QColor, QPainter, QPaintEvent, QResizeEvent, QConicalGradient, QRadialGradient, QMouseEvent
+from PyQt5.QtWidgets import QWidget, QSizePolicy
+from PyQt5.QtCore import Qt, QRect, QPointF, QLineF, pyqtSignal
+from PyQt5.QtGui import QColor, QPainter, QPaintEvent, QResizeEvent, QConicalGradient, QRadialGradient, QMouseEvent
+
 
 class ColorCircle(QWidget):
 
-    currentColorChanged = Signal(QColor)
+    currentColorChanged = pyqtSignal(QColor)
 
     def __init__(self, parent=None, startupcolor: list = [255, 255, 255], margin=10) -> None:
         super().__init__(parent=parent)

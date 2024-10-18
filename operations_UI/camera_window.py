@@ -1,16 +1,16 @@
 import sys
 import cv2
 import time
-from PySide6.QtCore import Qt, QThread, QTimer, Signal
-from PySide6.QtGui import QImage, QPixmap
-from PySide6.QtWidgets import QApplication, QMainWindow, QLabel, QVBoxLayout, QWidget
+from PyQt5.QtCore import QThread, pyqtSignal
+from PyQt5.QtGui import QImage, QPixmap
+from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QVBoxLayout, QWidget
 
 finish_flag = False
 
 
 class CameraThread(QThread):
-    image_ready = Signal(QImage)
-    thread_finished = Signal()
+    image_ready = pyqtSignal(QImage)
+    thread_finished = pyqtSignal()
 
     def __init__(self):
         super().__init__()
@@ -38,7 +38,7 @@ class CameraThread(QThread):
 
 
 class CameraWindow(QMainWindow, QThread):
-    camera_finish = Signal(str, bool)
+    camera_finish = pyqtSignal(str, bool)
 
     def __init__(self):
         super().__init__()

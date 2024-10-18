@@ -8,17 +8,10 @@
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
-    QMetaObject, QObject, QPoint, QRect,
-    QSize, QTime, QUrl, Qt)
-from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
-    QFont, QFontDatabase, QGradient, QIcon,
-    QImage, QKeySequence, QLinearGradient, QPainter,
-    QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QComboBox, QGridLayout, QHBoxLayout,
-    QLabel, QLineEdit, QMainWindow, QPushButton,
-    QScrollArea, QSizePolicy, QSlider, QSpacerItem,
-    QTextBrowser, QVBoxLayout, QWidget)
+from PyQt5.QtCore import QCoreApplication,QMetaObject,  QRect, QSize, Qt
+from PyQt5.QtGui import QCursor, QFont, QIcon, QPixmap
+from PyQt5.QtWidgets import  (QComboBox, QGridLayout, QHBoxLayout, QLabel, QLineEdit, QPushButton, QScrollArea,
+                              QSizePolicy, QSlider, QSpacerItem, QTextBrowser, QVBoxLayout, QWidget)
 
 class Ui_myAGV(object):
     def setupUi(self, myAGV):
@@ -40,7 +33,7 @@ class Ui_myAGV(object):
         self.title = QLabel(self.menu_widget)
         self.title.setObjectName(u"title")
         font = QFont()
-        font.setFamilies([u"Arial"])
+        font.setFamily(u"Arial")
         font.setPointSize(18)
         font.setBold(True)
         self.title.setFont(font)

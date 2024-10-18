@@ -8,10 +8,8 @@ import traceback
 import socket
 import json
 from typing import Optional
-
-from PyQt5.QtGui import QColor
-from PySide6.QtCore import Signal, QCoreApplication, QThread, QTranslator
-from PySide6.QtWidgets import QWidget, QApplication, QMessageBox, QSizePolicy, QMainWindow
+from PyQt5.QtCore import QCoreApplication, QThread, QTranslator, pyqtSignal
+from PyQt5.QtWidgets import QWidget, QApplication, QMessageBox, QSizePolicy, QMainWindow
 from operations_UI.AGV_operations_ui import Ui_myAGV
 from pymycobot.myagv import MyAgv
 from operations_UI.color_picker import ColorCircle
@@ -19,9 +17,7 @@ from operations_UI.camera_window import CameraWindow
 from operations_UI.component_status import ComponentsSet
 import os
 import cv2
-
-if os.name == "posix":
-    import RPi.GPIO as GPIO
+import RPi.GPIO as GPIO
 
 
 class ButtonStyleEnum:
@@ -1013,8 +1009,8 @@ class myAGV_windows(QMainWindow):
 
 
 class AGVFunctionalTesting(QThread):  #
-    testing_finish = Signal(str)
-    testing_stop = Signal()
+    testing_finish = pyqtSignal(str)
+    testing_stop = pyqtSignal()
 
     def __init__(self, my_agv: MyAgv, test_name: str):
         super().__init__()
@@ -1142,10 +1138,10 @@ class AGVFunctionalTesting(QThread):  #
 
 
 class MyAGVStatusDetector(QThread):
-    voltages = Signal(float, float)
-    battery = Signal(bool, bool)
-    powers = Signal(float, float)
-    motors = Signal(bool, list)
+    voltages = pyqtSignal(float, float)
+    battery = pyqtSignal(bool, bool)
+    powers = pyqtSignal(float, float)
+    motors = pyqtSignal(bool, list)
 
     def __init__(self, my_agv: MyAgv):
         super().__init__()
