@@ -247,8 +247,8 @@ border:None;</string>
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>1047</width>
-         <height>792</height>
+         <width>1068</width>
+         <height>770</height>
         </rect>
        </property>
        <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,2">
@@ -692,6 +692,21 @@ font: 75 9pt &quot;Arial&quot;;</string>
                    </property>
                    <property name="text">
                     <string>Restore</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="aging_btn">
+                   <property name="styleSheet">
+                    <string notr="true">background-color: rgb(39, 174, 96);
+color: rgb(255, 255, 255);
+border-radius: 7px;
+border: 2px groove gray;
+border-style: outset;
+font: 75 9pt &quot;Arial&quot;;</string>
+                   </property>
+                   <property name="text">
+                    <string>老化</string>
                    </property>
                   </widget>
                  </item>
