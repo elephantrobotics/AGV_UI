@@ -8,7 +8,7 @@ import traceback
 import socket
 import json
 from typing import Optional
-from PyQt5.QtCore import QCoreApplication, QThread, QTranslator, pyqtSignal
+from PyQt5.QtCore import QCoreApplication, QThread, QTranslator, pyqtSignal, QTimer
 from PyQt5.QtWidgets import QWidget, QApplication, QMessageBox, QSizePolicy, QMainWindow
 from operations_UI.AGV_operations_ui import Ui_myAGV
 from pymycobot.myagv import MyAgv
@@ -18,7 +18,7 @@ from operations_UI.component_status import ComponentsSet
 import os
 import cv2
 import RPi.GPIO as GPIO
-
+_translate = QCoreApplication.translate
 
 class ButtonStyleEnum:
     RED = """
@@ -130,8 +130,10 @@ class myAGV_windows(QMainWindow):
 
         self.led_default = [255, 0, 0]  # red light
         self.my_agv: Optional[MyAgv] = None
+        self.agv_motor_aging: Optional[AgvMotorAging] = None
         self.function_testing: Optional[AGVFunctionalTesting] = None
         self.agv_status_detector: Optional[MyAGVStatusDetector] = None
+        self.battery_voltage_timer: Optional[QTimer] = None
         self.radar_flag = False
         self.keyboard_flag = False
         self.joystick_flag = False
@@ -139,6 +141,7 @@ class myAGV_windows(QMainWindow):
         self.flag_all = False
         self.flag_build = False
         self.camera = None
+        self.battery_voltages = []
         self._app = QApplication.instance()
         self.translator = QTranslator(self)
 
@@ -275,6 +278,9 @@ class myAGV_windows(QMainWindow):
             self.ui.Restore_btn.pressed.connect(self.restore_btn)
             self.ui.Restore_btn.released.connect(self.release_style)
 
+            self.ui.Aging_btn.clicked.connect(self.aging_btn)
+            self.ui.Charge_btn.clicked.connect(self.charge_btn)
+
         ui_params()
         ui_functions()
         ui_buttons()
@@ -289,10 +295,61 @@ class myAGV_windows(QMainWindow):
                 font: 75 9pt "Arial";
             """)
 
+    def aging_btn(self):
+        if self.radar_flag is True:
+            return
+
+        if self.try_connect_agv():
+            self.msg_log("【老化测试】开始老化")
+            self.ui.Aging_btn.setEnabled(False)
+            self.ui.Aging_btn.setStyleSheet(ButtonStyleEnum.RED)
+            self.agv_motor_aging = AgvMotorAging(self.my_agv, timeout=600, speed=30)
+            self.agv_motor_aging.aging_finish.connect(self.aging_finished)
+            self.agv_motor_aging.start()
+
+    def aging_finished(self, state: str, difference: []):
+        if state == "finish":
+            for idx, vol in enumerate(difference, start=1):
+                self.msg_log(f"【老化测试】电池【{idx}】老化前后电压差范围为{vol}V")
+            self.msg_log(_translate("myAGV", "Aging is done."))
+            self.ui.Aging_btn.setStyleSheet(ButtonStyleEnum.GREEN)
+            self.ui.Aging_btn.setEnabled(True)
+            self.agv_motor_aging = None
+
+    def charge_btn(self):
+        BATTERY_TIMEOUT = 30 * 60 * 1000
+        self.battery_voltages = self.get_battery_voltage()
+        self.msg_log(f"【电池测试】开始监听电池的电压，当前电压 => {self.battery_voltages}")
+        self.ui.Charge_btn.setStyleSheet(ButtonStyleEnum.GRAY)
+        self.ui.Charge_btn.setEnabled(False)
+        self.battery_voltage_timer = QTimer(self)
+        self.battery_voltage_timer.setSingleShot(True)  # 只触发一次
+        self.battery_voltage_timer.timeout.connect(self.voltage_timeout)
+        self.battery_voltage_timer.start(BATTERY_TIMEOUT)
+
+    def voltage_timeout(self):
+        battery_voltages = self.get_battery_voltage()
+        self.msg_log(f"【电池测试】监听电池电压结束，当前电压 => {battery_voltages}")
+        for idx, vol in enumerate([abs(after - before) for after, before in zip(self.battery_voltages, battery_voltages)], start=1):
+            self.msg_log(f"电池【{idx}】前后电压差范围为{vol}V")
+        self.ui.Charge_btn.setStyleSheet(ButtonStyleEnum.GREEN)
+        self.ui.Charge_btn.setEnabled(True)
+
+    def get_battery_voltage(self) -> list:
+        info = None
+        while info is None:
+            try:
+                info = self.my_agv.get_battery_info()
+            except Exception as e:
+                info = None
+                print(e)
+            time.sleep(0.3)
+        return info[1:]
+
     def restore_btn(self):
 
         current_time = self.get_current_time()
-        self.msg_log(QCoreApplication.translate("myAGV", "Motor Restor"), current_time)
+        self.msg_log(QCoreApplication.translate("myAGV", "Motor Restore"), current_time)
 
         if self.try_connect_agv():
             self.ui.Restore_btn.setStyleSheet("""
@@ -1211,7 +1268,62 @@ class MyAGVStatusDetector(QThread):
                 time.sleep(0.2)
             except Exception as e:
                 print(e)
-                print(traceback.format_exc())
+
+
+class AgvMotorAging(QThread):
+    """
+    电机老化测试线程
+    """
+    aging_finish = pyqtSignal(str, list)
+
+    def __init__(self, agv: MyAgv, parent=None, speed: int = 10, timeout=600):
+        super().__init__(parent=parent)
+        self.agv = agv
+        self.speed = speed
+        self.timeout = timeout
+
+    def motor_testing(self):
+        self.agv.go_ahead(self.speed, self.timeout)
+
+        # 向后10分钟
+        self.agv.retreat(self.speed, self.timeout)
+
+        # 左移10分钟
+        self.agv.pan_left(self.speed, self.timeout)
+
+        # 右移10分钟
+        self.agv.pan_right(self.speed, self.timeout)
+
+        # 顺时针旋转10分钟
+        self.agv.clockwise_rotation(self.speed, self.timeout)
+
+        # 逆时针旋转10分钟
+        self.agv.counterclockwise_rotation(self.speed, self.timeout)
+
+    def get_battery_info(self):
+        info = None
+        while info is None:
+            try:
+                info = self.agv.get_battery_info()
+            except Exception as e:
+                info = None
+                print(e)
+            time.sleep(0.3)
+        return info
+
+    def run(self):
+        difference = []
+        try:
+            print(" * motor aging ...")
+            _, *before_aging_vol = self.get_battery_info()
+            self.motor_testing()
+            _, *after_aging_vol = self.get_battery_info()
+            difference = [abs(after - before) for after, before in zip(after_aging_vol, before_aging_vol)]
+        except Exception as e:
+            print(e)
+            print(traceback.format_exc())
+        finally:
+            self.aging_finish.emit("finish", difference)
 
 
 # 程序入口

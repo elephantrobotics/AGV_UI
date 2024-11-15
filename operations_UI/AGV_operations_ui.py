@@ -48,7 +48,7 @@ class Ui_myAGV(object):
         self.logo_lab.setMaximumSize(QtCore.QSize(30, 30))
         self.logo_lab.setStyleSheet("")
         self.logo_lab.setText("")
-        self.logo_lab.setPixmap(QtGui.QPixmap("img_UI/logo.ico"))
+        self.logo_lab.setPixmap(QtGui.QPixmap("C:/Users/Administrator/.designer/backup/operations_UI/img_UI/logo.ico"))
         self.logo_lab.setScaledContents(True)
         self.logo_lab.setObjectName("logo_lab")
         self.gridLayout.addWidget(self.logo_lab, 0, 0, 1, 1)
@@ -65,7 +65,7 @@ class Ui_myAGV(object):
         self.min_btn.setStyleSheet("")
         self.min_btn.setText("")
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("img_UI/min.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap("C:/Users/Administrator/.designer/backup/operations_UI/img_UI/min.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.min_btn.setIcon(icon)
         self.min_btn.setIconSize(QtCore.QSize(30, 30))
         self.min_btn.setObjectName("min_btn")
@@ -83,7 +83,7 @@ class Ui_myAGV(object):
         self.max_btn.setStyleSheet("")
         self.max_btn.setText("")
         icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap("img_UI/max.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon1.addPixmap(QtGui.QPixmap("C:/Users/Administrator/.designer/backup/operations_UI/img_UI/max.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.max_btn.setIcon(icon1)
         self.max_btn.setIconSize(QtCore.QSize(30, 30))
         self.max_btn.setObjectName("max_btn")
@@ -95,7 +95,7 @@ class Ui_myAGV(object):
         self.close_btn.setStyleSheet("")
         self.close_btn.setText("")
         icon2 = QtGui.QIcon()
-        icon2.addPixmap(QtGui.QPixmap("img_UI/close.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon2.addPixmap(QtGui.QPixmap("C:/Users/Administrator/.designer/backup/operations_UI/img_UI/close.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.close_btn.setIcon(icon2)
         self.close_btn.setIconSize(QtCore.QSize(30, 30))
         self.close_btn.setObjectName("close_btn")
@@ -343,15 +343,24 @@ class Ui_myAGV(object):
 "font: 75 9pt \"Arial\";")
         self.Restore_btn.setObjectName("Restore_btn")
         self.verticalLayout_8.addWidget(self.Restore_btn)
-        self.aging_btn = QtWidgets.QPushButton(self.widget_23)
-        self.aging_btn.setStyleSheet("background-color: rgb(39, 174, 96);\n"
+        self.Aging_btn = QtWidgets.QPushButton(self.widget_23)
+        self.Aging_btn.setStyleSheet("background-color: rgb(39, 174, 96);\n"
 "color: rgb(255, 255, 255);\n"
 "border-radius: 7px;\n"
 "border: 2px groove gray;\n"
 "border-style: outset;\n"
 "font: 75 9pt \"Arial\";")
-        self.aging_btn.setObjectName("aging_btn")
-        self.verticalLayout_8.addWidget(self.aging_btn)
+        self.Aging_btn.setObjectName("Aging_btn")
+        self.verticalLayout_8.addWidget(self.Aging_btn)
+        self.Charge_btn = QtWidgets.QPushButton(self.widget_23)
+        self.Charge_btn.setStyleSheet("background-color: rgb(39, 174, 96);\n"
+"color: rgb(255, 255, 255);\n"
+"border-radius: 7px;\n"
+"border: 2px groove gray;\n"
+"border-style: outset;\n"
+"font: 75 9pt \"Arial\";")
+        self.Charge_btn.setObjectName("Charge_btn")
+        self.verticalLayout_8.addWidget(self.Charge_btn)
         self.horizontalLayout_27.addWidget(self.widget_23)
         self.verticalLayout_3.addWidget(self.widget_22)
         self.widget_24 = QtWidgets.QWidget(self.widget_left)
@@ -651,7 +660,8 @@ class Ui_myAGV(object):
         self.label_value.setText(_translate("myAGV", "value"))
         self.label_15.setText(_translate("myAGV", "Test"))
         self.Restore_btn.setText(_translate("myAGV", "Restore"))
-        self.aging_btn.setText(_translate("myAGV", "老化"))
+        self.Aging_btn.setText(_translate("myAGV", "Aging Test"))
+        self.Charge_btn.setText(_translate("myAGV", "Charge Test"))
         self.start_detection_button.setText(_translate("myAGV", "Start Detection"))
         self.comboBox_testing.setItemText(0, _translate("myAGV", "Motor"))
         self.comboBox_testing.setItemText(1, _translate("myAGV", "LED"))

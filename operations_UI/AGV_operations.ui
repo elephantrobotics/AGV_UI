@@ -97,7 +97,7 @@ color: rgb(255, 255, 255);</string>
           <string/>
          </property>
          <property name="pixmap">
-          <pixmap>operations_UI/img_UI/logo.ico</pixmap>
+          <pixmap>C:/Users/Administrator/.designer/backup/operations_UI/img_UI/logo.ico</pixmap>
          </property>
          <property name="scaledContents">
           <bool>true</bool>
@@ -141,7 +141,7 @@ color: rgb(255, 255, 255);</string>
          </property>
          <property name="icon">
           <iconset>
-           <normaloff>operations_UI/img_UI/min.ico</normaloff>operations_UI/img_UI/min.ico</iconset>
+           <normaloff>C:/Users/Administrator/.designer/backup/operations_UI/img_UI/min.ico</normaloff>C:/Users/Administrator/.designer/backup/operations_UI/img_UI/min.ico</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -185,7 +185,7 @@ color: rgb(255, 255, 255);</string>
          </property>
          <property name="icon">
           <iconset>
-           <normaloff>operations_UI/img_UI/max.ico</normaloff>operations_UI/img_UI/max.ico</iconset>
+           <normaloff>C:/Users/Administrator/.designer/backup/operations_UI/img_UI/max.ico</normaloff>C:/Users/Administrator/.designer/backup/operations_UI/img_UI/max.ico</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -220,7 +220,7 @@ color: rgb(255, 255, 255);</string>
          </property>
          <property name="icon">
           <iconset>
-           <normaloff>operations_UI/img_UI/close.ico</normaloff>operations_UI/img_UI/close.ico</iconset>
+           <normaloff>C:/Users/Administrator/.designer/backup/operations_UI/img_UI/close.ico</normaloff>C:/Users/Administrator/.designer/backup/operations_UI/img_UI/close.ico</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -696,7 +696,7 @@ font: 75 9pt &quot;Arial&quot;;</string>
                   </widget>
                  </item>
                  <item>
-                  <widget class="QPushButton" name="aging_btn">
+                  <widget class="QPushButton" name="Aging_btn">
                    <property name="styleSheet">
                     <string notr="true">background-color: rgb(39, 174, 96);
 color: rgb(255, 255, 255);
@@ -706,7 +706,22 @@ border-style: outset;
 font: 75 9pt &quot;Arial&quot;;</string>
                    </property>
                    <property name="text">
-                    <string>老化</string>
+                    <string>Aging Test</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="Charge_btn">
+                   <property name="styleSheet">
+                    <string notr="true">background-color: rgb(39, 174, 96);
+color: rgb(255, 255, 255);
+border-radius: 7px;
+border: 2px groove gray;
+border-style: outset;
+font: 75 9pt &quot;Arial&quot;;</string>
+                   </property>
+                   <property name="text">
+                    <string>Charge Test</string>
                    </property>
                   </widget>
                  </item>
