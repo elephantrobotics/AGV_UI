@@ -10,15 +10,65 @@ import json
 from typing import Optional
 from PyQt5.QtCore import QCoreApplication, QThread, QTranslator, pyqtSignal, QTimer
 from PyQt5.QtWidgets import QWidget, QApplication, QMessageBox, QSizePolicy, QMainWindow
-from operations_UI.AGV_operations_ui import Ui_myAGV
+from widgets.AGV_operations_ui import Ui_myAGV
 from pymycobot.myagv import MyAgv
-from operations_UI.color_picker import ColorCircle
-from operations_UI.camera_window import CameraWindow
-from operations_UI.component_status import ComponentsSet
+from widgets.ui.color_picker import ColorCircle
+from widgets.camera_window import CameraWindow
+from widgets.component_status import ComponentsSet
+from utils.resource import FileResource
 import os
 import cv2
 import RPi.GPIO as GPIO
+
+device_filepath = "/proc/device-tree/model"
+device_exist = os.path.exists(device_filepath)
+if not device_exist:
+    raise Exception(" * Current platform is not supported")
+
+system_model = subprocess.check_output("cat /proc/device-tree/model", shell=True).decode("utf-8").strip()
+
+print(f" * ================================================")
+print(f" * Current platform is {system_model}")
+print(f" * ================================================")
+
+if system_model.startswith("Raspberry Pi 4"):
+    class AGVConfig:
+        debug = False
+        baudrate = 115200
+        comport = "/dev/ttyAMA2"
+        suction_pump_pins = (2, 3)
+        radar_control_pin = 20
+
+elif system_model.startswith("NVIDIA Jetson Nano Developer Kit"):
+    class AGVConfig:
+        debug = False
+        baudrate = 115200
+        comport = "/dev/ttyS0"
+        suction_pump_pins = (19, 26)
+        radar_control_pin = 20
+else:
+    raise Exception(" * Current platform is not supported")
+
+
 _translate = QCoreApplication.translate
+agv_chinese_names = {0: "前进", 1: "后退", 2: "左转", 3: "右转", 4: "停止", 5: "顺时针旋转", 6: "逆时针旋转"}
+
+
+class AGVDirectionEnum:     # 运动方向
+    FORWARD = 0             # 前进
+    BACKWARD = 1            # 后退
+    PAN_LEFT = 2                # 左转
+    PAN_RIGHT = 3               # 右转
+    STOP = 4                # 停止
+    CLOCKWISE_ROTATION = 5           # 顺时针旋转
+    COUNTERCLOCKWISE_ROTATION = 6    # 逆时针旋转
+
+
+class AGVStateEnum:       # 老化状态
+    STARTUP = 0             # 启动
+    RUNNING = 1             # 运行
+    FINISHED = 2            # 完成
+
 
 class ButtonStyleEnum:
     RED = """
@@ -129,11 +179,12 @@ class myAGV_windows(QMainWindow):
         self.ui.menu_widget.setVisible(False)
 
         self.led_default = [255, 0, 0]  # red light
-        self.my_agv: Optional[MyAgv] = None
+        self.agv_handler: Optional[MyAgv] = None
         self.agv_motor_aging: Optional[AgvMotorAging] = None
         self.function_testing: Optional[AGVFunctionalTesting] = None
         self.agv_status_detector: Optional[MyAGVStatusDetector] = None
         self.battery_voltage_timer: Optional[QTimer] = None
+        self.file_resource = FileResource('assets')
         self.radar_flag = False
         self.keyboard_flag = False
         self.joystick_flag = False
@@ -150,8 +201,6 @@ class myAGV_windows(QMainWindow):
         self.language_initial()
 
         GPIO.setmode(GPIO.BCM)
-        GPIO.setup(21, GPIO.OUT)
-        GPIO.output(21, GPIO.HIGH)
 
         ipaddress = MyAGVStatusDetector.get_ipaddress()
         self.ui.lineEdit.setText(ipaddress)
@@ -173,7 +222,7 @@ class myAGV_windows(QMainWindow):
                 QCoreApplication.translate("myAGV", "Please turn off the radar before using this function.")
             )
         else:
-            self.my_agv = MyAgv("/dev/ttyAMA2", 115200)
+            self.agv_handler = MyAgv(port=AGVConfig.comport, baudrate=AGVConfig.baudrate, debug=AGVConfig.debug)
         return not self.radar_flag
 
     def color_painter(self):
@@ -300,21 +349,45 @@ class myAGV_windows(QMainWindow):
             return
 
         if self.try_connect_agv():
-            self.msg_log("【老化测试】开始老化")
+            self.msg_log("【老化测试】老化开始")
             self.ui.Aging_btn.setEnabled(False)
             self.ui.Aging_btn.setStyleSheet(ButtonStyleEnum.RED)
-            self.agv_motor_aging = AgvMotorAging(self.my_agv, timeout=600, speed=30)
-            self.agv_motor_aging.aging_finish.connect(self.aging_finished)
+            self.agv_motor_aging = AgvMotorAging(self.agv_handler, timeout=600, speed=30)
+            self.agv_motor_aging.aging_finished.connect(self.aging_finished)
+            self.agv_motor_aging.aging_noticed.connect(self.aging_noticed)
             self.agv_motor_aging.start()
+
+    def aging_noticed(self, direction: int, state: int, timeout: int):
+        name = "方向检测" if timeout == 5 else "老化测试"
+        if state == AGVStateEnum.STARTUP:
+            self.msg_log(f"【{name}】AGV车{agv_chinese_names[direction]}运动，时间{timeout}秒")
 
     def aging_finished(self, state: str, difference: []):
         if state == "finish":
-            for idx, vol in enumerate(difference, start=1):
-                self.msg_log(f"【老化测试】电池【{idx}】老化前后电压差范围为{vol}V")
-            self.msg_log(_translate("myAGV", "Aging is done."))
+            if not difference:
+                self.msg_log("【老化测试】老化结束")
+            else:
+                self.msg_log("【老化测试】老化完成")
+                for idx, vol in enumerate(difference, start=1):
+                    if idx == 1:
+                        self.msg_log(f"【老化测试】主电池的电压差为{vol}V")
+
+                    elif idx == 2:
+                        self.msg_log(f"【老化测试】备用电池的电压差为{vol}V")
+
+            self.agv_handler.stop()
             self.ui.Aging_btn.setStyleSheet(ButtonStyleEnum.GREEN)
             self.ui.Aging_btn.setEnabled(True)
             self.agv_motor_aging = None
+
+        elif state == "break":
+            answer = QMessageBox.question(self, "提示", "请确认AGV车运动方向是否正确？", QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes)
+            if answer == QMessageBox.Yes:
+                self.msg_log("【老化测试】人工确认AGV车运动方向正确，继续老化测试")
+                self.agv_motor_aging.next(True)
+            else:
+                self.msg_log("【老化测试】人工确认AGV车运动方向错误，老化测试终止")
+                self.agv_motor_aging.next(False)
 
     def charge_btn(self):
         BATTERY_TIMEOUT = 30 * 60 * 1000
@@ -339,7 +412,7 @@ class myAGV_windows(QMainWindow):
         info = None
         while info is None:
             try:
-                info = self.my_agv.get_battery_info()
+                info = self.agv_handler.get_battery_info()
             except Exception as e:
                 info = None
                 print(e)
@@ -360,7 +433,7 @@ class myAGV_windows(QMainWindow):
                 border-style: outset;
                 font: 75 9pt "Arial";
             """)
-            self.my_agv.restore()
+            self.agv_handler.restore()
 
     def testing_finished(self, item, is_stop=False):
         self.try_connect_agv()
@@ -375,16 +448,16 @@ class myAGV_windows(QMainWindow):
         if item == "Pump" or item == "吸泵":
             # stop testing to close pump
 
-            GPIO.output(3, GPIO.HIGH)
-            GPIO.output(2, GPIO.LOW)
+            GPIO.output(AGVConfig.suction_pump_pins[1], GPIO.HIGH)
+            GPIO.output(AGVConfig.suction_pump_pins[0], GPIO.LOW)
             time.sleep(0.05)
-            GPIO.output(2, GPIO.HIGH)
+            GPIO.output(AGVConfig.suction_pump_pins[0], GPIO.HIGH)
 
             # GPIO.cleanup()
 
         if item == "Motor" or item == "电机":
-            self.my_agv._mesg(128, 128, 128)
-            self.my_agv.stop()
+            self.agv_handler._mesg(128, 128, 128)
+            self.agv_handler.stop()
 
         if item == "2D Camera" or item == "2D 相机":
             self.camera.close()
@@ -425,17 +498,18 @@ class myAGV_windows(QMainWindow):
                 QMessageBox.Ok
             )
         else:
-            if self.my_agv is not None:
+            if self.agv_handler is not None:
                 print(" * Set LED color to: ", r, g, b)
-                self.my_agv._mesg([0x01, 0x0A, 0x01])
-                self.my_agv.set_led(1, r, g, b)
+                self.agv_handler._mesg([0x01, 0x0A, 0x01])
+                self.agv_handler.set_led(1, r, g, b)
 
     @classmethod
     def get_current_time(cls):
         return time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time()))
 
     def language_initial(self):
-        with open("translation/language.json", "r", encoding='utf-8') as f:
+        language_filepath = self.file_resource.get('translation', 'language.json')
+        with open(language_filepath, "r", encoding='utf-8') as f:
             language = json.loads(f.read())
         lang = language["language"]
         self.language_selection(lang)
@@ -449,7 +523,8 @@ class myAGV_windows(QMainWindow):
             lang_write = "zh_CN"
 
         data = {"language": lang_write}
-        with open("translation/language.json", "w") as f:
+        language_filepath = self.file_resource.get('translation', 'language.json')
+        with open(language_filepath, "w") as f:
             json.dump(data, f, indent=4)
         self.language_initial()
 
@@ -471,7 +546,8 @@ class myAGV_windows(QMainWindow):
             self._app.removeTranslator(self.translator)
             self.retranslateUi()
         if lang == "zh_CN" or lang == "中文":
-            self.translator.load("translation/operations_lang.qm")
+            language_filepath = self.file_resource.get('translation', 'operations_lang.qm')
+            self.translator.load(language_filepath)
             self._app.installTranslator(self.translator)
             self.retranslateUi()
 
@@ -505,8 +581,8 @@ class myAGV_windows(QMainWindow):
     def radar_control(self):
         if self.ui.radar_button.isChecked():
             self.agv_status_detector.stop_detector()
-            if self.my_agv is not None:
-                self.my_agv._serial_port.close()
+            if self.agv_handler is not None:
+                self.agv_handler._serial_port.close()
 
             time.sleep(0.2)
             # self.ui.start_detection_button.setCheckable(False)
@@ -924,7 +1000,7 @@ class myAGV_windows(QMainWindow):
                     self.camera.camera_finish.connect(self.testing_finished)
                     self.camera.show()
                 else:
-                    self.function_testing = AGVFunctionalTesting(test_name=item, my_agv=self.my_agv)
+                    self.function_testing = AGVFunctionalTesting(test_name=item, my_agv=self.agv_handler)
                     self.function_testing.testing_finish.connect(self.testing_finished)
                     self.button_status_switch(False)
                     ComponentsSet.testing_open_close(self.ui, False)
@@ -967,7 +1043,7 @@ class myAGV_windows(QMainWindow):
             for el, val in enumerate(zip(ui_motors, curr)):
                 val[0].setText(str(val[1]))
 
-        self.agv_status_detector = MyAGVStatusDetector(self.my_agv)
+        self.agv_status_detector = MyAGVStatusDetector(self.agv_handler)
         self.agv_status_detector.voltages.connect(voltage_set)
         self.agv_status_detector.battery.connect(battery_set)
         self.agv_status_detector.powers.connect(powers_set)
@@ -977,8 +1053,8 @@ class myAGV_windows(QMainWindow):
     def radar_open(cls):
         GPIO.setmode(GPIO.BCM)
         time.sleep(0.1)
-        GPIO.setup(20, GPIO.OUT)
-        GPIO.output(20, GPIO.HIGH)
+        GPIO.setup(AGVConfig.radar_control_pin, GPIO.OUT)
+        GPIO.output(AGVConfig.radar_control_pin, GPIO.HIGH)
         time.sleep(0.05)
         CommandExecutor.open_radar()
 
@@ -986,8 +1062,8 @@ class myAGV_windows(QMainWindow):
     def radar_close(cls):
         GPIO.setmode(GPIO.BCM)
         time.sleep(0.1)
-        GPIO.setup(20, GPIO.OUT)
-        GPIO.output(20, GPIO.LOW)
+        GPIO.setup(AGVConfig.radar_control_pin, GPIO.OUT)
+        GPIO.output(AGVConfig.radar_control_pin, GPIO.LOW)
         time.sleep(0.05)
         CommandExecutor.close_radar()
 
@@ -1162,20 +1238,20 @@ class AGVFunctionalTesting(QThread):  #
     def Pump_testing(self):
 
         GPIO.setmode(GPIO.BCM)
-        GPIO.setup(2, GPIO.OUT)
-        GPIO.setup(3, GPIO.OUT)
+        GPIO.setup(AGVConfig.suction_pump_pins[0], GPIO.OUT)
+        GPIO.setup(AGVConfig.suction_pump_pins[1], GPIO.OUT)
 
         # open
-        GPIO.output(3, GPIO.LOW)
-        GPIO.output(2, GPIO.HIGH)
+        GPIO.output(AGVConfig.suction_pump_pins[1], GPIO.LOW)
+        GPIO.output(AGVConfig.suction_pump_pins[0], GPIO.HIGH)
 
         time.sleep(4)
 
         # close
-        GPIO.output(3, GPIO.HIGH)
-        GPIO.output(2, GPIO.LOW)
+        GPIO.output(AGVConfig.suction_pump_pins[1], GPIO.HIGH)
+        GPIO.output(AGVConfig.suction_pump_pins[0], GPIO.LOW)
         time.sleep(0.05)
-        GPIO.output(2, GPIO.HIGH)
+        GPIO.output(AGVConfig.suction_pump_pins[0], GPIO.HIGH)
 
         self.testing_finish.emit(self.test)
 
@@ -1202,7 +1278,7 @@ class MyAGVStatusDetector(QThread):
 
     def __init__(self, my_agv: MyAgv):
         super().__init__()
-        self.my_agv = my_agv
+        self.agv_handler = my_agv
         self.detector = True
 
     def stop_detector(self):
@@ -1232,7 +1308,7 @@ class MyAGVStatusDetector(QThread):
         return round((voltage - 9) / (12 - 9) * 100, 2)
 
     def get_status_info(self):
-        data = self.my_agv.get_mcu_info()
+        data = self.agv_handler.get_mcu_info()
         if not data:
             return
 
@@ -1274,31 +1350,39 @@ class AgvMotorAging(QThread):
     """
     电机老化测试线程
     """
-    aging_finish = pyqtSignal(str, list)
+    aging_finished = pyqtSignal(str, list)  # 老化完成
+    aging_noticed = pyqtSignal(int, int, int)   # 运动方向
+    motion_checked = pyqtSignal(bool)  # 运动检测
 
     def __init__(self, agv: MyAgv, parent=None, speed: int = 10, timeout=600):
         super().__init__(parent=parent)
         self.agv = agv
         self.speed = speed
         self.timeout = timeout
+        self.aging_event = threading.Event()
+        self.next_tick_running = False
+        self.agv_direction_function_table = {
+            AGVDirectionEnum.FORWARD: self.agv.go_ahead,
+            AGVDirectionEnum.BACKWARD: self.agv.retreat,
+            AGVDirectionEnum.PAN_LEFT: self.agv.pan_left,
+            AGVDirectionEnum.PAN_RIGHT: self.agv.pan_right,
+            AGVDirectionEnum.CLOCKWISE_ROTATION: self.agv.clockwise_rotation,
+            AGVDirectionEnum.COUNTERCLOCKWISE_ROTATION: self.agv.counterclockwise_rotation
+        }
 
-    def motor_testing(self):
-        self.agv.go_ahead(self.speed, self.timeout)
+    def next(self, running: bool):
+        self.aging_event.set()
+        self.next_tick_running = running
 
-        # 向后10分钟
-        self.agv.retreat(self.speed, self.timeout)
+    def aging_notification(self, direction: int, state: int, timeout: int):
+        self.aging_noticed.emit(direction, state, timeout)
 
-        # 左移10分钟
-        self.agv.pan_left(self.speed, self.timeout)
-
-        # 右移10分钟
-        self.agv.pan_right(self.speed, self.timeout)
-
-        # 顺时针旋转10分钟
-        self.agv.clockwise_rotation(self.speed, self.timeout)
-
-        # 逆时针旋转10分钟
-        self.agv.counterclockwise_rotation(self.speed, self.timeout)
+    def motor_movement_testing(self, timeout: int = 600):
+        for direction, function in self.agv_direction_function_table.items():
+            self.aging_notification(direction, AGVStateEnum.STARTUP, timeout=timeout)
+            function(speed=self.speed, timeout=timeout)
+            self.aging_notification(direction, AGVStateEnum.FINISHED, timeout=timeout)
+            time.sleep(2)
 
     def get_battery_info(self):
         info = None
@@ -1314,16 +1398,22 @@ class AgvMotorAging(QThread):
     def run(self):
         difference = []
         try:
-            print(" * motor aging ...")
-            _, *before_aging_vol = self.get_battery_info()
-            self.motor_testing()
-            _, *after_aging_vol = self.get_battery_info()
-            difference = [abs(after - before) for after, before in zip(after_aging_vol, before_aging_vol)]
+            self.agv.stop()
+            self.motor_movement_testing(timeout=5)
+            self.aging_finished.emit("break", difference)
+
+            self.aging_event.wait()
+
+            if self.next_tick_running is True:
+                _, *before_aging_vol = self.get_battery_info()
+                self.motor_movement_testing(timeout=self.timeout)
+                _, *after_aging_vol = self.get_battery_info()
+                difference = [abs(after - before) for after, before in zip(after_aging_vol, before_aging_vol)]
         except Exception as e:
             print(e)
             print(traceback.format_exc())
         finally:
-            self.aging_finish.emit("finish", difference)
+            self.aging_finished.emit("finish", difference)
 
 
 # 程序入口

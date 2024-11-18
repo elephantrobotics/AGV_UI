@@ -121,7 +121,7 @@ Click the drop-down box to select the Gmapping mapping method, and click the "Op
 
 Click the "Save Map" button, and a new terminal will appear on the desktop to display the saved map information, as shown in the figure. The red circled part in the picture is the saved map file:
 
-![Save map terminal](operations_UI/img_depict/save_map.png)
+![Save map terminal](resources/img_depict/save_map.png)
 
 
 **The default save path is in the software running directory.**
@@ -136,18 +136,18 @@ Click the "Save Map" button, and a new terminal will appear on the desktop to di
 
  > /home/ubuntu/myagv_ros/src/myagv_navigation/map/
 
-![File Manager](operations_UI/img_depict/file_2.png)
+![File Manager](resources/img_depict/file_2.png)
 
 #### 2.modify the launch file
 
 1. Click to open Visual Studio Code in the top left corner to open the code editor.
-![vscode Icon](operations_UI/img_depict/vscode_icon.png)
+![vscode Icon](resources/img_depict/vscode_icon.png)
 
 2. Open the navigation_active.launch file in /home/ubuntu/myagv_ros/src/myagv_navigation/launch/ path.
-![modify launchfile1](operations_UI/img_depict/modify_launch1.png)
+![modify launchfile1](resources/img_depict/modify_launch1.png)
 
 3. Replace the myroom2.yaml in line 5 with our own map file name map.yaml.
-![modify launch file2](operations_UI/img_depict/modify_launch2.png)
+![modify launch file2](resources/img_depict/modify_launch2.png)
 
 4. Save the modified file and exit (VScode is more memory intensive when running, it is recommended to close VScode after modifying the code, otherwise the running carsystem will be very laggy, you can also use vim and other lightweight editors.)
 
@@ -158,15 +158,15 @@ Click the "Save Map" button, and a new terminal will appear on the desktop to di
 
 If the car on the Rviz interface does not correspond to the actual car, click "2D Pose Estimate" on the top toolbar to adjust, so that the car on the Rviz interface and the realized car can correspond, and navigate after adjustment.
 
-![Run launch File1](operations_UI/img_depict/run_launch1.jpg)
+![Run launch File1](resources/img_depict/run_launch1.jpg)
 
 1. Click on "2D Nav Goal" in the top toolbar.
 
-![Run launch File3](operations_UI/img_depict/run_launch3.png)
+![Run launch File3](resources/img_depict/run_launch3.png)
 
 2. Click on the point we want to reach on the map, the carwill start towards the target point, and you can also see in the rviz a planned path of the carbetween the starting point and the target point, the carwill move along the route to the target point.
 
-![Run launch File4](operations_UI/img_depict/run_launch4.jpg)
+![Run launch File4](resources/img_depict/run_launch4.jpg)
 
 **Limit:**
 
