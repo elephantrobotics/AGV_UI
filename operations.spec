@@ -2,7 +2,7 @@
 
 
 a = Analysis(
-    ['main.py'],
+    ['operations.py'],
     pathex=[],
     binaries=[],
     datas=[("assets", "./assets")],
@@ -22,7 +22,7 @@ exe = EXE(
     a.binaries,
     a.datas,
     [],
-    name='main',
+    name='operations',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,

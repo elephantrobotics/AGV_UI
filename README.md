@@ -18,6 +18,6 @@
 3. 打开翻译文件，进行翻译
    ```shell
    # 添加翻译文件
-   pylupdate5 -noobsolete .\operations.py -ts .\translation\operations_lang.ts
+   pylupdate5 -noobsolete .\operations.py .\widgets\operation_ui.py -ts .\assets\translation\operations_lang.ts
    ```
 4. 翻译完成之后点击`发布`即可完成翻译

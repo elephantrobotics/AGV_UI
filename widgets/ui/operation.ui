@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>myAGV</class>
- <widget class="QMainWindow" name="myAGV">
+ <class>Operation</class>
+ <widget class="QMainWindow" name="Operation">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -264,7 +264,8 @@ border:None;</string>
         <item>
          <widget class="QWidget" name="widget_left" native="true">
           <property name="styleSheet">
-           <string notr="true">background-color: rgb(218, 218, 218);</string>
+           <string notr="true">background-color: rgb(218, 218, 218);
+border-radius: 5px;</string>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_3">
            <property name="leftMargin">
@@ -288,12 +289,15 @@ font: 75 14pt &quot;Arial&quot;;</string>
                </widget>
               </item>
               <item>
-               <widget class="QComboBox" name="comboBox_language_selection">
+               <widget class="QComboBox" name="languageSelection">
                 <property name="minimumSize">
                  <size>
                   <width>0</width>
                   <height>25</height>
                  </size>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">color:black;</string>
                 </property>
                 <item>
                  <property name="text">
@@ -342,6 +346,9 @@ font: 75 9pt &quot;Arial&quot;;</string>
                 <property name="text">
                  <string>ON</string>
                 </property>
+                <property name="checkable">
+                 <bool>true</bool>
+                </property>
                </widget>
               </item>
              </layout>
@@ -359,9 +366,6 @@ font: 75 9pt &quot;Arial&quot;;</string>
                  <string>Basic Control</string>
                 </property>
                </widget>
-              </item>
-              <item>
-               <widget class="QWidget" name="widget_7" native="true"/>
               </item>
              </layout>
             </widget>
@@ -390,6 +394,9 @@ font: 75 9pt &quot;Arial&quot;;</string>
                 </property>
                 <property name="text">
                  <string>ON</string>
+                </property>
+                <property name="checkable">
+                 <bool>true</bool>
                 </property>
                </widget>
               </item>
@@ -489,6 +496,9 @@ font: 75 9pt &quot;Arial&quot;;</string>
                    <property name="text">
                     <string>Open Build Map</string>
                    </property>
+                   <property name="checkable">
+                    <bool>true</bool>
+                   </property>
                   </widget>
                  </item>
                  <item>
@@ -498,6 +508,9 @@ font: 75 9pt &quot;Arial&quot;;</string>
                      <width>0</width>
                      <height>25</height>
                     </size>
+                   </property>
+                   <property name="styleSheet">
+                    <string notr="true">color:black;</string>
                    </property>
                   </widget>
                  </item>
@@ -529,6 +542,9 @@ font: 75 9pt &quot;Arial&quot;;</string>
                    <property name="text">
                     <string>3D Navigation</string>
                    </property>
+                   <property name="checkable">
+                    <bool>true</bool>
+                   </property>
                   </widget>
                  </item>
                  <item>
@@ -550,6 +566,9 @@ font: 75 9pt &quot;Arial&quot;;</string>
                    <property name="text">
                     <string>Navigation</string>
                    </property>
+                   <property name="checkable">
+                    <bool>true</bool>
+                   </property>
                   </widget>
                  </item>
                 </layout>
@@ -570,9 +589,6 @@ font: 75 9pt &quot;Arial&quot;;</string>
                  <string>LED Control</string>
                 </property>
                </widget>
-              </item>
-              <item>
-               <widget class="QWidget" name="widget_15" native="true"/>
               </item>
              </layout>
             </widget>
@@ -665,53 +681,59 @@ font: 75 9pt &quot;Arial&quot;;</string>
             </widget>
            </item>
            <item>
-            <widget class="QWidget" name="widget_22" native="true">
-             <layout class="QHBoxLayout" name="horizontalLayout_27">
+            <widget class="QWidget" name="widget_2" native="true">
+             <layout class="QHBoxLayout" name="horizontalLayout_19">
               <item>
-               <widget class="QLabel" name="label_15">
+               <widget class="QLabel" name="label_2">
                 <property name="styleSheet">
                  <string notr="true">font: 13pt &quot;Arial&quot;;</string>
                 </property>
                 <property name="text">
-                 <string>Test</string>
+                 <string>Functional Testing</string>
                 </property>
                </widget>
               </item>
               <item>
+               <widget class="QPushButton" name="Restore_btn">
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>25</height>
+                 </size>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">background-color: rgb(39, 174, 96);
+color: rgb(255, 255, 255);
+border-radius: 7px;
+border: 2px groove gray;
+border-style: outset;
+font: 75 9pt &quot;Arial&quot;;</string>
+                </property>
+                <property name="text">
+                 <string>Restore</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <widget class="QWidget" name="widget_22" native="true">
+             <property name="styleSheet">
+              <string notr="true">background-color: rgb(236, 240, 241);</string>
+             </property>
+             <layout class="QHBoxLayout" name="horizontalLayout_27">
+              <item>
                <widget class="QWidget" name="widget_23" native="true">
-                <layout class="QVBoxLayout" name="verticalLayout_8">
-                 <item>
-                  <widget class="QPushButton" name="Restore_btn">
-                   <property name="styleSheet">
-                    <string notr="true">background-color: rgb(39, 174, 96);
-color: rgb(255, 255, 255);
-border-radius: 7px;
-border: 2px groove gray;
-border-style: outset;
-font: 75 9pt &quot;Arial&quot;;</string>
-                   </property>
-                   <property name="text">
-                    <string>Restore</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QPushButton" name="Aging_btn">
-                   <property name="styleSheet">
-                    <string notr="true">background-color: rgb(39, 174, 96);
-color: rgb(255, 255, 255);
-border-radius: 7px;
-border: 2px groove gray;
-border-style: outset;
-font: 75 9pt &quot;Arial&quot;;</string>
-                   </property>
-                   <property name="text">
-                    <string>Aging Test</string>
-                   </property>
-                  </widget>
-                 </item>
+                <layout class="QHBoxLayout" name="horizontalLayout_28">
                  <item>
                   <widget class="QPushButton" name="Charge_btn">
+                   <property name="minimumSize">
+                    <size>
+                     <width>0</width>
+                     <height>25</height>
+                    </size>
+                   </property>
                    <property name="styleSheet">
                     <string notr="true">background-color: rgb(39, 174, 96);
 color: rgb(255, 255, 255);
@@ -722,6 +744,27 @@ font: 75 9pt &quot;Arial&quot;;</string>
                    </property>
                    <property name="text">
                     <string>Charge Test</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="Aging_btn">
+                   <property name="minimumSize">
+                    <size>
+                     <width>0</width>
+                     <height>25</height>
+                    </size>
+                   </property>
+                   <property name="styleSheet">
+                    <string notr="true">background-color: rgb(39, 174, 96);
+color: rgb(255, 255, 255);
+border-radius: 7px;
+border: 2px groove gray;
+border-style: outset;
+font: 75 9pt &quot;Arial&quot;;</string>
+                   </property>
+                   <property name="text">
+                    <string>Aging Testing</string>
                    </property>
                   </widget>
                  </item>
@@ -738,7 +781,7 @@ font: 75 9pt &quot;Arial&quot;;</string>
              </property>
              <layout class="QHBoxLayout" name="horizontalLayout_10">
               <item>
-               <widget class="QPushButton" name="start_detection_button">
+               <widget class="QPushButton" name="startDetectionBtn">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                   <horstretch>0</horstretch>
@@ -762,35 +805,16 @@ font: 75 9pt &quot;Arial&quot;;</string>
                 <property name="text">
                  <string>Start Detection</string>
                 </property>
+                <property name="checkable">
+                 <bool>true</bool>
+                </property>
                </widget>
               </item>
               <item>
-               <widget class="QComboBox" name="comboBox_testing">
-                <item>
-                 <property name="text">
-                  <string>Motor</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>LED</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>2D Camera</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>3D Camera</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>Pump</string>
-                 </property>
-                </item>
+               <widget class="QComboBox" name="functionalComboBoxItems">
+                <property name="styleSheet">
+                 <string notr="true">color:black;</string>
+                </property>
                </widget>
               </item>
              </layout>
@@ -806,41 +830,76 @@ font: 75 9pt &quot;Arial&quot;;</string>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_6" stretch="2,1">
            <property name="leftMargin">
-            <number>10</number>
+            <number>0</number>
            </property>
            <property name="topMargin">
-            <number>10</number>
+            <number>0</number>
            </property>
            <property name="rightMargin">
             <number>0</number>
            </property>
            <property name="bottomMargin">
-            <number>2</number>
+            <number>0</number>
            </property>
            <item>
             <widget class="QWidget" name="widget_3" native="true">
-             <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="8,1">
+             <layout class="QVBoxLayout" name="verticalLayout_8" stretch="8,0">
               <property name="leftMargin">
-               <number>5</number>
+               <number>9</number>
               </property>
               <property name="topMargin">
-               <number>0</number>
+               <number>9</number>
               </property>
               <property name="rightMargin">
-               <number>5</number>
+               <number>9</number>
               </property>
               <property name="bottomMargin">
-               <number>3</number>
+               <number>9</number>
               </property>
               <item>
-               <widget class="QTextBrowser" name="textBrowser">
+               <widget class="QTextBrowser" name="loggerLabel">
                 <property name="styleSheet">
-                 <string notr="true">border:2px solid #1D5D9B;</string>
+                 <string notr="true">border:1px solid #1D5D9B;
+border-radius: 5px;</string>
                 </property>
                </widget>
               </item>
               <item>
-               <layout class="QVBoxLayout" name="verticalLayout">
+               <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="2,8,2">
+                <item>
+                 <widget class="QPushButton" name="UpdateBtn">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>30</height>
+                   </size>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">background-color: rgb(39, 174, 96);
+color: rgb(255, 255, 255);
+border-radius: 7px;
+border: 2px groove gray;
+border-style: outset;
+font: 75 9pt &quot;Arial&quot;;</string>
+                  </property>
+                  <property name="text">
+                   <string>Update API</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <spacer name="horizontalSpacer">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
                 <item>
                  <widget class="QPushButton" name="log_clear">
                   <property name="minimumSize">
@@ -858,22 +917,9 @@ border-style: outset;
 font: 75 9pt &quot;Arial&quot;;</string>
                   </property>
                   <property name="text">
-                   <string>clear</string>
+                   <string>Clear Log</string>
                   </property>
                  </widget>
-                </item>
-                <item>
-                 <spacer name="verticalSpacer">
-                  <property name="orientation">
-                   <enum>Qt::Vertical</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>20</width>
-                    <height>40</height>
-                   </size>
-                  </property>
-                 </spacer>
                 </item>
                </layout>
               </item>
@@ -883,68 +929,102 @@ font: 75 9pt &quot;Arial&quot;;</string>
            <item>
             <widget class="QWidget" name="widget_4" native="true">
              <property name="styleSheet">
-              <string notr="true">background-color:#EEEEEE;</string>
+              <string notr="true">background-color:#EEEEEE;
+border-radius: 5px;</string>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_14" stretch="1,3">
               <property name="leftMargin">
-               <number>5</number>
+               <number>0</number>
               </property>
               <property name="topMargin">
                <number>0</number>
               </property>
               <property name="rightMargin">
-               <number>5</number>
+               <number>0</number>
               </property>
               <property name="bottomMargin">
                <number>0</number>
               </property>
               <item>
                <widget class="QWidget" name="widget_11" native="true">
-                <layout class="QHBoxLayout" name="horizontalLayout_20">
+                <layout class="QHBoxLayout" name="horizontalLayout_20" stretch="2,2">
                  <property name="leftMargin">
-                  <number>0</number>
+                  <number>9</number>
                  </property>
                  <property name="rightMargin">
-                  <number>0</number>
+                  <number>9</number>
                  </property>
                  <property name="bottomMargin">
-                  <number>8</number>
+                  <number>9</number>
                  </property>
                  <item>
-                  <widget class="QLabel" name="IP_address">
-                   <property name="styleSheet">
-                    <string notr="true">font: 10pt &quot;Arial&quot;;</string>
+                  <layout class="QHBoxLayout" name="horizontalLayout_14">
+                   <property name="rightMargin">
+                    <number>11</number>
                    </property>
-                   <property name="text">
-                    <string>IP Address</string>
-                   </property>
-                  </widget>
+                   <item>
+                    <widget class="QLabel" name="labbbb">
+                     <property name="styleSheet">
+                      <string notr="true">font: 10pt &quot;Arial&quot;;</string>
+                     </property>
+                     <property name="text">
+                      <string>IP Address</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLineEdit" name="HostEdit">
+                     <property name="enabled">
+                      <bool>true</bool>
+                     </property>
+                     <property name="minimumSize">
+                      <size>
+                       <width>0</width>
+                       <height>20</height>
+                      </size>
+                     </property>
+                     <property name="styleSheet">
+                      <string notr="true">background-color: rgb(255, 255, 255);</string>
+                     </property>
+                     <property name="text">
+                      <string/>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
                  </item>
                  <item>
-                  <widget class="QLineEdit" name="lineEdit">
-                   <property name="minimumSize">
-                    <size>
-                     <width>0</width>
-                     <height>20</height>
-                    </size>
+                  <layout class="QHBoxLayout" name="horizontalLayout_15">
+                   <property name="rightMargin">
+                    <number>11</number>
                    </property>
-                   <property name="styleSheet">
-                    <string notr="true">background-color: rgb(255, 255, 255);</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <spacer name="horizontalSpacer">
-                   <property name="orientation">
-                    <enum>Qt::Horizontal</enum>
-                   </property>
-                   <property name="sizeHint" stdset="0">
-                    <size>
-                     <width>40</width>
-                     <height>20</height>
-                    </size>
-                   </property>
-                  </spacer>
+                   <item>
+                    <widget class="QLabel" name="label">
+                     <property name="styleSheet">
+                      <string notr="true">font: 10pt &quot;Arial&quot;;</string>
+                     </property>
+                     <property name="text">
+                      <string>Firmware version</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLineEdit" name="VersionEdit">
+                     <property name="enabled">
+                      <bool>true</bool>
+                     </property>
+                     <property name="minimumSize">
+                      <size>
+                       <width>0</width>
+                       <height>20</height>
+                      </size>
+                     </property>
+                     <property name="styleSheet">
+                      <string notr="true">background-color: rgb(255, 255, 255);</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
                  </item>
                 </layout>
                </widget>
