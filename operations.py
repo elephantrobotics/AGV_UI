@@ -231,33 +231,22 @@ class MyAGVMainWindow(QMainWindow):
         if state == AGVStateEnum.STARTUP:
             self.console.echo(f"【{name}】AGV车{agv_chinese_names[direction]}运动，时间{timeout}秒")
 
-    def aging_finished(self, state: str, difference: []):
-        if state == "finish":
-            if not difference:
-                self.console.echo("【老化测试】老化结束")
-            else:
-                self.console.echo("【老化测试】老化完成")
-                for idx, vol in enumerate(difference, start=1):
-                    if idx == 1:
-                        self.console.echo(f"【老化测试】主电池的电压差为{vol}V")
+    def aging_finished(self, difference: []):
+        if not difference:
+            self.console.echo("【老化测试】老化结束")
+        else:
+            self.console.echo("【老化测试】老化完成")
+            for idx, vol in enumerate(difference, start=1):
+                if idx == 1:
+                    self.console.echo(f"【老化测试】主电池的电压差为{vol}V")
 
-                    elif idx == 2:
-                        self.console.echo(f"【老化测试】备用电池的电压差为{vol}V")
+                elif idx == 2:
+                    self.console.echo(f"【老化测试】备用电池的电压差为{vol}V")
 
-            self.agv_handler.agv.stop()
-            self.ui.Aging_btn.setStyleSheet(ButtonStyleEnum.GREEN)
-            self.ui.Aging_btn.setEnabled(True)
-            self.agv_motor_aging = None
-
-        elif state == "break":
-            answer = QMessageBox.question(self, "提示", "请确认AGV车运动方向是否正确？",
-                                          QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes)
-            if answer == QMessageBox.Yes:
-                self.console.echo("【老化测试】人工确认AGV车运动方向正确，继续老化测试")
-                self.agv_motor_aging.next(True)
-            else:
-                self.console.echo("【老化测试】人工确认AGV车运动方向错误，老化测试终止")
-                self.agv_motor_aging.next(False)
+        self.agv_handler.agv.stop()
+        self.ui.Aging_btn.setStyleSheet(ButtonStyleEnum.GREEN)
+        self.ui.Aging_btn.setEnabled(True)
+        self.agv_motor_aging = None
 
     def charge_btn(self):
         BATTERY_TIMEOUT = 30 * 60 * 1000

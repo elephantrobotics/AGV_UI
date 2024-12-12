@@ -28,9 +28,8 @@ class AgvMotorAging(QThread):
     """
     电机老化测试线程
     """
-    aging_finished = pyqtSignal(str, list)  # 老化完成
+    aging_finished = pyqtSignal(list)  # 老化完成
     aging_noticed = pyqtSignal(int, int, int)  # 运动方向
-    motion_checked = pyqtSignal(bool)  # 运动检测
 
     speed_timeout_mapping = {10: 240, 50: 180, 127: 180}
 
@@ -87,18 +86,12 @@ class AgvMotorAging(QThread):
         difference = []
         try:
             self.agv.stop()
-            self.motor_movement_testing(timeout=5)
-            self.aging_finished.emit("break", difference)
-
-            self.aging_event.wait()
-
-            if self.next_tick_running is True:
-                _, *before_aging_vol = self.get_battery_info()
-                self.motor_movement_testing(timeout=self.timeout, is_aging=True)
-                _, *after_aging_vol = self.get_battery_info()
-                difference = [abs(after - before) for after, before in zip(after_aging_vol, before_aging_vol)]
+            _, *before_aging_vol = self.get_battery_info()
+            self.motor_movement_testing(timeout=self.timeout, is_aging=True)
+            _, *after_aging_vol = self.get_battery_info()
+            difference = [abs(after - before) for after, before in zip(after_aging_vol, before_aging_vol)]
         except Exception as e:
             print(e)
             print(traceback.format_exc())
         finally:
-            self.aging_finished.emit("finish", difference)
+            self.aging_finished.emit(difference)
