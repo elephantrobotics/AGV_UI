@@ -4,10 +4,7 @@ import time
 
 from pymycobot import MyAgv
 from .command import ShellAPI
-from . import GlobalVar
-import roslaunch
-
-GPIO = GlobalVar.GPIO
+from . import GlobalVar, roslaunch
 
 
 class AgvHandler(object):
@@ -29,35 +26,35 @@ class AgvHandler(object):
             serial_port.close()
             
     def radar_high(self):
-        GPIO.setmode(GPIO.BCM)
+        GlobalVar.GPIO.setmode(GlobalVar.GPIO.BCM)
         time.sleep(0.1)
-        GPIO.setup(self.radar_pin, GPIO.OUT)
-        GPIO.output(self.radar_pin, GPIO.HIGH)
+        GlobalVar.GPIO.setup(self.radar_pin, GlobalVar.GPIO.OUT)
+        GlobalVar.GPIO.output(self.radar_pin, GlobalVar.GPIO.HIGH)
 
     def radar_low(self):
-        GPIO.setmode(GPIO.BCM)
+        GlobalVar.GPIO.setmode(GlobalVar.GPIO.BCM)
         time.sleep(0.1)
-        GPIO.setup(self.radar_pin, GPIO.OUT)
-        GPIO.output(self.radar_pin, GPIO.LOW)
+        GlobalVar.GPIO.setup(self.radar_pin, GlobalVar.GPIO.OUT)
+        GlobalVar.GPIO.output(self.radar_pin, GlobalVar.GPIO.LOW)
         
     def init_pump(self):
         # init
-        GPIO.setmode(GPIO.BCM)
-        GPIO.setup(self.suction_pump_pins[0], GPIO.OUT)
-        GPIO.setup(self.suction_pump_pins[1], GPIO.OUT)
+        GlobalVar.GPIO.setmode(GlobalVar.GPIO.BCM)
+        GlobalVar.GPIO.setup(self.suction_pump_pins[0], GlobalVar.GPIO.OUT)
+        GlobalVar.GPIO.setup(self.suction_pump_pins[1], GlobalVar.GPIO.OUT)
     
     def turn_on_pump(self):
         # open
-        GPIO.output(self.suction_pump_pins[1], GPIO.LOW)
+        GlobalVar.GPIO.output(self.suction_pump_pins[1], GlobalVar.GPIO.LOW)
         time.sleep(0.5)
-        GPIO.output(self.suction_pump_pins[0], GPIO.HIGH)
+        GlobalVar.GPIO.output(self.suction_pump_pins[0], GlobalVar.GPIO.HIGH)
 
     def turn_off_pump(self):
         # close
-        GPIO.output(self.suction_pump_pins[1], GPIO.HIGH)
-        GPIO.output(self.suction_pump_pins[0], GPIO.LOW)
+        GlobalVar.GPIO.output(self.suction_pump_pins[1], GlobalVar.GPIO.HIGH)
+        GlobalVar.GPIO.output(self.suction_pump_pins[0], GlobalVar.GPIO.LOW)
         time.sleep(0.05)
-        GPIO.output(self.suction_pump_pins[0], GPIO.HIGH)
+        GlobalVar.GPIO.output(self.suction_pump_pins[0], GlobalVar.GPIO.HIGH)
 
     def radar_open(self):
         self.radar_high()

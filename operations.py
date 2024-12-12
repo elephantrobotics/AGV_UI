@@ -6,11 +6,10 @@ import threading
 import time
 import json
 import typing as T
-from PyQt5.QtCore import QCoreApplication, QTranslator, QTimer
+from PyQt5.QtCore import QCoreApplication, QTranslator
 from PyQt5.QtWidgets import QWidget, QApplication, QMessageBox, QSizePolicy, QMainWindow
 
 import core
-from functions.aging import AgvMotorAging, AGVStateEnum
 from functions.detector import MyAGVStatusDetector
 from functions.functional import FunctionalBaseTesting, AGVMotorTesting, AGVLEDTesting, AGVPUMPTesting
 from core import Constant, GlobalVar
@@ -85,16 +84,13 @@ class MyAGVMainWindow(QMainWindow):
         self.label_color = None
         self.led_default = (255, 0, 0)  # red light
         self.agv_handler: T.Optional[AgvHandler] = None
-        self.agv_motor_aging: T.Optional[AgvMotorAging] = None
         self.functional_testing: T.Optional[FunctionalBaseTesting, AGVCameraWidget] = None
         self.agv_status_detector: T.Optional[MyAGVStatusDetector] = None
-        self.battery_voltage_timer: T.Optional[QTimer] = None
         self.keyboard_flag = False
         self.joystick_flag = False
         self.in_function_testing = False  # 功能检测运行中
         self.flag_all = False
         self.flag_build = False
-        self.battery_voltages = []
         self.functional_testing_mapping: T.Dict = {
             Translate.Functional.Led: AGVLEDTesting,
             Translate.Functional.Pump: AGVPUMPTesting,
@@ -207,93 +203,6 @@ class MyAGVMainWindow(QMainWindow):
         self.ui.startDetectionBtn.clicked.connect(self.start_testing)
 
         self.ui.Restore_btn.pressed.connect(self.restore_btn)
-
-        self.ui.Aging_btn.clicked.connect(self.aging_btn)
-        self.ui.Charge_btn.clicked.connect(self.charge_btn)
-
-        self.ui.UpdateBtn.clicked.connect(self.update_btn)
-
-    def aging_btn(self):
-        if self.radar_flag is True:
-            return
-
-        if self.try_connect_agv():
-            self.console.echo("【老化测试】老化开始")
-            self.ui.Aging_btn.setEnabled(False)
-            self.ui.Aging_btn.setStyleSheet(ButtonStyleEnum.RED)
-            self.agv_motor_aging = AgvMotorAging(self.agv_handler.agv, timeout=600, speed=30)
-            self.agv_motor_aging.aging_finished.connect(self.aging_finished)
-            self.agv_motor_aging.aging_noticed.connect(self.aging_noticed)
-            self.agv_motor_aging.start()
-
-    def aging_noticed(self, direction: int, state: int, timeout: int):
-        name = "方向检测" if timeout == 5 else "老化测试"
-        if state == AGVStateEnum.STARTUP:
-            self.console.echo(f"【{name}】AGV车{agv_chinese_names[direction]}运动，时间{timeout}秒")
-
-    def aging_finished(self, state: str, difference: []):
-        if state == "finish":
-            if not difference:
-                self.console.echo("【老化测试】老化结束")
-            else:
-                self.console.echo("【老化测试】老化完成")
-                for idx, vol in enumerate(difference, start=1):
-                    if idx == 1:
-                        self.console.echo(f"【老化测试】主电池的电压差为{vol}V")
-
-                    elif idx == 2:
-                        self.console.echo(f"【老化测试】备用电池的电压差为{vol}V")
-
-            self.agv_handler.agv.stop()
-            self.ui.Aging_btn.setStyleSheet(ButtonStyleEnum.GREEN)
-            self.ui.Aging_btn.setEnabled(True)
-            self.agv_motor_aging = None
-
-        elif state == "break":
-            answer = QMessageBox.question(self, "提示", "请确认AGV车运动方向是否正确？",
-                                          QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes)
-            if answer == QMessageBox.Yes:
-                self.console.echo("【老化测试】人工确认AGV车运动方向正确，继续老化测试")
-                self.agv_motor_aging.next(True)
-            else:
-                self.console.echo("【老化测试】人工确认AGV车运动方向错误，老化测试终止")
-                self.agv_motor_aging.next(False)
-
-    def charge_btn(self):
-        BATTERY_TIMEOUT = 30 * 60 * 1000
-        self.battery_voltages = self.get_battery_voltage()
-        self.ui.Charge_btn.setStyleSheet(ButtonStyleEnum.GRAY)
-        self.ui.Charge_btn.setEnabled(False)
-        self.battery_voltage_timer = QTimer(self)
-        self.battery_voltage_timer.setSingleShot(True)  # 只触发一次
-        self.battery_voltage_timer.timeout.connect(self.voltage_timeout)
-        self.battery_voltage_timer.start(BATTERY_TIMEOUT)
-        self.console.echo(f"【电池测试】开始监听电池的电压，当前电压 => {self.battery_voltages}")
-
-    def update_btn(self):
-        source_path = self.file_resource.get("bin", "pymycobot-3.6.6-py3-none-any.whl")
-        update_command = f"pip install {source_path} --upgrade"
-        threading.Thread(target=ShellAPI.run_in_terminal, args=(update_command, True)).start()
-
-    def voltage_timeout(self):
-        battery_voltages = self.get_battery_voltage()
-        self.console.echo(f"【电池测试】监听电池电压结束，当前电压 => {battery_voltages}")
-        diffs = [abs(after - before) for after, before in zip(self.battery_voltages, battery_voltages)]
-        for idx, vol in enumerate(diffs, start=1):
-            self.console.echo(f"电池【{idx}】前后电压差范围为{vol}V")
-        self.ui.Charge_btn.setStyleSheet(ButtonStyleEnum.GREEN)
-        self.ui.Charge_btn.setEnabled(True)
-
-    def get_battery_voltage(self) -> list:
-        info = None
-        while info is None:
-            try:
-                info = self.agv_handler.agv.get_battery_info()
-            except Exception as e:
-                info = None
-                print(e)
-            time.sleep(0.3)
-        return info[1:]
 
     def restore_btn(self):
         self.console.echo(_translate("myAGV", "Motor Restore"))
@@ -443,21 +352,16 @@ class MyAGVMainWindow(QMainWindow):
 
             self.ui.radar_button.setStyleSheet(ButtonStyleEnum.RED)
             self.ui.radar_button.setText(_translate("myAGV", "OFF"))
-
-            msg = _translate("myAGV", "Radar open...")
-            self.console.echo(msg)
+            self.console.echo(_translate("myAGV", "Radar open..."))
 
             # add limit for testing and led
             ComponentsSet.radar_open_close(self.ui, False)
             self.ui.Restore_btn.setEnabled(False)
             self.ui.Restore_btn.setStyleSheet(ButtonStyleEnum.GRAY)
 
-            try:
-                threading.Thread(target=AgvHandler.radar_open, daemon=True).start()
-                self.radar_flag = True
-                self.ui.status_radar.setStyleSheet(ButtonStyleEnum.LightGreen)
-            except Exception as e:
-                self.console.exception(e)
+            threading.Thread(target=self.agv_handler.radar_open, daemon=True).start()
+            self.ui.status_radar.setStyleSheet(ButtonStyleEnum.LightGreen)
+            self.radar_flag = True
 
         else:
             if self.flag_all:  # other functions are running...
@@ -484,7 +388,7 @@ class MyAGVMainWindow(QMainWindow):
                     time.sleep(4)  # 等待2s后，释放检测按钮（可用）
                     ComponentsSet.radar_open_close(self.ui, True)
                     self.ui.status_radar.setStyleSheet(ButtonStyleEnum.LightGrey)
-                    threading.Thread(target=AgvHandler.radar_close, daemon=True).start()
+                    threading.Thread(target=self.agv_handler.radar_close, daemon=True).start()
                     self.try_connect_agv()
                     self.status_detecting()
                 except Exception as e:
@@ -579,8 +483,8 @@ class MyAGVMainWindow(QMainWindow):
                 try:
                     self.console.echo(msg)
                     joystick_run_launch = "myagv_ps2_number.launch"
-                    joystick_close = threading.Thread(target=self.joystick_close_number, args=(joystick_run_launch,),
-                                                      daemon=True)
+                    joystick_close = threading.Thread(
+                        target=self.joystick_close_number, args=(joystick_run_launch,), daemon=True)
                     joystick_close.start()
 
                 except Exception as e:
@@ -696,7 +600,7 @@ class MyAGVMainWindow(QMainWindow):
                     self,
                     _translate("myAGV", "Warning"),
                     _translate("myAGV", "Radar not open!"),
-                    QMessageBox.OK
+                    QMessageBox.Ok
                 )
 
                 self.ui.navigation_3d_button.setChecked(False)
@@ -766,8 +670,7 @@ class MyAGVMainWindow(QMainWindow):
                 self.console.echo(_translate("myAGV", "Open navigation"))
 
                 self.flag_all = True
-                open_navigation = threading.Thread(
-                    target=self.navigation_open, daemon=True)
+                open_navigation = threading.Thread(target=self.navigation_open, daemon=True)
                 open_navigation.start()
 
         else:
@@ -812,7 +715,7 @@ class MyAGVMainWindow(QMainWindow):
             else:
                 self.functional_testing = AGVFunctionalTester(test_name=current_testing_item, agv=self.agv_handler.agv)
                 self.functional_testing.finished.connect(self.on_functional_finished)
-                self.functional_testing.processed.connect(self.on_functional_processed)
+                # self.functional_testing.processed.connect(self.on_functional_processed)
                 self.functional_testing.start()
             self.button_status_switch(False)
             ComponentsSet.testing_open_close(self.ui, False)

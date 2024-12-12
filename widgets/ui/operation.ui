@@ -290,6 +290,12 @@ font: 75 14pt &quot;Arial&quot;;</string>
               </item>
               <item>
                <widget class="QComboBox" name="languageSelection">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
                 <property name="minimumSize">
                  <size>
                   <width>0</width>
@@ -297,7 +303,9 @@ font: 75 14pt &quot;Arial&quot;;</string>
                  </size>
                 </property>
                 <property name="styleSheet">
-                 <string notr="true">color:black;</string>
+                 <string notr="true">color:black;
+border:1px solid black;
+border-radius: 5px;</string>
                 </property>
                 <item>
                  <property name="text">
@@ -407,6 +415,9 @@ font: 75 9pt &quot;Arial&quot;;</string>
                   <width>0</width>
                   <height>25</height>
                  </size>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">color:black;</string>
                 </property>
                 <item>
                  <property name="text">
@@ -681,43 +692,6 @@ font: 75 9pt &quot;Arial&quot;;</string>
             </widget>
            </item>
            <item>
-            <widget class="QWidget" name="widget_2" native="true">
-             <layout class="QHBoxLayout" name="horizontalLayout_19">
-              <item>
-               <widget class="QLabel" name="label_2">
-                <property name="styleSheet">
-                 <string notr="true">font: 13pt &quot;Arial&quot;;</string>
-                </property>
-                <property name="text">
-                 <string>Functional Testing</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QPushButton" name="Restore_btn">
-                <property name="minimumSize">
-                 <size>
-                  <width>0</width>
-                  <height>25</height>
-                 </size>
-                </property>
-                <property name="styleSheet">
-                 <string notr="true">background-color: rgb(39, 174, 96);
-color: rgb(255, 255, 255);
-border-radius: 7px;
-border: 2px groove gray;
-border-style: outset;
-font: 75 9pt &quot;Arial&quot;;</string>
-                </property>
-                <property name="text">
-                 <string>Restore</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-           </item>
-           <item>
             <widget class="QWidget" name="widget_22" native="true">
              <property name="styleSheet">
               <string notr="true">background-color: rgb(236, 240, 241);</string>
@@ -727,28 +701,17 @@ font: 75 9pt &quot;Arial&quot;;</string>
                <widget class="QWidget" name="widget_23" native="true">
                 <layout class="QHBoxLayout" name="horizontalLayout_28">
                  <item>
-                  <widget class="QPushButton" name="Charge_btn">
-                   <property name="minimumSize">
-                    <size>
-                     <width>0</width>
-                     <height>25</height>
-                    </size>
-                   </property>
+                  <widget class="QLabel" name="label_2">
                    <property name="styleSheet">
-                    <string notr="true">background-color: rgb(39, 174, 96);
-color: rgb(255, 255, 255);
-border-radius: 7px;
-border: 2px groove gray;
-border-style: outset;
-font: 75 9pt &quot;Arial&quot;;</string>
+                    <string notr="true">font: 13pt &quot;Arial&quot;;</string>
                    </property>
                    <property name="text">
-                    <string>Charge Test</string>
+                    <string>Test</string>
                    </property>
                   </widget>
                  </item>
                  <item>
-                  <widget class="QPushButton" name="Aging_btn">
+                  <widget class="QPushButton" name="Restore_btn">
                    <property name="minimumSize">
                     <size>
                      <width>0</width>
@@ -764,7 +727,7 @@ border-style: outset;
 font: 75 9pt &quot;Arial&quot;;</string>
                    </property>
                    <property name="text">
-                    <string>Aging Testing</string>
+                    <string>Restore</string>
                    </property>
                   </widget>
                  </item>
@@ -783,7 +746,7 @@ font: 75 9pt &quot;Arial&quot;;</string>
               <item>
                <widget class="QPushButton" name="startDetectionBtn">
                 <property name="sizePolicy">
-                 <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                 <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
                   <horstretch>0</horstretch>
                   <verstretch>30</verstretch>
                  </sizepolicy>
@@ -812,8 +775,16 @@ font: 75 9pt &quot;Arial&quot;;</string>
               </item>
               <item>
                <widget class="QComboBox" name="functionalComboBoxItems">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
                 <property name="styleSheet">
-                 <string notr="true">color:black;</string>
+                 <string notr="true">color:black;
+border:1px solid black;
+border-radius: 5px;</string>
                 </property>
                </widget>
               </item>
@@ -865,28 +836,7 @@ border-radius: 5px;</string>
                </widget>
               </item>
               <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="2,8,2">
-                <item>
-                 <widget class="QPushButton" name="UpdateBtn">
-                  <property name="minimumSize">
-                   <size>
-                    <width>0</width>
-                    <height>30</height>
-                   </size>
-                  </property>
-                  <property name="styleSheet">
-                   <string notr="true">background-color: rgb(39, 174, 96);
-color: rgb(255, 255, 255);
-border-radius: 7px;
-border: 2px groove gray;
-border-style: outset;
-font: 75 9pt &quot;Arial&quot;;</string>
-                  </property>
-                  <property name="text">
-                   <string>Update API</string>
-                  </property>
-                 </widget>
-                </item>
+               <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="8,2">
                 <item>
                  <spacer name="horizontalSpacer">
                   <property name="orientation">

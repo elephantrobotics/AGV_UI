@@ -15,9 +15,15 @@
 
 1. 安装翻译家：`pip install pyqt5-tools`
 2. 根据自己的安装路径配置系统环境
-3. 打开翻译文件，进行翻译
+3. 需要翻译的文件
+   - `operations.py`
+   - `widgets/operation_ui.py`
+   - `core/translate.py`
+4. 翻译文件存放路径：`./assets/translation/operations_lang.ts`
+5. 使用`pylupdate5`命令生成`.ts`文件
    ```shell
    # 添加翻译文件
-   pylupdate5 -noobsolete .\operations.py .\widgets\operation_ui.py -ts .\assets\translation\operations_lang.ts
+   pylupdate5 -noobsolete .\operations.py .\widgets\operation_ui.py .\core\translate.py -ts .\assets\translation\operations_lang.ts
    ```
-4. 翻译完成之后点击`发布`即可完成翻译
+6. 使用`PyQT5-tools`自带的`QT Linguist`翻译`ts`文件
+7. 翻译完成之后点击`发布`即可完成翻译

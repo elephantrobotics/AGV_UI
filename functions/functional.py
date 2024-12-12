@@ -5,7 +5,6 @@ import traceback
 from PyQt5.QtCore import QThread, pyqtSignal
 from pymycobot import MyAgv
 from core import GlobalVar
-# from core.translate import generate_translation_configuration
 from core.translate import Translate
 
 
@@ -63,7 +62,6 @@ class AGVLEDTesting(FunctionalBaseTesting):
 class AGVPUMPTesting(FunctionalBaseTesting):
 
     def do_testing(self):
-        # Translate = generate_translation_configuration()
         GPIO = GlobalVar.GPIO
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(GlobalVar.suction_pump_pins[0], GPIO.OUT)
@@ -89,7 +87,6 @@ class AGVMotorTesting(FunctionalBaseTesting):
 
     def __init__(self, agv: MyAgv, test_name: str, parent=None):
         super().__init__(agv, test_name, parent)
-        # Translate = generate_translation_configuration()
         self.direction_movement_table = {
             Translate.Direction.GoAhead: lambda: self.agv.go_ahead(100, 4),
             Translate.Direction.Retreat: lambda: self.agv.retreat(100, 4),

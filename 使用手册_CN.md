@@ -3,11 +3,8 @@
 
 ## 运行程序：
 1. 克隆github 仓库地址：`https://github.com/elephantrobotics/AGV_UI`
-2. 切换**Visualize_OP**分支:  `git checkout Visualize_OP`    
-3. 使用python运行该文件：
-`
-python operations.py  
-`
+2. 切换**Vis_Merge**分支:  `git checkout Vis_Merge`    
+3. 使用python运行该文件：`python operations.py`
 
 ![Softeware Page](resources/img_depict/software_page_cn.png "Software Page")
 
@@ -48,19 +45,19 @@ python operations.py
 
 ### 3.1 键盘控制
 
-   ![Keyboard terminal](resources/img_depict/keyboard_terminal.png "Keyboard terminal")  
+![Keyboard terminal](resources/img_depict/keyboard_terminal.png "Keyboard terminal")  
 
-   **方向键：**
+**方向键：**
 
-   按键    | 方向
-   -------- | -----
-   i  | 前进
-   ，  | 后退
-   j | 向左运动
-   l | 向右运动
-   u|逆时针旋转
-   o|顺时针旋转
-   k|停止
+| 按键 | 方向     |
+|----|--------|
+| i  | 前进     |
+| ，  | 后退     |
+| j  | 向左运动   |
+| l  | 向右运动   |
+| u  | 逆时针旋转  |
+| o  | 顺时针旋转  |
+| k  | 停止     |
 
 ### 3.2 手柄控制（选择对应的字母和数字型号）
 

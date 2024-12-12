@@ -129,8 +129,15 @@ class Ui_Operation(object):
         self.label_language.setObjectName("label_language")
         self.horizontalLayout_12.addWidget(self.label_language)
         self.languageSelection = QtWidgets.QComboBox(self.widget)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.languageSelection.sizePolicy().hasHeightForWidth())
+        self.languageSelection.setSizePolicy(sizePolicy)
         self.languageSelection.setMinimumSize(QtCore.QSize(0, 25))
-        self.languageSelection.setStyleSheet("color:black;")
+        self.languageSelection.setStyleSheet("color:black;\n"
+"border:1px solid black;\n"
+"border-radius: 5px;")
         self.languageSelection.setObjectName("languageSelection")
         self.languageSelection.addItem("")
         self.languageSelection.addItem("")
@@ -183,6 +190,7 @@ class Ui_Operation(object):
         self.horizontalLayout_13.addWidget(self.basic_control_button)
         self.basic_control_selection = QtWidgets.QComboBox(self.widget_8)
         self.basic_control_selection.setMinimumSize(QtCore.QSize(0, 25))
+        self.basic_control_selection.setStyleSheet("color:black;")
         self.basic_control_selection.setObjectName("basic_control_selection")
         self.basic_control_selection.addItem("")
         self.basic_control_selection.addItem("")
@@ -324,25 +332,6 @@ class Ui_Operation(object):
         self.label_value.setObjectName("label_value")
         self.horizontalLayout_26.addWidget(self.label_value)
         self.verticalLayout_3.addWidget(self.widget_19)
-        self.widget_2 = QtWidgets.QWidget(self.widget_left)
-        self.widget_2.setObjectName("widget_2")
-        self.horizontalLayout_19 = QtWidgets.QHBoxLayout(self.widget_2)
-        self.horizontalLayout_19.setObjectName("horizontalLayout_19")
-        self.label_2 = QtWidgets.QLabel(self.widget_2)
-        self.label_2.setStyleSheet("font: 13pt \"Arial\";")
-        self.label_2.setObjectName("label_2")
-        self.horizontalLayout_19.addWidget(self.label_2)
-        self.Restore_btn = QtWidgets.QPushButton(self.widget_2)
-        self.Restore_btn.setMinimumSize(QtCore.QSize(0, 25))
-        self.Restore_btn.setStyleSheet("background-color: rgb(39, 174, 96);\n"
-"color: rgb(255, 255, 255);\n"
-"border-radius: 7px;\n"
-"border: 2px groove gray;\n"
-"border-style: outset;\n"
-"font: 75 9pt \"Arial\";")
-        self.Restore_btn.setObjectName("Restore_btn")
-        self.horizontalLayout_19.addWidget(self.Restore_btn)
-        self.verticalLayout_3.addWidget(self.widget_2)
         self.widget_22 = QtWidgets.QWidget(self.widget_left)
         self.widget_22.setStyleSheet("background-color: rgb(236, 240, 241);")
         self.widget_22.setObjectName("widget_22")
@@ -352,26 +341,20 @@ class Ui_Operation(object):
         self.widget_23.setObjectName("widget_23")
         self.horizontalLayout_28 = QtWidgets.QHBoxLayout(self.widget_23)
         self.horizontalLayout_28.setObjectName("horizontalLayout_28")
-        self.Charge_btn = QtWidgets.QPushButton(self.widget_23)
-        self.Charge_btn.setMinimumSize(QtCore.QSize(0, 25))
-        self.Charge_btn.setStyleSheet("background-color: rgb(39, 174, 96);\n"
+        self.label_2 = QtWidgets.QLabel(self.widget_23)
+        self.label_2.setStyleSheet("font: 13pt \"Arial\";")
+        self.label_2.setObjectName("label_2")
+        self.horizontalLayout_28.addWidget(self.label_2)
+        self.Restore_btn = QtWidgets.QPushButton(self.widget_23)
+        self.Restore_btn.setMinimumSize(QtCore.QSize(0, 25))
+        self.Restore_btn.setStyleSheet("background-color: rgb(39, 174, 96);\n"
 "color: rgb(255, 255, 255);\n"
 "border-radius: 7px;\n"
 "border: 2px groove gray;\n"
 "border-style: outset;\n"
 "font: 75 9pt \"Arial\";")
-        self.Charge_btn.setObjectName("Charge_btn")
-        self.horizontalLayout_28.addWidget(self.Charge_btn)
-        self.Aging_btn = QtWidgets.QPushButton(self.widget_23)
-        self.Aging_btn.setMinimumSize(QtCore.QSize(0, 25))
-        self.Aging_btn.setStyleSheet("background-color: rgb(39, 174, 96);\n"
-"color: rgb(255, 255, 255);\n"
-"border-radius: 7px;\n"
-"border: 2px groove gray;\n"
-"border-style: outset;\n"
-"font: 75 9pt \"Arial\";")
-        self.Aging_btn.setObjectName("Aging_btn")
-        self.horizontalLayout_28.addWidget(self.Aging_btn)
+        self.Restore_btn.setObjectName("Restore_btn")
+        self.horizontalLayout_28.addWidget(self.Restore_btn)
         self.horizontalLayout_27.addWidget(self.widget_23)
         self.verticalLayout_3.addWidget(self.widget_22)
         self.widget_24 = QtWidgets.QWidget(self.widget_left)
@@ -380,7 +363,7 @@ class Ui_Operation(object):
         self.horizontalLayout_10 = QtWidgets.QHBoxLayout(self.widget_24)
         self.horizontalLayout_10.setObjectName("horizontalLayout_10")
         self.startDetectionBtn = QtWidgets.QPushButton(self.widget_24)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(30)
         sizePolicy.setHeightForWidth(self.startDetectionBtn.sizePolicy().hasHeightForWidth())
@@ -396,7 +379,14 @@ class Ui_Operation(object):
         self.startDetectionBtn.setObjectName("startDetectionBtn")
         self.horizontalLayout_10.addWidget(self.startDetectionBtn)
         self.functionalComboBoxItems = QtWidgets.QComboBox(self.widget_24)
-        self.functionalComboBoxItems.setStyleSheet("color:black;")
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.functionalComboBoxItems.sizePolicy().hasHeightForWidth())
+        self.functionalComboBoxItems.setSizePolicy(sizePolicy)
+        self.functionalComboBoxItems.setStyleSheet("color:black;\n"
+"border:1px solid black;\n"
+"border-radius: 5px;")
         self.functionalComboBoxItems.setObjectName("functionalComboBoxItems")
         self.horizontalLayout_10.addWidget(self.functionalComboBoxItems)
         self.verticalLayout_3.addWidget(self.widget_24)
@@ -419,16 +409,6 @@ class Ui_Operation(object):
         self.verticalLayout_8.addWidget(self.loggerLabel)
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        self.UpdateBtn = QtWidgets.QPushButton(self.widget_3)
-        self.UpdateBtn.setMinimumSize(QtCore.QSize(0, 30))
-        self.UpdateBtn.setStyleSheet("background-color: rgb(39, 174, 96);\n"
-"color: rgb(255, 255, 255);\n"
-"border-radius: 7px;\n"
-"border: 2px groove gray;\n"
-"border-style: outset;\n"
-"font: 75 9pt \"Arial\";")
-        self.UpdateBtn.setObjectName("UpdateBtn")
-        self.horizontalLayout_2.addWidget(self.UpdateBtn)
         spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_2.addItem(spacerItem)
         self.log_clear = QtWidgets.QPushButton(self.widget_3)
@@ -441,9 +421,8 @@ class Ui_Operation(object):
 "font: 75 9pt \"Arial\";")
         self.log_clear.setObjectName("log_clear")
         self.horizontalLayout_2.addWidget(self.log_clear)
-        self.horizontalLayout_2.setStretch(0, 2)
-        self.horizontalLayout_2.setStretch(1, 8)
-        self.horizontalLayout_2.setStretch(2, 2)
+        self.horizontalLayout_2.setStretch(0, 8)
+        self.horizontalLayout_2.setStretch(1, 2)
         self.verticalLayout_8.addLayout(self.horizontalLayout_2)
         self.verticalLayout_8.setStretch(0, 8)
         self.verticalLayout_6.addWidget(self.widget_3)
@@ -700,12 +679,9 @@ class Ui_Operation(object):
         self.label_12.setText(_translate("Operation", "RGB"))
         self.label_luminance.setText(_translate("Operation", "Luminance"))
         self.label_value.setText(_translate("Operation", "value"))
-        self.label_2.setText(_translate("Operation", "Functional Testing"))
+        self.label_2.setText(_translate("Operation", "Test"))
         self.Restore_btn.setText(_translate("Operation", "Restore"))
-        self.Charge_btn.setText(_translate("Operation", "Charge Test"))
-        self.Aging_btn.setText(_translate("Operation", "Aging Testing"))
         self.startDetectionBtn.setText(_translate("Operation", "Start Detection"))
-        self.UpdateBtn.setText(_translate("Operation", "Update API"))
         self.log_clear.setText(_translate("Operation", "Clear Log"))
         self.labbbb.setText(_translate("Operation", "IP Address"))
         self.label.setText(_translate("Operation", "Firmware version"))
