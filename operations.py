@@ -330,9 +330,9 @@ class MyAGVMainWindow(QMainWindow):
             self.ui.navigation_button,
             self.ui.navigation_3d_button
         ]
-
         for btn in button:
             btn.setCheckable(status)
+            btn.setEnabled(status)
 
     def clear_log(self):
         self.ui.loggerLabel.clear()
@@ -766,10 +766,13 @@ class MyAGVMainWindow(QMainWindow):
 
     @classmethod
     def keyboard_open(cls):
-        ShellAPI.run_in_terminal(
-            "cd /home/ubuntu; roslaunch ~/myagv_ros/src/myagv_teleop/launch/myagv_teleop.launch; exec bash")
+        # self.flag_all=True
+        source_ros = "source /opt/ros/noetic/setup.bash"
+        source_workspace = "source /home/er/myagv_ros/devel/setup.bash"
+        launch_command = "roslaunch myagv_teleop myagv_teleop.launch"
+        # subprocess.run(['gnome-terminal', '-e', f"bash -c '{launch_command}; exec $SHELL'"])
         os.system(
-            "gnome-terminal -e 'bash -c \"cd /home/ubuntu; roslaunch ~/myagv_ros/src/myagv_teleop/launch/myagv_teleop.launch; exec bash\"'")
+            f"gnome-terminal -e 'bash -c \"{source_ros} && {source_workspace} && {launch_command}; exec bash\"'")
 
     @classmethod
     def keyboard_close(cls, run_launch):
@@ -778,8 +781,11 @@ class MyAGVMainWindow(QMainWindow):
 
     @classmethod
     def joystick_open(cls):
+        source_ros = "source /opt/ros/noetic/setup.bash"
+        source_workspace = "source /home/er/myagv_ros/devel/setup.bash"
         launch_command = "roslaunch myagv_ps2 myagv_ps2.launch"
-        subprocess.run(['gnome-terminal', '-e', f"bash -c '{launch_command}; exec $SHELL'"])
+        subprocess.run(
+            ['gnome-terminal', '-e', f"bash -c '{source_ros} && {source_workspace} && {launch_command}; exec $SHELL'"])
 
     @classmethod
     def joystick_close(cls, run_launch):
@@ -798,9 +804,12 @@ class MyAGVMainWindow(QMainWindow):
 
     @classmethod
     def gmapping_build_open(cls):
+        source_ros = "source /opt/ros/noetic/setup.bash"
+        source_workspace = "source /home/er/myagv_ros/devel/setup.bash"
         launch_command = "roslaunch myagv_navigation myagv_slam_laser.launch"
-        os.system(
-            "gnome-terminal -e 'bash -c \"cd /home/ubuntu; roslaunch ~/myagv_ros/src/myagv_navigation/launch/myagv_slam_laser.launch; exec bash\"'")
+        subprocess.run(
+            ['gnome-terminal', '-e', f"bash -c '{source_ros} && {source_workspace} && {launch_command}; exec $SHELL'"]
+        )
 
     @classmethod
     def gmapping_build_close(cls, run_launch):
@@ -821,14 +830,19 @@ class MyAGVMainWindow(QMainWindow):
     @classmethod
     def save_map_file(cls):
         # cd_command=""
+        source_ros = "source /opt/ros/noetic/setup.bash"
+        source_workspace = "source /home/er/myagv_ros/devel/setup.bash"
         launch_command = "rosrun map_server map_saver"
-        subprocess.run(['gnome-terminal', '-e', f"bash -c '{launch_command}; exec $SHELL'"])
-        time.sleep(1)
+        subprocess.run(
+            ['gnome-terminal', '-e', f"bash -c '{source_ros} && {source_workspace} && {launch_command}; exec $SHELL'"])
 
     @classmethod
     def navigation_open(cls):
+        source_ros = "source /opt/ros/noetic/setup.bash"
+        source_workspace = "source /home/er/myagv_ros/devel/setup.bash"
         launch_command = "roslaunch myagv_navigation navigation_active.launch"
-        subprocess.run(['gnome-terminal', '-e', f"bash -c '{launch_command}; exec $SHELL'"])
+        subprocess.run(
+            ['gnome-terminal', '-e', f"bash -c '{source_ros} && {source_workspace} && {launch_command}; exec $SHELL'"])
 
     @classmethod
     def navigation_close(cls, run_launch):
