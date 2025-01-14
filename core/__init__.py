@@ -1,72 +1,125 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
-import threading
-import socket
-# from .translate import generate_translation_configuration
+from enum import Enum
+import typing as T
 
-
-def gstreamer_pipeline(
-    sensor_id=0,
-    capture_width=1920,
-    capture_height=1080,
-    display_width=960,
-    display_height=540,
-    framerate=30,
-    flip_method=0,
-):
-    return (
-        "nvarguscamerasrc sensor-id=%d ! "
-        "video/x-raw(memory:NVMM), width=(int)%d, height=(int)%d, framerate=(fraction)%d/1 ! "
-        "nvvidconv flip-method=%d ! "
-        "video/x-raw, width=(int)%d, height=(int)%d, format=(string)BGRx ! "
-        "videoconvert ! "
-        "video/x-raw, format=(string)BGR ! appsink"
-        % (
-            sensor_id,
-            capture_width,
-            capture_height,
-            framerate,
-            flip_method,
-            display_width,
-            display_height,
-        )
-    )
-
-
-def run_in_thread(func, *args, **kwargs):
-    """
-    run function in thread
-    """
-    threading.Thread(target=func, args=args, kwargs=kwargs).start()
-
-
-def get_localhost():
-    st = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    try:
-        st.connect(('10.255.255.255', 1))
-        IP = st.getsockname()[0]
-    except Exception as e:
-        print(e)
-        IP = '127.0.0.1'
-    finally:
-        st.close()
-    return IP
+from .utils import run_in_thread, get_localhost, gstreamer_pipeline
+from .command import Command
+from .translate import Translate
 
 
 class Constant:
     SYSTEM_IDENTIFICATION_FILE = "/proc/device-tree/model"
 
 
-class GlobalVar:
-    device_model = ""
-    GPIO = None
-    comport = ""
-    baudrate = 115200
-    suction_pump_pins = (0, 0)
-    radar_control_pin = 0
-    debug = False
-    camera2D_pipline = 0
-    camera3D_pipline = 0
+class System(Enum):
+    JETSON_NANO = 'NVIDIA Jetson Nano Developer Kit'
+    RASPBERRYPI = "Raspberry Pi 4"
+
+    def equal(self, model: str) -> bool:
+        return model.startswith(self.value)
+
+
+CURRENT_SYSTEM_MODEL = Command.cat(Constant.SYSTEM_IDENTIFICATION_FILE)
+
+print(f" * ================================================")
+print(f" * Current platform is {CURRENT_SYSTEM_MODEL}")
+print(f" * ================================================")
+
+if System.RASPBERRYPI.equal(CURRENT_SYSTEM_MODEL):
+    import RPi.GPIO as GPIO
+
+    class GlobalVar:
+        comport = "/dev/ttyAMA2"
+        baudrate = 115200
+        suction_pump_pins = (2, 3)
+        radar_control_pin = 20
+        debug = False
+        camera2D_pipline = 0
+        camera3D_pipline = 0
+
+
+elif System.JETSON_NANO.equal(CURRENT_SYSTEM_MODEL):
+    import Jetson.GPIO as GPIO
+
+    class GlobalVar:
+        comport = "/dev/ttyS0"
+        baudrate = 115200
+        suction_pump_pins = (19, 26)    # 电磁阀引脚/电机引脚
+        radar_control_pin = 20
+        debug = False
+        camera2D_pipline = gstreamer_pipeline(0)
+        camera3D_pipline = 0
+
+else:
+    raise Exception(" * Current platform is not supported")
+
+
+class GpioHandler:
+    IN = GPIO.IN
+    OUT = GPIO.OUT
+    HIGH = GPIO.HIGH
+    LOW = GPIO.LOW
+    PWM = GPIO.PWM
+
+    BCM = GPIO.BCM
+    PUD_UP = GPIO.PUD_UP
+    PUD_DOWN = GPIO.PUD_DOWN
+
+    @classmethod
+    def islow(cls, pin_number: int) -> bool:
+        return cls.input(pin_number) == GPIO.LOW
+
+    @classmethod
+    def ishigh(cls, pin_number: int) -> bool:
+        return cls.input(pin_number) == GPIO.HIGH
+
+    @classmethod
+    def setup(cls, channel: int, mode: int):
+        GPIO.setup(channel, mode)
+
+    @classmethod
+    def setmode(cls, mode: int):
+        GPIO.setmode(mode)
+
+    @classmethod
+    def input(cls, channel: int):
+        return GPIO.input(channel)
+
+    @classmethod
+    def output(cls, channel: int, value: int):
+        return GPIO.output(channel, value)
+
+    @classmethod
+    def event_detect(cls, channel: int, callback: T.Callable, bouncetime: int):
+        GPIO.add_event_detect(channel, GPIO.BOTH, callback=callback, bouncetime=bouncetime)
+
+    @classmethod
+    def remove_event_detect(cls, channel: int):
+        GPIO.remove_event_detect(channel)
+        GPIO.cleanup(channel)
+
+    @classmethod
+    def gpio_function(cls, channel: int):
+        return GPIO.gpio_function(channel)
+
+    @classmethod
+    def listening(cls, channel: int, callback: T.Callable, timeout: int, valid_signal: int = 0):
+        def on_detect_callback(ori_channel):
+            if cls.input(ori_channel) == valid_signal:
+                callback()
+
+        if System.JETSON_NANO.equal(CURRENT_SYSTEM_MODEL):
+            GPIO.setup(channel, GPIO.IN)
+
+        elif System.RASPBERRYPI.equal(CURRENT_SYSTEM_MODEL):
+            GPIO.setup(channel, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+
+        GPIO.add_event_detect(channel, GPIO.BOTH, callback=on_detect_callback, bouncetime=timeout)
+
+    @classmethod
+    def cleanup(cls):
+        GPIO.cleanup()
 
 
 __all__ = [
@@ -74,8 +127,10 @@ __all__ = [
     "get_localhost",
     "Constant",
     "GlobalVar",
-    # "generate_translation_configuration",
-    # "reload_translation_configuration"
+    "Command",
+    "GpioHandler",
+    "System",
+    "Translate"
 ]
 
 

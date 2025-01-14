@@ -36,6 +36,10 @@ class RealtimeCameraThread(QThread):
             ret, frame = self.__capture.read()
             if self.__running is False:
                 break
+
+            if ret is False:
+                continue
+
             frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             height, width, channel = frame.shape
             bytes_per_line = 3 * width
@@ -62,16 +66,22 @@ class AGVCameraWidget(QWidget, CameraUI):
 
     def startup(self):
         self.camera_thread.dispatched.connect(self.display)
-        self.camera_thread.finished.connect(self.shutdown)
+        self.camera_thread.finished.connect(self.__on_finished)
         self.camera_thread.start()
         self.show()
         self.camera_thread.set_size(self.VideoLabel.size())
 
-    def shutdown(self, is_stop: bool):
+    def __on_finished(self, is_stop: bool):
         self.finished.emit(self.test_name, is_stop)
-        self.camera_thread.stop_running()
         self.camera_thread.quit()
-        self.close()
+        if self.isVisible():
+            self.close()
+
+    def shutdown(self):
+        self.camera_thread.stop_running()
+
+    def closeEvent(self, a0):
+        self.shutdown()
 
     def display(self, pixmap: QPixmap):
         self.VideoLabel.setPixmap(pixmap)

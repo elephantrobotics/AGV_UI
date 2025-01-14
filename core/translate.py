@@ -7,29 +7,6 @@ from PyQt5.QtCore import QCoreApplication
 _translate = QCoreApplication.translate
 
 
-def ui_params():
-    """
-    set selection choices and style
-    """
-    language_params = [
-        _translate("Communal", "English"),
-        _translate("Communal", "Chinese")
-    ]
-
-    basic_control_params = [
-        _translate("Communal", "Keyboard Control"),
-        _translate("Communal", "Joystick-Alphabet"),
-        _translate("Communal", "Joystick-Number")
-    ]
-
-    test_params = [
-        _translate("Communal", "Motor"),
-        _translate("Communal", "LED"),
-        _translate("Communal", "3D Camera"),
-        _translate("Communal", "Pump")
-    ]
-
-
 class _Language:
     def __init__(self):
         self.English = _translate("Communal", "English")

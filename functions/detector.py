@@ -3,7 +3,7 @@
 import time
 
 from PyQt5.QtCore import pyqtSignal, QThread
-from pymycobot import MyAgv
+from core.handler import AgvHandler
 
 
 class MyAGVStatusDetector(QThread):
@@ -12,7 +12,7 @@ class MyAGVStatusDetector(QThread):
     powers = pyqtSignal(float, float)
     motors = pyqtSignal(bool, list)
 
-    def __init__(self, my_agv: MyAgv):
+    def __init__(self, my_agv: AgvHandler):
         super().__init__()
         self.agv_handler = my_agv
         self.detector = True

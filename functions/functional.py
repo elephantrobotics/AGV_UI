@@ -3,16 +3,16 @@
 import time
 import traceback
 from PyQt5.QtCore import QThread, pyqtSignal
-from pymycobot import MyAgv
-from core import GlobalVar
 from core.translate import Translate
+from core.handler import AgvHandler
+from . import Functional
 
 
 class FunctionalBaseTesting(QThread):
     finished = pyqtSignal(str, bool)
     processed = pyqtSignal(dict)
 
-    def __init__(self, agv: MyAgv, test_name: str, parent=None):
+    def __init__(self, agv: AgvHandler, test_name: str, parent=None):
         super().__init__(parent=parent)
         self.test_name = test_name
         self.agv = agv
@@ -37,13 +37,12 @@ class AGVLEDTesting(FunctionalBaseTesting):
 
     @staticmethod
     def get_colors():
-        # Translate = generate_translation_configuration()
         return {
             Translate.Color.Red: (255, 0, 0),
             Translate.Color.Orange: (255, 128, 0),
             Translate.Color.Yellow: (255, 255, 0),
             Translate.Color.Green: (0, 255, 0),
-            Translate.Color.Cyan: (0, 255, 255),
+            # Translate.Color.Cyan: (0, 255, 255),
             Translate.Color.Blue: (0, 0, 255),
             Translate.Color.Purple: (128, 0, 255)
         }
@@ -62,30 +61,32 @@ class AGVLEDTesting(FunctionalBaseTesting):
 class AGVPUMPTesting(FunctionalBaseTesting):
 
     def do_testing(self):
-        GPIO = GlobalVar.GPIO
-        GPIO.setmode(GPIO.BCM)
-        GPIO.setup(GlobalVar.suction_pump_pins[0], GPIO.OUT)
-        GPIO.setup(GlobalVar.suction_pump_pins[1], GPIO.OUT)
+        # GPIO = GlobalVar.GPIO
+        # GPIO.setmode(GPIO.BCM)
+        # GPIO.setup(GlobalVar.suction_pump_pins[0], GPIO.OUT)
+        # GPIO.setup(GlobalVar.suction_pump_pins[1], GPIO.OUT)
+        Functional.init_pump()
 
         # open
         self.emit_process(behavior=Translate.State.Open)
-        GPIO.output(GlobalVar.suction_pump_pins[1], GPIO.LOW)
-        GPIO.output(GlobalVar.suction_pump_pins[0], GPIO.HIGH)
-
+        # GPIO.output(GlobalVar.suction_pump_pins[1], GPIO.LOW)
+        # GPIO.output(GlobalVar.suction_pump_pins[0], GPIO.HIGH)
+        Functional.turn_on_pump()
         time.sleep(4)
 
         # close
         self.emit_process(behavior=Translate.State.Close)
-        GPIO.output(GlobalVar.suction_pump_pins[1], GPIO.HIGH)
-        GPIO.output(GlobalVar.suction_pump_pins[0], GPIO.LOW)
-        time.sleep(0.05)
-        GPIO.output(GlobalVar.suction_pump_pins[0], GPIO.HIGH)
-        GPIO.cleanup()
+        # GPIO.output(GlobalVar.suction_pump_pins[1], GPIO.HIGH)
+        # GPIO.output(GlobalVar.suction_pump_pins[0], GPIO.LOW)
+        # time.sleep(0.05)
+        # GPIO.output(GlobalVar.suction_pump_pins[0], GPIO.HIGH)
+        # GPIO.cleanup()
+        Functional.turn_off_pump()
 
 
 class AGVMotorTesting(FunctionalBaseTesting):
 
-    def __init__(self, agv: MyAgv, test_name: str, parent=None):
+    def __init__(self, agv: AgvHandler, test_name: str, parent=None):
         super().__init__(agv, test_name, parent)
         self.direction_movement_table = {
             Translate.Direction.GoAhead: lambda: self.agv.go_ahead(100, 4),

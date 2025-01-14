@@ -1,18 +1,18 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
-from .command import ShellAPI
+from core.command import Command
 
 ROS_SETUP_FILEPATH = "/opt/ros/noetic/setup.bash"
 ROS_WORKSPACE_FILEPATH = "/home/er/myagv_ros/devel/setup.bash"
 
 
 def close_rviz():
-    ShellAPI.kill("rviz")
+    Command.kill("rviz")
 
 
 def roslaunch(*args):
     command = " ".join(args)
-    ShellAPI.run_in_terminal(
+    Command.run_in_terminal(
         f"source {ROS_SETUP_FILEPATH} && source {ROS_WORKSPACE_FILEPATH} && roslaunch {command}", keep=True
     )
 
@@ -21,7 +21,7 @@ def navigation_close():
     # os.system("ps -ef | grep -E rviz | grep -v 'grep' | awk '{print $2}' | xargs kill -2")
     # os.system("ps -ef | grep -E " + run_launch + " | grep -v 'grep' | awk '{print $2}' | xargs kill -2")
     close_rviz()
-    ShellAPI.kill("navigation_active.launch")
+    Command.kill("navigation_active.launch")
 
 
 def navigation_open():
@@ -31,32 +31,32 @@ def navigation_open():
 def keyboard_open(cls):
     # ShellAPI.run_in_terminal("cd /home/ubuntu; roslaunch ~/myagv_ros/src/myagv_teleop/launch/myagv_teleop.launch; exec bash")
     # os.system("gnome-terminal -e 'bash -c \"cd /home/ubuntu; roslaunch ~/myagv_ros/src/myagv_teleop/launch/myagv_teleop.launch; exec bash\"'")
-    ShellAPI.run_in_terminal("myagv_teleop myagv_teleop.launch", keep=True)
+    Command.run_in_terminal("myagv_teleop myagv_teleop.launch", keep=True)
 
 
 def keyboard_close():
     # close_command = "ps -ef | grep -E " + run_launch + " | grep -v 'grep' | awk '{print $2}' | xargs kill -2"
-    ShellAPI.kill("myagv_teleop.launch")
+    Command.kill("myagv_teleop.launch")
 
 
 def joystick_open(cls):
     # launch_command = "roslaunch myagv_ps2 myagv_ps2.launch"
     # subprocess.run(['gnome-terminal', '-e', f"bash -c '{launch_command}; exec $SHELL'"])
-    ShellAPI.run_in_terminal("myagv_ps2 myagv_ps2.launch", keep=True)
+    Command.run_in_terminal("myagv_ps2 myagv_ps2.launch", keep=True)
 
 
 def joystick_close():
-    ShellAPI.kill("myagv_ps2.launch")
+    Command.kill("myagv_ps2.launch")
 
 
 def joystick_close_number():
-    ShellAPI.kill("myagv_ps2_number.launch")
+    Command.kill("myagv_ps2_number.launch")
 
 
 def joystick_open_number(cls):
     # launch_command = "roslaunch myagv_ps2 myagv_ps2_number.launch"
     # subprocess.run(['gnome-terminal', '-e', f"bash -c '{launch_command}; exec $SHELL'"])
-    ShellAPI.run_in_terminal("myagv_ps2 myagv_ps2_number.launch", keep=True)
+    Command.run_in_terminal("myagv_ps2 myagv_ps2_number.launch", keep=True)
 
 
 def gmapping_build_open(cls):
@@ -64,18 +64,18 @@ def gmapping_build_open(cls):
     # os.system("gnome-terminal -e 'bash -c
     # \"cd /home/ubuntu; roslaunch ~/myagv_ros/src/myagv_navigation/launch/myagv_slam_laser.launch; exec bash\"'")
     command = "cd /home/ubuntu; roslaunch ~/myagv_ros/src/myagv_navigation/launch/myagv_slam_laser.launch"
-    ShellAPI.run_in_terminal(command, keep=True)
+    Command.run_in_terminal(command, keep=True)
 
 
-def gmapping_build_close():
+def gampping_build_close():
     # os.system("ps -ef | grep -E rviz | grep -v 'grep' | awk '{print $2}' | xargs kill -2")
     # os.system("ps -ef | grep -E " + run_launch + " | grep -v 'grep' | awk '{print $2}' | xargs kill -2")
     close_launch = "myagv_slam_laser.launch"
     close_rviz()
-    ShellAPI.kill(close_launch)
+    Command.kill(close_launch)
 
 
 def save_map_file():
     # launch_command = "rosrun map_server map_saver"
     # subprocess.run(['gnome-terminal', '-e', f"bash -c '{launch_command}; exec $SHELL'"])
-    ShellAPI.run_in_terminal("rosrun map_server map_saver", keep=True)
+    Command.run_in_terminal("rosrun map_server map_saver", keep=True)

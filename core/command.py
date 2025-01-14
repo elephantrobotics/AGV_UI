@@ -4,7 +4,7 @@ import subprocess
 import traceback
 
 
-class ShellAPI:
+class Command:
 
     @classmethod
     def check_output(cls, command) -> str:

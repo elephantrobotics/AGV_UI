@@ -1,39 +1,31 @@
-#!/usr/bin/env python
-# -*- coding: UTF-8 -*-
-import time
-import traceback
-import typing as T
-
-from PyQt5.QtWidgets import QTextBrowser
+import logging
+from PyQt5.QtCore import QObject, pyqtSignal
+from logging import Handler
 
 
-class Console(object):
-    timestamp_format = "%Y-%m-%d %H:%M:%S"
+class QConsoleHandler(QObject, Handler):
+    level_color_mapping = {
+        logging.INFO: "black",
+        logging.WARNING: "black",
+        logging.ERROR: "red",
+        logging.CRITICAL: "cyan",
+        logging.DEBUG: "green"
+    }
+    outputted = pyqtSignal(str)
 
-    def __init__(self, output: T.Optional[QTextBrowser] = None):
-        self.output: T.Optional[QTextBrowser] = output
+    """A custom logging handler that outputs to a QTextBrowser widget."""
 
-    def set_output(self, output: QTextBrowser):
-        self.output = output
+    def __init__(self, formatter: logging.Formatter, level: int = logging.INFO, parent=None):
+        super().__init__(parent=parent)
+        self.level = level
+        self.setFormatter(formatter)
 
-    def _echo(self, msg: str):
-        if self.output is None:
-            raise RuntimeError("No output widget set")
-        self.output.append(msg)
+    def format(self, record):
+        format_message = super().format(record)
+        color = self.level_color_mapping.get(record.levelno, "white")
+        return f"<p style='color:{color};padding:0px;margin:0px;'>{format_message}</p>"
 
-    def get_current_timestamp(self):
-        return time.strftime(self.timestamp_format, time.localtime(time.time()))
+    def emit(self, record):
+        message = self.format(record)
+        self.outputted.emit(message)
 
-    def echo(self, *args):
-        timestamp = self.get_current_timestamp()
-        self._echo(f"[{timestamp}] {' '.join(args)}")
-
-    def exception(self, exception: Exception):
-        message = traceback.format_exc()
-        timestamp = self.get_current_timestamp()
-
-        with open("error.log", "w") as f:
-            f.write(repr(exception))
-            f.write(message)
-
-        self._echo(f"[{timestamp}] {message}")
