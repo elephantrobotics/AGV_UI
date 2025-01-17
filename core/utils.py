@@ -2,6 +2,8 @@
 # -*- coding: UTF-8 -*-
 import socket
 import threading
+import subprocess
+CAMERA_3D_ID = "2bc5:069d"
 
 
 def gstreamer_pipeline(
@@ -50,3 +52,11 @@ def get_localhost():
     finally:
         st.close()
     return IP
+
+
+def get_3d_camera_status():
+    usb_infos = subprocess.check_output("lsusb").decode("utf-8")
+    for line in usb_infos.splitlines():
+        if line.count(CAMERA_3D_ID) > 0:
+            return True
+    return False

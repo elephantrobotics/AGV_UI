@@ -26,11 +26,11 @@ class Command:
 
     @classmethod
     def run_in_terminal(cls, command, keep: bool = False):
-        print(f" * Running command in terminal: \r\n\r\n\t{command}\r\n")
+        print(f" * Running command in terminal: \r\n\t{command}\r\n")
         if keep:
-            subprocess.run(f'gnome-terminal -- bash -c "{command}; exec bash"', shell=True)
+            subprocess.Popen(f'gnome-terminal -- bash -c "{command}; exec bash"', shell=True)
         else:
-            subprocess.run(f'gnome-terminal -- bash -c \"{command};\"', shell=True)
+            subprocess.Popen(f'gnome-terminal -- bash -c \"{command};\"', shell=True)
 
     @classmethod
     def kill(cls, command):

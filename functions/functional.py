@@ -42,46 +42,35 @@ class AGVLEDTesting(FunctionalBaseTesting):
             Translate.Color.Orange: (255, 128, 0),
             Translate.Color.Yellow: (255, 255, 0),
             Translate.Color.Green: (0, 255, 0),
-            # Translate.Color.Cyan: (0, 255, 255),
+            Translate.Color.Cyan: (0, 255, 255),
             Translate.Color.Blue: (0, 0, 255),
             Translate.Color.Purple: (128, 0, 255)
         }
 
     def do_testing(self):
-        # #####################################################
-        self.agv.set_led_mode(1)  # 适配1.0版本, 1.1之后可删除
-        self.agv.stop()
-        # #####################################################
+        self.agv.set_led_mode(0)
         for name, color in self.get_colors().items():
             self.emit_process(name=name, color=color)
             self.agv.set_led(1, *color)
             time.sleep(1)
+        self.agv.set_led_mode(1)
 
 
 class AGVPUMPTesting(FunctionalBaseTesting):
 
     def do_testing(self):
-        # GPIO = GlobalVar.GPIO
-        # GPIO.setmode(GPIO.BCM)
-        # GPIO.setup(GlobalVar.suction_pump_pins[0], GPIO.OUT)
-        # GPIO.setup(GlobalVar.suction_pump_pins[1], GPIO.OUT)
         Functional.init_pump()
-
         # open
         self.emit_process(behavior=Translate.State.Open)
-        # GPIO.output(GlobalVar.suction_pump_pins[1], GPIO.LOW)
-        # GPIO.output(GlobalVar.suction_pump_pins[0], GPIO.HIGH)
         Functional.turn_on_pump()
         time.sleep(4)
-
         # close
         self.emit_process(behavior=Translate.State.Close)
-        # GPIO.output(GlobalVar.suction_pump_pins[1], GPIO.HIGH)
-        # GPIO.output(GlobalVar.suction_pump_pins[0], GPIO.LOW)
-        # time.sleep(0.05)
-        # GPIO.output(GlobalVar.suction_pump_pins[0], GPIO.HIGH)
-        # GPIO.cleanup()
         Functional.turn_off_pump()
+
+    def terminate(self):
+        Functional.turn_off_pump()
+        super().terminate()
 
 
 class AGVMotorTesting(FunctionalBaseTesting):

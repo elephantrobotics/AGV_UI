@@ -1,28 +1,45 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
+import dataclasses
 import time
-
-from PyQt5.QtCore import pyqtSignal, QThread
+import traceback
+import typing as T
+import serial.serialutil
+from PyQt5.QtCore import pyqtSignal, QThread, QObject
 from core.handler import AgvHandler
 
 
-class MyAGVStatusDetector(QThread):
-    voltages = pyqtSignal(float, float)
-    battery = pyqtSignal(bool, bool)
-    powers = pyqtSignal(float, float)
-    motors = pyqtSignal(bool, list)
+@dataclasses.dataclass
+class AGVBattery:
+    status: T.Tuple[bool, bool] = (False, False)
+    powers: T.Tuple[float, float] = (0.0, 0.0)
+    voltages: T.Tuple[float, float] = (0.0, 0.0)
 
-    def __init__(self, my_agv: AgvHandler):
-        super().__init__()
-        self.agv_handler = my_agv
-        self.detector = True
+
+@dataclasses.dataclass
+class AGVMotor:
+    state: bool = False
+    currents: T.List[float] = dataclasses.field(default_factory=lambda: [0.0, 0.0, 0.0, 0.0])
+
+
+class MyAGVStatusDetector(QThread):
+    battery_stated = pyqtSignal(AGVBattery)
+    motor_stated = pyqtSignal(AGVMotor)
+    versioned = pyqtSignal(str)
+
+    def __init__(self, agv_handler: AgvHandler, interval: float = 10, parent: QObject = None):
+        super().__init__(parent=parent)
+        self.__agv_handler = agv_handler
+        self.__detector = True
+        self.__interval = interval
+
+    def _dynamic_update_state(self):
+        self.updated.emit(self.agv_state)
 
     def stop_detector(self):
-        self.detector = False
-        self.battery.emit(0, 0)
-        self.voltages.emit(0, 0)
-        self.powers.emit(0, 0)
-        self.motors.emit(False, [0, 0, 0, 0])
+        self.__detector = False
+        self.motor_stated.emit(AGVMotor())
+        self.battery_stated.emit(AGVBattery())
         self.quit()
 
     @classmethod
@@ -30,40 +47,49 @@ class MyAGVStatusDetector(QThread):
         """计算电池电量"""
         return round((voltage - 9) / (12 - 9) * 100, 2)
 
-    def get_status_info(self):
-        data = self.agv_handler.get_mcu_info()
+    def _get_status_info(self):
+        data = self.__agv_handler.get_mcu_info()
         if not data:
             return
 
-        # 电池状态 【电池2接入、电池1接入、适配器接入、充电桩接入、电池2充电灯， 电池1充电灯】
-        battery_status = list(map(lambda n: int(n) == 1, data[9]))
-        battery1 = battery_status[1]
-        battery2 = battery_status[0]
-        self.battery.emit(battery1, battery2)
-
         # 电机电流
-        motors = data[12:16]
-        # status = all(motor for motor in motors)
-        self.motors.emit(bool(data), motors)
+        currents = data[12:16]
+        self.motor_stated.emit(AGVMotor(state=any(map(lambda c: c != 0, currents)), currents=currents))
 
-        battery_voltage_1 = data[10]  # 电池1电压
-        battery_voltage_2 = data[11]  # 电池2电压
+        # 电池状态 【电池2接入、电池1接入、适配器接入、充电桩接入、电池2充电灯， 电池1充电灯】
+        # main_battery_state, backup_battery_state, *_ = tuple(map(lambda n: int(n) == 1, data[9]))
+        main_battery_state = data[9][1] == '1'
+        backup_battery_state = data[9][0] == '1'
+        main_battery_voltage = data[10]  # 主电池电压
+        sub_battery_voltage = data[11]  # 副电池电压
 
-        battery_level_1 = 0.00  # 电池1电量
-        battery_level_2 = 0.00  # 电池2电量
-        if int(battery1) and battery_voltage_1:
-            battery_level_1 = self.calculate_amount_of_power(battery_voltage_1)
+        main_battery_coulomb = 0.00  # 主电池电量
+        sub_battery_coulomb = 0.00  # 副电池电量
+        if main_battery_state and main_battery_voltage:
+            main_battery_coulomb = self.calculate_amount_of_power(main_battery_voltage)
 
-        if int(battery2) and battery_voltage_2:
-            battery_level_2 = self.calculate_amount_of_power(battery_voltage_1)
+        if backup_battery_state and sub_battery_voltage:
+            sub_battery_coulomb = self.calculate_amount_of_power(sub_battery_voltage)
 
-        self.voltages.emit(battery_voltage_1, battery_voltage_2)
-        self.powers.emit(battery_level_1, battery_level_2)
+        self.battery_stated.emit(
+            AGVBattery(
+                status=(main_battery_state, backup_battery_state),
+                voltages=(main_battery_voltage, sub_battery_voltage),
+                powers=(main_battery_coulomb, sub_battery_coulomb)
+            )
+        )
 
     def run(self):
-        while self.detector is True:
+        while self.__detector is True:
             try:
-                self.get_status_info()
-                time.sleep(1)
+                self._get_status_info()
+                version = self.__agv_handler.get_firmware_version()
+                if version:
+                    self.versioned.emit(str(version))
+            except serial.serialutil.SerialException:
+                pass
             except Exception as e:
-                print(e)
+                print(f"@MyAGVStatusDetector::run exception: {e}")
+                print(traceback.format_exc())
+            finally:
+                time.sleep(self.__interval)

@@ -19,8 +19,3 @@ class AgvHandler(MyAgv):
     def close(self):
         if self._serial_port.is_open is True:
             self._serial_port.close()
-
-    def get_system_version(self):
-        firmware_version = self.get_firmware_version()
-        # modified_version = self.agv.get_modified_version()
-        return f"{firmware_version}"

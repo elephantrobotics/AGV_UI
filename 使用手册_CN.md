@@ -1,43 +1,43 @@
 
-# myAgv 上位机软件使用手册
+# MyAgv 上位机软件使用手册
 
-## 运行程序：
-1. 克隆github 仓库地址：`https://github.com/elephantrobotics/AGV_UI`
-2. 切换**Vis_Merge**分支:  `git checkout Vis_Merge`    
-3. 使用python运行该文件：`python operations.py`
+![Software Page](resources/chinese-images/software_page.png)
 
-![Softeware Page](resources/img_depict/software_page_cn.png "Software Page")
+> 1. 克隆github 仓库地址：`https://github.com/elephantrobotics/AGV_UI`
+> 2. 切换**Vis_Merge**分支:  `git checkout Vis_Merge`    
+> 3. 使用python运行该文件：`python operations.py`
 
 ## 1. 语言切换
 
-选择中英文，进行对应的语言切换。
+选择中文或英文，进行对应的语言切换, 软件关闭时会保存上一次选择的语言, 再次启动时默认使用上次选择的语言。
 
-![Language Choose](resources/img_depict/language_choose.png "Choose Language")
+![Language Choose](resources/chinese-images/language_choose.png "Choose Language")
 
 ## 2. 雷达功能
 
-![Radar Open](resources/img_depict/radar_open_cn.png "Open Radar")
+![Radar Open](resources/chinese-images/radar_open.png "Open Radar")
 
-![Radar Close](resources/img_depict/radar_close_cn.png "Close Radar")
+![Radar Close](resources/chinese-images/radar_close.png "Close Radar")
 
-1. 点击按钮，打开雷达。按钮变成红色，文字显示为“关”。
+1. 点击按钮，打开雷达。按钮变成红色，文字显示为“关闭”。
 2. myAgv的雷达开始转动。
 3. 桌面出现新的终端如图示，说明雷达打开成功。
 
-![Radar Open](resources/img_depict/radar_open_terminal.png "Open Radar")
+![Radar Open](resources/chinese-images/radar_open_terminal.png "Open Radar")
 
-**限制:**  
-
-   1. 雷达打开：可使用基本控制、建图、导航、保存地图功能
-   2. 雷达关闭：
-      1. 可使用LED灯光控制和测试功能
-      2. 雷达关闭前需要确保基本控制、建图、导航功能已经关闭
+> **限制:**
+1. 雷达打开：可使用基本控制、建图、导航、保存地图功能
+2. 雷达关闭：
+   1. 可使用`LED灯光控制`和`功能测试`功能
+   2. 雷达关闭前需要确保`基本控制`、`建图`、`导航`功能已经关闭
+   3. 雷达关闭后，无法使用`基本控制`、`建图`、`导航`、`保存地图`功能
+   4. 状态监控面板会实时获取数据
 
 ## 3. 基本控制功能  
 
->主要通过键盘、手柄两种方式控制机器移动
+> 主要通过键盘、手柄两种方式控制机器移动, 手柄分为`数字`和`字母`两种型号
 
-![Basic Control](resources/img_depict/basic_control.png "Basic Control")
+![Basic Control](resources/chinese-images/basic_control.png "Basic Control")
 
 **前置条件：** 打开基本控制前需打开雷达，未打开则弹出提示框显示“雷达未打开”。
 
@@ -45,7 +45,7 @@
 
 ### 3.1 键盘控制
 
-![Keyboard terminal](resources/img_depict/keyboard_terminal.png "Keyboard terminal")  
+![Keyboard terminal](resources/chinese-images/keyboard_terminal.png "Keyboard terminal")  
 
 **方向键：**
 
@@ -61,59 +61,64 @@
 
 ### 3.2 手柄控制（选择对应的字母和数字型号）
 
-#### 2.1 手柄-字母款
+#### 3.2.1 手柄-字母款
 
-   ![JoyStick Alphabet](resources/img_depict/joystick_terminal.jpg  "JoyStick Alphabet")
+![JoyStick Alphabet](resources/chinese-images/joystick_alphabet_terminal.png  "JoyStick Alphabet")
 
-   >如图所示，1~4控制小车前进后退和左右运动，5控制小车逆时针旋转，6控制小车顺时针旋转，7为停止按钮。
+> 如图所示，1~4控制小车前进后退和左右运动，5控制小车逆时针旋转，6控制小车顺时针旋转，7为停止按钮。
 
-   ![JoyStick Alphabet](resources/img_depict/joystick_alphabet.jpg)
+![JoyStick Alphabet](resources/chinese-images/joystick_alphabet.jpg)
 
 ---
 
-#### 2.2 手柄-数字款
+#### 3.2.2 手柄-数字款
 
-   ![JoyStick Number](resources/img_depict/joystick_terminal.jpg "JoyStick Number")
+![JoyStick Number](resources/img_depict/joystick_terminal.jpg "JoyStick Number")
 
-   >如图所示，1~4控制小车前进后退和左右运动，5控制小车逆时针旋转，6控制小车顺时针旋转，7为停止按钮。
+> 如图所示，1~4控制小车前进后退和左右运动，5控制小车逆时针旋转，6控制小车顺时针旋转，7为停止按钮。
 
-   ![JoyStick Number](resources/img_depict/joystick_number.png "JoyStick Number")
+![JoyStick Number](resources/chinese-images/joystick_number.png "JoyStick Number")
 
 ## 4. 地图导航
 
-![Map Navigation](resources/img_depict/map_navi.png "Map and navigation")
+![Map Navigation](resources/chinese-images/map_navigation.png "Map and navigation")
+
+> 地图导航包含`2D导航`和`3D导航`。`2D导航`分成`多点导航`和`单点导航`。`3D导航`只支持`单点导航`。 可以通过下拉框选择对应的导航方式。
 
 **前置条件：**
+1. 打开雷达
+2. 可以同时打开键盘控制, 用于导航中中断。  
+3. 这时不能开启`建图`功能
 
-   1. 打开雷达
-   2. 打开键盘控制  
+### 4.1 2D导航
+#### 4.1.1 多点导航
+#### 4.1.2 单点导航
+### 4.2 3D导航
 
-若未打开，则弹出提示框提示需要打开的项目。
+## 5. 建图
 
-### 4.1 建图
+![Build Map](resources/chinese-images/mapping.png  "Build Map")
 
-**建图方式分为Gmapping 和Cartographer 两种。**
+> `建图`方式分为`GMapping`和`Rtabmap`两种。 `GMapping`需要手动保存建图，保存建图需要确保`GMapping`已打开。`Rtabmap`地图会自动保存。
 
-![Build Map](resources/img_depict/build_map_cn.png  "Build Map")
+### 5.1 GMapping
 
-#### Gmapping
+点击下拉框选择`GMapping`建图方式，点击“打开建图”按钮开始建图。
 
-点击下拉框选择Gmapping建图方式，点击“打开建图”按钮开始建图。
+1. 桌面显示rviz界面
+2. 选中已打开的键盘终端，使用键盘控制小车，rviz空间会随着小车的移动将地图构建出来。轨迹如图所示：  ![Gmapping Map](resources/img_depict/gmapping_rviz.png  "Gmapping Map")
 
-   1. 桌面显示rviz界面
-   2. 选中已打开的键盘终端，使用键盘控制小车，rviz空间会随着小车的移动将地图构建出来。轨迹如图所示：  ![Gmapping Map](resources/img_depict/gmapping_rviz.png  "Gmapping Map")
+### 5.2 Rtabmap
 
-#### Cartographer
+点击下拉框选择`Rtabmap`建图方式，点击“打开建图”按钮开始建图。
 
-点击下拉框选择Gmapping建图方式，点击“打开建图”按钮开始建图。
-
-   1. 桌面打开新终端，若终端内不断滚动输出数据，则表示小车cartographer建图文件成功打开，终端内显示状态如下：   ![Cartographer Map](resources/img_depict/cartographer_terminal.png)
-   2. 代码运行成功后会打开rviz，这时在rviz中便会显示地图和雷达信息，红色箭头为小车的朝向。界面如图所示。   ![Cartographer Map](resources/img_depict/cartograph_rviz.jpg)
-   3. 选中已打开的键盘终端，使用键盘控制小车，rviz空间会随着小车的移动将地图构建出来。轨迹如图所示：  ![Cartographer Track](resources/img_depict/catograph_rviz2.jpg)
+1. 桌面打开新终端，若终端内不断滚动输出数据，则表示小车cartographer建图文件成功打开，终端内显示状态如下：   ![Cartographer Map](resources/img_depict/cartographer_terminal.png)
+2. 代码运行成功后会打开rviz，这时在rviz中便会显示地图和雷达信息，红色箭头为小车的朝向。界面如图所示。   ![Cartographer Map](resources/img_depict/cartograph_rviz.jpg)
+3. 选中已打开的键盘终端，使用键盘控制小车，rviz空间会随着小车的移动将地图构建出来。轨迹如图所示：  ![Cartographer Track](resources/img_depict/catograph_rviz2.jpg)
 
 **限制:** 开启建图后导航不可使用；若需使用导航功能请先关闭建图。
 
-#### 4.1.1 保存建图
+### 5.3 保存建图
 
 ![Save Map](resources/img_depict/save_map_cn.png "Save Map")
 
@@ -121,7 +126,7 @@
 ![Save map terminal](resources/img_depict/save_map.png)
 **默认保存路径在软件运行目录下**
 
-### 4.2 导航
+### 5.4 导航
 
 ![Map Navigation](resources/img_depict/navagation_cn.png "Map Navigation")
 
@@ -166,28 +171,28 @@
 1. 导航和3D导航两种方式只可选择其一。若需使用另一种，请关闭当前的使用方式。
 2. 导航打开后不可打开建图，若需建图请关闭导航。
 
-## 5. LED 灯光设置
+## 6. LED 控制
 
-![LED Light](resources/img_depict/led_light.png "LED Light")
+![LED Light](resources/chinese-images/led_light.png "LED Light")
 
-**前置条件：** 关闭雷达
-通过圆盘选择灯光颜色，拖动滑动条改变灯光颜色的亮度。图示右侧则显示对应的HEX和RGB值。
+> 通过圆盘选择灯光颜色，拖动滑动条改变灯光颜色的亮度。图示右侧则显示对应的HEX和RGB值。雷达启动时不可以控制LED灯。
 
-## 6. 测试功能
+## 7. 测试功能
 
-![Testing Function](resources/img_depict/test_part.png "Testing Function")
-**限制：测试过程中 雷达、基本控制、地图导航 模块不可使用**
+![Testing Function](resources/chinese-images/functional_testing.png "Testing Function")
 
-### 6.1 电机检测
+**限制：测试过程中 雷达、基本控制、地图导航模块不可使用**
+
+## 7.1 电机检测
 
 **功能：** 检测电机是否可以正常运行  
-**运行：**  
+**运行：**
 
 1. 下拉框选择电机，点击开始测试
 2. 该过程建议将myAgv放在地面进行测试；过程中前进后退各4s，左平移和右平移各4s，左旋转和右旋转各8s
 3. 以上步骤均执行后，检测完毕
 
-### 6.2 LED灯光检测
+### 7.2 LED灯光检测
 
 **功能：** 检测myAgv的LED灯光是否可以正常使用  
 **运行：**  
@@ -196,49 +201,49 @@
 2. 依次切换赤橙黄绿青蓝紫颜色，若可正常观察到颜色切换；则LED灯正常使用
 3. 每个颜色显示时长为1s，所有颜色正常显示后，检测完毕。
 
-### 6.3 3D相机检测
+### 7.3 3D相机检测
 
 待添加
 
-### 6.4 2D相机检测
+### 7.4 2D相机检测
 
 **功能：** 检测2D相机是否可以正常使用  
-**运行：**  
+**运行：**
 
 1. 下拉框选择2D相机，点击开始测试
 2. 弹出新窗口，显示摄像头捕捉到的画面；若可显示图像，摄像头正常运行。
 3. 画面显示时长约5s，之后自动关闭窗口画面。检测完毕。
 
-### 6.5 吸泵检测
+### 7.5 吸泵检测
 
 **功能：** 检测吸泵是否可以正常使用  
-**运行：**  
+**运行：**
 
 1. 下拉框选择吸泵，点击开始测试
 2. 吸泵打开，运行4s后自动关闭；此时检测完毕
 
-### 6.6 堵转恢复
-![Restore Function](resources/img_depict/restore_cn.png "Restore Function")
+### 7.6 堵转恢复
 
 **功能：** 使堵转状态下的电机恢复正常，可继续运动  
-**运行：**  点击图示按钮后即可恢复
+**运行：** 点击图示按钮后即可恢复
 
 ## 7. 日志区域
 
-![Log Area](resources/img_depict/log_area_cn.png "Log Area")
+![Log Area](resources/chinese-images/log_area.png "Log Area")
 
-以上所有操作均会显示在日志区域。点击图示右侧“清除按钮”清空当前内容。
+以上所有操作均会显示在日志区域。点击图示右上角“清除按钮”清空日志区域当前内容。
 
 ## 8. 状态监测
 
-![Status Detecting](resources/img_depict/status_add_cn.png "Status Information")
+![Status Detecting](resources/chinese-images/condition_monitoring.png "Status Information")
 
-**1. IP地址显示:** 显示当前的IP地址  
-**2. 电池信息:** 显示当前接入的电池信息  
-（1） 接入后显示绿灯以及对应的电量和电压；未接入显示灰色，数值为0  
-
-**3. 电机电流:** 显示电机电流信息  
-（1） 电机在运动情况下有电流通过，此时电机会亮绿灯否有电流通过并显示当前电流数值；否则为灰色。  
-
-**4. 雷达信息:** 显示雷达是否打开。  
-（1） 雷达按钮打开时，绿灯亮起；雷达按钮关闭时，灯熄灭，转为灰色。
+1. **IP地址显示:** 显示当前的IP地址  
+2. **固件版本显示:** 显示固件版本号 
+3. **电池信息:** 显示当前接入的电池信息  
+   1. 接入后显示绿灯以及对应的电量和电压；未接入显示灰色，数值为0.0
+4. **电机电流:** 显示电机电流信息
+   1. 电机在运动情况下有电流通过，此时电机会亮绿灯否有电流通过并显示当前电流数值；否则为灰色，默认显示0.0。
+5. **雷达信息:** 显示雷达是否打开。 
+   1. 雷达按钮打开时，绿灯亮起；雷达按钮关闭时，灯熄灭，转为灰色。
+6. **3D相机信息:** 显示3D相机是否接入。
+   1. 3D相机接入后，绿灯亮起；3D相机未接入时，灯熄灭，转为灰色。
