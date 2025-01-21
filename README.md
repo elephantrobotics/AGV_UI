@@ -27,3 +27,7 @@
    ```
 6. 使用`PyQT5-tools`自带的`QT Linguist`翻译`ts`文件
 7. 翻译完成之后点击`发布`即可完成翻译
+8. 安装
+   ```shell
+   sudo apt-get install ros-noetic-actionlib ros-noetic-actionlib-msgs
+   ```

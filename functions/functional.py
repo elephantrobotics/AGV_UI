@@ -48,12 +48,12 @@ class AGVLEDTesting(FunctionalBaseTesting):
         }
 
     def do_testing(self):
-        self.agv.set_led_mode(0)
+        self.agv.set_led_mode(1)
         for name, color in self.get_colors().items():
             self.emit_process(name=name, color=color)
             self.agv.set_led(1, *color)
             time.sleep(1)
-        self.agv.set_led_mode(1)
+        self.agv.set_led_mode(0)
 
 
 class AGVPUMPTesting(FunctionalBaseTesting):

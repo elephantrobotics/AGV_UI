@@ -6,8 +6,6 @@ import threading
 import json
 import traceback
 import typing as T
-from datetime import datetime
-
 from PyQt5.QtCore import QCoreApplication, QTranslator, QTimer
 from PyQt5.QtGui import QColor
 from PyQt5.QtWidgets import QApplication, QSizePolicy, QMainWindow, QDesktopWidget
@@ -32,7 +30,7 @@ from widgets.camera import AGVCameraWidget
 from widgets.prompt import QPrompt
 
 GpioHandler.setmode(GpioHandler.BCM)
-GpioHandler.setup(GlobalVar.radar_control_pin, GpioHandler.IN)
+GpioHandler.setup(GlobalVar.radar_control_pin, GpioHandler.OUT)
 _translate = QCoreApplication.translate
 
 
@@ -186,10 +184,11 @@ class MyAGVMainWindow(QMainWindow):
             is_running = self.is_radar_running
 
         if is_running is True:
-            self.color_picker.setEnabled(False)
+
             self.ui.start_detection_btn.setEnabled(False)
             self.ui.start_detection_btn.setStyleSheet(ButtonStyleEnum.GRAY)
-            self.ui.color_brightness_slider.setEnabled(False)
+            # self.color_picker.setEnabled(False)
+            # self.ui.color_brightness_slider.setEnabled(False)
             self.ui.restore_btn.setEnabled(False)
             self.ui.restore_btn.setStyleSheet(ButtonStyleEnum.GRAY)
 
@@ -205,12 +204,12 @@ class MyAGVMainWindow(QMainWindow):
                 self.agv_handler.close()
 
         else:
-            self.color_picker.setEnabled(True)
+            # self.color_picker.setEnabled(True)
+            # self.ui.color_brightness_slider.setEnabled(True)
             self.ui.restore_btn.setEnabled(True)
             self.ui.restore_btn.setStyleSheet(ButtonStyleEnum.GREEN)
             self.ui.start_detection_btn.setEnabled(True)
             self.ui.start_detection_btn.setStyleSheet(ButtonStyleEnum.BLUE)
-            self.ui.color_brightness_slider.setEnabled(True)
 
             self.ui.radar_status.setStyleSheet(ButtonStyleEnum.LightGrey)
             self.ui.radar_button.setText(_translate("myAGV", "ON"))
@@ -360,6 +359,7 @@ class MyAGVMainWindow(QMainWindow):
         blue = color.blue()
 
         color_hex = color.name()
+        self.agv_handler.set_led_mode(1)
         self.ui.lineEdit_HEX.setText(color_hex)
         self.ui.lineEdit_RGB.setText(f"({red}, {green}, {blue})")
         self.agv_handler.set_led(1, red, green, blue)
@@ -402,7 +402,7 @@ class MyAGVMainWindow(QMainWindow):
         if self.is_radar_running is False:
             self.update_radar_status(True)
             self.console.info(_translate("myAGV", "Radar open..."))
-            threading.Thread(target=Functional.radar_open, daemon=True).start()
+            Functional.radar_open()
             return
 
         if self.basic_control_flag is True:
@@ -419,7 +419,7 @@ class MyAGVMainWindow(QMainWindow):
 
         else:
             self.console.info(_translate("myAGV", "close radar"))
-            threading.Thread(target=Functional.radar_close, daemon=True).start()
+            Functional.radar_close()
             self.update_radar_status(False)
 
     def basic_control_handle(self):
@@ -524,8 +524,10 @@ class MyAGVMainWindow(QMainWindow):
             self.ui.build_map_selection.setEnabled(True)
             self.ui.navigation_selection.setEnabled(False)  # 导航方式不可选取
 
-            self.ui.navigation_3d_button.setEnabled(True)  # 建图关闭后导航可用
-            self.ui.navigation_3d_button.setStyleSheet(ButtonStyleEnum.BLUE)
+            navigation_model = self.ui.navigation_selection.currentText()
+            if navigation_model in ("Single-point Navigation", "单点导航"):
+                self.ui.navigation_3d_button.setEnabled(True)  # 建图关闭后导航可用
+                self.ui.navigation_3d_button.setStyleSheet(ButtonStyleEnum.BLUE)
 
             self.ui.navigation_2d_button.setEnabled(True)
             self.ui.navigation_2d_button.setStyleSheet(ButtonStyleEnum.BLUE)
@@ -722,10 +724,8 @@ class MyAGVMainWindow(QMainWindow):
             self.console.info(self.format_log_by_different_languages(
                 Translate.State.Stop, test_name, Translate.Other.Testing
             ))
-        elif isinstance(self.functional_testing, AGVCameraWidget) and not self.functional_testing.opened():
-            self.console.info(self.format_log_by_different_languages(
-                Translate.State.Fail, Translate.Other.CameraOpenFailed
-            ))
+        elif isinstance(self.functional_testing, AGVCameraWidget) and self.functional_testing.opened():
+            self.console.info(self.format_log_by_different_languages(Translate.Other.CameraOpenFailed))
         else:
             self.console.info(self.format_log_by_different_languages(
                 Translate.State.Finish, test_name, Translate.Other.Testing
