@@ -14,38 +14,67 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Operation(object):
     def setupUi(self, Operation):
         Operation.setObjectName("Operation")
-        Operation.resize(1217, 786)
-        self.centralwidget = QtWidgets.QWidget(Operation)
-        self.centralwidget.setObjectName("centralwidget")
-        self.verticalLayout_15 = QtWidgets.QVBoxLayout(self.centralwidget)
-        self.verticalLayout_15.setContentsMargins(2, 0, 2, 2)
-        self.verticalLayout_15.setObjectName("verticalLayout_15")
-        self.scrollArea = QtWidgets.QScrollArea(self.centralwidget)
-        self.scrollArea.setStyleSheet("background-color: rgb(243, 243, 243);\n"
-"border:None;")
+        Operation.resize(1215, 794)
+        self.horizontalLayout = QtWidgets.QHBoxLayout(Operation)
+        self.horizontalLayout.setContentsMargins(-1, -1, 9, -1)
+        self.horizontalLayout.setSpacing(11)
+        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.widget_left = QtWidgets.QWidget(Operation)
+        self.widget_left.setStyleSheet("background-color: rgb(218, 218, 218);\n"
+"border-radius: 5px;\n"
+"")
+        self.widget_left.setObjectName("widget_left")
+        self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.widget_left)
+        self.verticalLayout_3.setContentsMargins(9, 9, 9, 9)
+        self.verticalLayout_3.setSpacing(9)
+        self.verticalLayout_3.setObjectName("verticalLayout_3")
+        self.scrollArea = QtWidgets.QScrollArea(self.widget_left)
+        self.scrollArea.setStyleSheet("/*QScrollArea{\n"
+"    background-color: rgb(243, 243, 243);\n"
+"    border:None;\n"
+"}*/\n"
+"\n"
+"QScrollBar:vertical {\n"
+"    border-radius: 5px; \n"
+"    background: #f0f0f0;        \n"
+"    width: 5px;                \n"
+"    margin: 22px 5px 22px 5px;     \n"
+"}\n"
+"\n"
+"QScrollBar::handle:vertical {\n"
+"    background: #c0c0c0;         \n"
+"    min-height: 30px;          \n"
+"    border-radius: 5px;         \n"
+"}\n"
+"\n"
+"QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {\n"
+"    background: none;        \n"
+"}\n"
+"\n"
+"QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {\n"
+"    background: none;     \n"
+"}")
+        self.scrollArea.setLineWidth(0)
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setObjectName("scrollArea")
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 1213, 784))
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 427, 758))
+        self.scrollAreaWidgetContents.setStyleSheet("")
         self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
-        self.horizontalLayout = QtWidgets.QHBoxLayout(self.scrollAreaWidgetContents)
-        self.horizontalLayout.setContentsMargins(11, 9, 11, 9)
-        self.horizontalLayout.setSpacing(11)
-        self.horizontalLayout.setObjectName("horizontalLayout")
-        self.widget_left = QtWidgets.QWidget(self.scrollAreaWidgetContents)
-        self.widget_left.setStyleSheet("background-color: rgb(218, 218, 218);\n"
-"border-radius: 5px;")
-        self.widget_left.setObjectName("widget_left")
-        self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.widget_left)
-        self.verticalLayout_3.setContentsMargins(9, 9, -1, -1)
-        self.verticalLayout_3.setSpacing(9)
-        self.verticalLayout_3.setObjectName("verticalLayout_3")
-        self.widget_5 = QtWidgets.QWidget(self.widget_left)
-        self.widget_5.setStyleSheet("background-color: rgb(236, 240, 241);")
-        self.widget_5.setObjectName("widget_5")
-        self.horizontalLayout_19 = QtWidgets.QHBoxLayout(self.widget_5)
+        self.verticalLayout_4 = QtWidgets.QVBoxLayout(self.scrollAreaWidgetContents)
+        self.verticalLayout_4.setContentsMargins(0, 0, 9, 0)
+        self.verticalLayout_4.setSpacing(11)
+        self.verticalLayout_4.setObjectName("verticalLayout_4")
+        self.radar_panel = QtWidgets.QWidget(self.scrollAreaWidgetContents)
+        self.radar_panel.setStyleSheet("background-color: rgb(236, 240, 241);")
+        self.radar_panel.setObjectName("radar_panel")
+        self.horizontalLayout_19 = QtWidgets.QHBoxLayout(self.radar_panel)
         self.horizontalLayout_19.setObjectName("horizontalLayout_19")
-        self.label_radar = QtWidgets.QLabel(self.widget_5)
+        self.widget_21 = QtWidgets.QWidget(self.radar_panel)
+        self.widget_21.setObjectName("widget_21")
+        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.widget_21)
+        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
+        self.label_radar = QtWidgets.QLabel(self.widget_21)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -53,25 +82,84 @@ class Ui_Operation(object):
         self.label_radar.setSizePolicy(sizePolicy)
         self.label_radar.setStyleSheet("font: 13pt \"Arial\";")
         self.label_radar.setObjectName("label_radar")
-        self.horizontalLayout_19.addWidget(self.label_radar)
-        self.radar_button = QtWidgets.QPushButton(self.widget_5)
-        self.radar_button.setMinimumSize(QtCore.QSize(0, 30))
-        self.radar_button.setStyleSheet("background-color: rgb(39, 174, 96);\n"
-"color: rgb(255, 255, 255);\n"
-"border-radius: 7px;\n"
-"border: 2px groove gray;\n"
-"border-style: outset;\n"
-"font: 75 9pt \"Arial\";")
-        self.radar_button.setCheckable(True)
-        self.radar_button.setObjectName("radar_button")
-        self.horizontalLayout_19.addWidget(self.radar_button)
-        self.verticalLayout_3.addWidget(self.widget_5)
-        self.widget_6 = QtWidgets.QWidget(self.widget_left)
-        self.widget_6.setStyleSheet("background-color: rgb(236, 240, 241);")
-        self.widget_6.setObjectName("widget_6")
-        self.verticalLayout_5 = QtWidgets.QVBoxLayout(self.widget_6)
+        self.horizontalLayout_2.addWidget(self.label_radar)
+        self.radar_control_button = QtWidgets.QPushButton(self.widget_21)
+        self.radar_control_button.setMinimumSize(QtCore.QSize(0, 30))
+        self.radar_control_button.setStyleSheet("QPushButton {\n"
+"    background-color: rgb(39, 174, 96);\n"
+"    color: rgb(255, 255, 255);\n"
+"    border-radius: 7px;\n"
+"    border: 2px groove gray;\n"
+"    border-style: outset;\n"
+"    font: 75 9pt \"Arial\";\n"
+"}\n"
+"QPushButton:disabled {\n"
+"    background-color:gray;\n"
+"    color: rgb(255, 255, 255);\n"
+"    border-radius: 7px;\n"
+"    border: 2px groove gray;\n"
+"    border-style: outset;\n"
+"    font: 75 9pt \"Arial\";\n"
+"}\n"
+"")
+        self.radar_control_button.setCheckable(True)
+        self.radar_control_button.setObjectName("radar_control_button")
+        self.horizontalLayout_2.addWidget(self.radar_control_button)
+        self.horizontalLayout_19.addWidget(self.widget_21)
+        self.verticalLayout_4.addWidget(self.radar_panel)
+        self.camera_3d_panel = QtWidgets.QWidget(self.scrollAreaWidgetContents)
+        self.camera_3d_panel.setStyleSheet("background-color: rgb(236, 240, 241);")
+        self.camera_3d_panel.setObjectName("camera_3d_panel")
+        self.horizontalLayout_27 = QtWidgets.QHBoxLayout(self.camera_3d_panel)
+        self.horizontalLayout_27.setObjectName("horizontalLayout_27")
+        self.widget_25 = QtWidgets.QWidget(self.camera_3d_panel)
+        self.widget_25.setObjectName("widget_25")
+        self.horizontalLayout_28 = QtWidgets.QHBoxLayout(self.widget_25)
+        self.horizontalLayout_28.setObjectName("horizontalLayout_28")
+        self.label_4 = QtWidgets.QLabel(self.widget_25)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.label_4.sizePolicy().hasHeightForWidth())
+        self.label_4.setSizePolicy(sizePolicy)
+        font = QtGui.QFont()
+        font.setFamily("Arial")
+        font.setPointSize(13)
+        font.setBold(False)
+        font.setWeight(50)
+        self.label_4.setFont(font)
+        self.label_4.setObjectName("label_4")
+        self.horizontalLayout_28.addWidget(self.label_4)
+        self.camera_3d_button = QtWidgets.QPushButton(self.widget_25)
+        self.camera_3d_button.setEnabled(True)
+        self.camera_3d_button.setMinimumSize(QtCore.QSize(0, 30))
+        self.camera_3d_button.setStyleSheet("QPushButton {\n"
+"    background-color:rgb(41, 128, 185);\n"
+"    color: rgb(255, 255, 255);\n"
+"    border-radius: 10px;\n"
+"    border: 2px groove gray;\n"
+"    border-style: outset;\n"
+"    font: 75 9pt \"Arial\";\n"
+"}\n"
+"QPushButton:disabled {\n"
+"    background-color:gray;\n"
+"    color: rgb(255, 255, 255);\n"
+"    border-radius: 7px;\n"
+"    border: 2px groove gray;\n"
+"    border-style: outset;\n"
+"    font: 75 9pt \"Arial\";\n"
+"}\n"
+"")
+        self.camera_3d_button.setObjectName("camera_3d_button")
+        self.horizontalLayout_28.addWidget(self.camera_3d_button)
+        self.horizontalLayout_27.addWidget(self.widget_25)
+        self.verticalLayout_4.addWidget(self.camera_3d_panel)
+        self.basic_control_panel = QtWidgets.QWidget(self.scrollAreaWidgetContents)
+        self.basic_control_panel.setStyleSheet("background-color: rgb(236, 240, 241);")
+        self.basic_control_panel.setObjectName("basic_control_panel")
+        self.verticalLayout_5 = QtWidgets.QVBoxLayout(self.basic_control_panel)
         self.verticalLayout_5.setObjectName("verticalLayout_5")
-        self.widget_17 = QtWidgets.QWidget(self.widget_6)
+        self.widget_17 = QtWidgets.QWidget(self.basic_control_panel)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -94,30 +182,117 @@ class Ui_Operation(object):
         self.basic_control_selection.addItem("")
         self.horizontalLayout_4.addWidget(self.basic_control_selection)
         self.verticalLayout_5.addWidget(self.widget_17)
-        self.widget_8 = QtWidgets.QWidget(self.widget_6)
+        self.widget_8 = QtWidgets.QWidget(self.basic_control_panel)
         self.widget_8.setStyleSheet("")
         self.widget_8.setObjectName("widget_8")
         self.horizontalLayout_13 = QtWidgets.QHBoxLayout(self.widget_8)
         self.horizontalLayout_13.setObjectName("horizontalLayout_13")
         self.basic_control_button = QtWidgets.QPushButton(self.widget_8)
         self.basic_control_button.setMinimumSize(QtCore.QSize(0, 30))
-        self.basic_control_button.setStyleSheet("background-color: rgb(39, 174, 96);\n"
-"color: rgb(255, 255, 255);\n"
-"border-radius: 10px;\n"
-"border: 2px groove gray;\n"
-"border-style: outset;\n"
-"font: 75 9pt \"Arial\";")
+        self.basic_control_button.setStyleSheet("QPushButton {\n"
+"    background-color: rgb(39, 174, 96);\n"
+"    color: rgb(255, 255, 255);\n"
+"    border-radius: 7px;\n"
+"    border: 2px groove gray;\n"
+"    border-style: outset;\n"
+"    font: 75 9pt \"Arial\";\n"
+"}\n"
+"QPushButton:disabled {\n"
+"    background-color:gray;\n"
+"    color: rgb(255, 255, 255);\n"
+"    border-radius: 7px;\n"
+"    border: 2px groove gray;\n"
+"    border-style: outset;\n"
+"    font: 75 9pt \"Arial\";\n"
+"}\n"
+"")
         self.basic_control_button.setCheckable(True)
         self.basic_control_button.setObjectName("basic_control_button")
         self.horizontalLayout_13.addWidget(self.basic_control_button)
         self.verticalLayout_5.addWidget(self.widget_8)
-        self.verticalLayout_3.addWidget(self.widget_6)
-        self.widget_13 = QtWidgets.QWidget(self.widget_left)
-        self.widget_13.setStyleSheet("background-color: rgb(236, 240, 241);")
-        self.widget_13.setObjectName("widget_13")
-        self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.widget_13)
+        self.verticalLayout_4.addWidget(self.basic_control_panel)
+        self.map_navigation_panel = QtWidgets.QWidget(self.scrollAreaWidgetContents)
+        self.map_navigation_panel.setStyleSheet("background-color: rgb(236, 240, 241);")
+        self.map_navigation_panel.setObjectName("map_navigation_panel")
+        self.verticalLayout = QtWidgets.QVBoxLayout(self.map_navigation_panel)
+        self.verticalLayout.setObjectName("verticalLayout")
+        self.widget_9 = QtWidgets.QWidget(self.map_navigation_panel)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.widget_9.sizePolicy().hasHeightForWidth())
+        self.widget_9.setSizePolicy(sizePolicy)
+        self.widget_9.setObjectName("widget_9")
+        self.horizontalLayout_5 = QtWidgets.QHBoxLayout(self.widget_9)
+        self.horizontalLayout_5.setContentsMargins(-1, 0, -1, 0)
+        self.horizontalLayout_5.setObjectName("horizontalLayout_5")
+        self.label_3 = QtWidgets.QLabel(self.widget_9)
+        self.label_3.setStyleSheet("font: 13pt \"Arial\";")
+        self.label_3.setObjectName("label_3")
+        self.horizontalLayout_5.addWidget(self.label_3)
+        self.navigation_selection = QtWidgets.QComboBox(self.widget_9)
+        self.navigation_selection.setStyleSheet("color:black;")
+        self.navigation_selection.setObjectName("navigation_selection")
+        self.navigation_selection.addItem("")
+        self.navigation_selection.addItem("")
+        self.horizontalLayout_5.addWidget(self.navigation_selection)
+        self.verticalLayout.addWidget(self.widget_9)
+        self.widget_2 = QtWidgets.QWidget(self.map_navigation_panel)
+        self.widget_2.setObjectName("widget_2")
+        self.horizontalLayout_8 = QtWidgets.QHBoxLayout(self.widget_2)
+        self.horizontalLayout_8.setObjectName("horizontalLayout_8")
+        self.navigation_2d_button = QtWidgets.QPushButton(self.widget_2)
+        self.navigation_2d_button.setMinimumSize(QtCore.QSize(0, 30))
+        self.navigation_2d_button.setStyleSheet("QPushButton {\n"
+"    background-color:rgb(41, 128, 185);\n"
+"    color: rgb(255, 255, 255);\n"
+"    border-radius: 10px;\n"
+"    border: 2px groove gray;\n"
+"    border-style: outset;\n"
+"    font: 75 9pt \"Arial\";\n"
+"}\n"
+"QPushButton:disabled {\n"
+"    background-color:gray;\n"
+"    color: rgb(255, 255, 255);\n"
+"    border-radius: 7px;\n"
+"    border: 2px groove gray;\n"
+"    border-style: outset;\n"
+"    font: 75 9pt \"Arial\";\n"
+"}\n"
+"")
+        self.navigation_2d_button.setCheckable(True)
+        self.navigation_2d_button.setObjectName("navigation_2d_button")
+        self.horizontalLayout_8.addWidget(self.navigation_2d_button)
+        self.navigation_3d_button = QtWidgets.QPushButton(self.widget_2)
+        self.navigation_3d_button.setMinimumSize(QtCore.QSize(0, 30))
+        self.navigation_3d_button.setStyleSheet("QPushButton {\n"
+"    background-color:rgb(41, 128, 185);\n"
+"    color: rgb(255, 255, 255);\n"
+"    border-radius: 10px;\n"
+"    border: 2px groove gray;\n"
+"    border-style: outset;\n"
+"    font: 75 9pt \"Arial\";\n"
+"}\n"
+"QPushButton:disabled {\n"
+"    background-color:gray;\n"
+"    color: rgb(255, 255, 255);\n"
+"    border-radius: 7px;\n"
+"    border: 2px groove gray;\n"
+"    border-style: outset;\n"
+"    font: 75 9pt \"Arial\";\n"
+"}\n"
+"")
+        self.navigation_3d_button.setCheckable(True)
+        self.navigation_3d_button.setObjectName("navigation_3d_button")
+        self.horizontalLayout_8.addWidget(self.navigation_3d_button)
+        self.verticalLayout.addWidget(self.widget_2)
+        self.verticalLayout_4.addWidget(self.map_navigation_panel)
+        self.slam_mapping_panel = QtWidgets.QWidget(self.scrollAreaWidgetContents)
+        self.slam_mapping_panel.setStyleSheet("background-color: rgb(236, 240, 241);")
+        self.slam_mapping_panel.setObjectName("slam_mapping_panel")
+        self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.slam_mapping_panel)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
-        self.widget_20 = QtWidgets.QWidget(self.widget_13)
+        self.widget_20 = QtWidgets.QWidget(self.slam_mapping_panel)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -139,98 +314,66 @@ class Ui_Operation(object):
         self.build_map_selection.addItem("")
         self.horizontalLayout_17.addWidget(self.build_map_selection)
         self.verticalLayout_2.addWidget(self.widget_20)
-        self.widget_10 = QtWidgets.QWidget(self.widget_13)
+        self.widget_10 = QtWidgets.QWidget(self.slam_mapping_panel)
         self.widget_10.setStyleSheet("")
         self.widget_10.setObjectName("widget_10")
         self.horizontalLayout_6 = QtWidgets.QHBoxLayout(self.widget_10)
         self.horizontalLayout_6.setObjectName("horizontalLayout_6")
         self.open_build_map = QtWidgets.QPushButton(self.widget_10)
         self.open_build_map.setMinimumSize(QtCore.QSize(0, 30))
-        self.open_build_map.setStyleSheet("background-color:rgb(41, 128, 185);\n"
-"color: rgb(255, 255, 255);\n"
-"border-radius: 10px;\n"
-"border: 2px groove gray;\n"
-"border-style: outset;\n"
-"font: 75 9pt \"Arial\";")
+        self.open_build_map.setStyleSheet("QPushButton {\n"
+"    background-color:rgb(41, 128, 185);\n"
+"    color: rgb(255, 255, 255);\n"
+"    border-radius: 10px;\n"
+"    border: 2px groove gray;\n"
+"    border-style: outset;\n"
+"    font: 75 9pt \"Arial\";\n"
+"}\n"
+"QPushButton:disabled {\n"
+"    background-color:gray;\n"
+"    color: rgb(255, 255, 255);\n"
+"    border-radius: 7px;\n"
+"    border: 2px groove gray;\n"
+"    border-style: outset;\n"
+"    font: 75 9pt \"Arial\";\n"
+"}\n"
+"")
         self.open_build_map.setCheckable(True)
         self.open_build_map.setObjectName("open_build_map")
         self.horizontalLayout_6.addWidget(self.open_build_map)
-        self.save_map_button = QtWidgets.QPushButton(self.widget_10)
-        self.save_map_button.setMinimumSize(QtCore.QSize(0, 30))
-        self.save_map_button.setStyleSheet("background-color: rgb(39, 174, 96);\n"
-"color: rgb(255, 255, 255);\n"
-"border-radius: 7px;\n"
-"border: 2px groove gray;\n"
-"border-style: outset;\n"
-"font: 75 9pt \"Arial\";")
-        self.save_map_button.setObjectName("save_map_button")
-        self.horizontalLayout_6.addWidget(self.save_map_button)
+        self.save_mapping_button = QtWidgets.QPushButton(self.widget_10)
+        self.save_mapping_button.setMinimumSize(QtCore.QSize(0, 30))
+        self.save_mapping_button.setStyleSheet("QPushButton {\n"
+"    background-color: rgb(39, 174, 96);\n"
+"    color: rgb(255, 255, 255);\n"
+"    border-radius: 7px;\n"
+"    border: 2px groove gray;\n"
+"    border-style: outset;\n"
+"    font: 75 9pt \"Arial\";\n"
+"}\n"
+"QPushButton:disabled {\n"
+"    background-color:gray;\n"
+"    color: rgb(255, 255, 255);\n"
+"    border-radius: 7px;\n"
+"    border: 2px groove gray;\n"
+"    border-style: outset;\n"
+"    font: 75 9pt \"Arial\";\n"
+"}\n"
+"")
+        self.save_mapping_button.setObjectName("save_mapping_button")
+        self.horizontalLayout_6.addWidget(self.save_mapping_button)
         self.verticalLayout_2.addWidget(self.widget_10)
-        self.verticalLayout_3.addWidget(self.widget_13)
-        self.widget_7 = QtWidgets.QWidget(self.widget_left)
-        self.widget_7.setStyleSheet("background-color: rgb(236, 240, 241);")
-        self.widget_7.setObjectName("widget_7")
-        self.verticalLayout = QtWidgets.QVBoxLayout(self.widget_7)
-        self.verticalLayout.setObjectName("verticalLayout")
-        self.widget_9 = QtWidgets.QWidget(self.widget_7)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.widget_9.sizePolicy().hasHeightForWidth())
-        self.widget_9.setSizePolicy(sizePolicy)
-        self.widget_9.setObjectName("widget_9")
-        self.horizontalLayout_5 = QtWidgets.QHBoxLayout(self.widget_9)
-        self.horizontalLayout_5.setContentsMargins(-1, 0, -1, 0)
-        self.horizontalLayout_5.setObjectName("horizontalLayout_5")
-        self.label_3 = QtWidgets.QLabel(self.widget_9)
-        self.label_3.setStyleSheet("font: 13pt \"Arial\";")
-        self.label_3.setObjectName("label_3")
-        self.horizontalLayout_5.addWidget(self.label_3)
-        self.navigation_selection = QtWidgets.QComboBox(self.widget_9)
-        self.navigation_selection.setStyleSheet("color:black;")
-        self.navigation_selection.setObjectName("navigation_selection")
-        self.navigation_selection.addItem("")
-        self.navigation_selection.addItem("")
-        self.horizontalLayout_5.addWidget(self.navigation_selection)
-        self.verticalLayout.addWidget(self.widget_9)
-        self.widget_2 = QtWidgets.QWidget(self.widget_7)
-        self.widget_2.setObjectName("widget_2")
-        self.horizontalLayout_8 = QtWidgets.QHBoxLayout(self.widget_2)
-        self.horizontalLayout_8.setObjectName("horizontalLayout_8")
-        self.navigation_2d_button = QtWidgets.QPushButton(self.widget_2)
-        self.navigation_2d_button.setMinimumSize(QtCore.QSize(0, 30))
-        self.navigation_2d_button.setStyleSheet("background-color:rgb(41, 128, 185);\n"
-"color: rgb(255, 255, 255);\n"
-"border-radius: 10px;\n"
-"border: 2px groove gray;\n"
-"border-style: outset;\n"
-"font: 75 9pt \"Arial\";")
-        self.navigation_2d_button.setCheckable(True)
-        self.navigation_2d_button.setObjectName("navigation_2d_button")
-        self.horizontalLayout_8.addWidget(self.navigation_2d_button)
-        self.navigation_3d_button = QtWidgets.QPushButton(self.widget_2)
-        self.navigation_3d_button.setMinimumSize(QtCore.QSize(0, 30))
-        self.navigation_3d_button.setStyleSheet("background-color:rgb(41, 128, 185);\n"
-"color: rgb(255, 255, 255);\n"
-"border-radius: 10px;\n"
-"border: 2px groove gray;\n"
-"border-style: outset;\n"
-"font: 75 9pt \"Arial\";")
-        self.navigation_3d_button.setCheckable(True)
-        self.navigation_3d_button.setObjectName("navigation_3d_button")
-        self.horizontalLayout_8.addWidget(self.navigation_3d_button)
-        self.verticalLayout.addWidget(self.widget_2)
-        self.verticalLayout_3.addWidget(self.widget_7)
-        self.widget_14 = QtWidgets.QWidget(self.widget_left)
-        self.widget_14.setStyleSheet("background-color: rgb(236, 240, 241);")
-        self.widget_14.setObjectName("widget_14")
-        self.verticalLayout_9 = QtWidgets.QVBoxLayout(self.widget_14)
+        self.verticalLayout_4.addWidget(self.slam_mapping_panel)
+        self.led_control_panel = QtWidgets.QWidget(self.scrollAreaWidgetContents)
+        self.led_control_panel.setStyleSheet("background-color: rgb(236, 240, 241);")
+        self.led_control_panel.setObjectName("led_control_panel")
+        self.verticalLayout_9 = QtWidgets.QVBoxLayout(self.led_control_panel)
         self.verticalLayout_9.setObjectName("verticalLayout_9")
-        self.label_10 = QtWidgets.QLabel(self.widget_14)
+        self.label_10 = QtWidgets.QLabel(self.led_control_panel)
         self.label_10.setStyleSheet("font: 13pt \"Arial\";")
         self.label_10.setObjectName("label_10")
         self.verticalLayout_9.addWidget(self.label_10)
-        self.widget_16 = QtWidgets.QWidget(self.widget_14)
+        self.widget_16 = QtWidgets.QWidget(self.led_control_panel)
         self.widget_16.setObjectName("widget_16")
         self.verticalLayout_10 = QtWidgets.QVBoxLayout(self.widget_16)
         self.verticalLayout_10.setObjectName("verticalLayout_10")
@@ -278,13 +421,13 @@ class Ui_Operation(object):
         self.horizontalLayout_26.addWidget(self.label_value)
         self.verticalLayout_10.addWidget(self.widget_19)
         self.verticalLayout_9.addWidget(self.widget_16)
-        self.verticalLayout_3.addWidget(self.widget_14)
-        self.widget_22 = QtWidgets.QWidget(self.widget_left)
-        self.widget_22.setStyleSheet("background-color: rgb(236, 240, 241);")
-        self.widget_22.setObjectName("widget_22")
-        self.verticalLayout_11 = QtWidgets.QVBoxLayout(self.widget_22)
+        self.verticalLayout_4.addWidget(self.led_control_panel)
+        self.functional_testing_panel = QtWidgets.QWidget(self.scrollAreaWidgetContents)
+        self.functional_testing_panel.setStyleSheet("background-color: rgb(236, 240, 241);")
+        self.functional_testing_panel.setObjectName("functional_testing_panel")
+        self.verticalLayout_11 = QtWidgets.QVBoxLayout(self.functional_testing_panel)
         self.verticalLayout_11.setObjectName("verticalLayout_11")
-        self.widget_12 = QtWidgets.QWidget(self.widget_22)
+        self.widget_12 = QtWidgets.QWidget(self.functional_testing_panel)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -310,7 +453,7 @@ class Ui_Operation(object):
         self.functional_selection.setObjectName("functional_selection")
         self.horizontalLayout_9.addWidget(self.functional_selection)
         self.verticalLayout_11.addWidget(self.widget_12)
-        self.widget_24 = QtWidgets.QWidget(self.widget_22)
+        self.widget_24 = QtWidgets.QWidget(self.functional_testing_panel)
         self.widget_24.setStyleSheet("background-color: rgb(236, 240, 241);")
         self.widget_24.setObjectName("widget_24")
         self.horizontalLayout_10 = QtWidgets.QHBoxLayout(self.widget_24)
@@ -322,12 +465,23 @@ class Ui_Operation(object):
         sizePolicy.setHeightForWidth(self.restore_btn.sizePolicy().hasHeightForWidth())
         self.restore_btn.setSizePolicy(sizePolicy)
         self.restore_btn.setMinimumSize(QtCore.QSize(0, 25))
-        self.restore_btn.setStyleSheet("background-color: rgb(39, 174, 96);\n"
-"color: rgb(255, 255, 255);\n"
-"border-radius: 7px;\n"
-"border: 2px groove gray;\n"
-"border-style: outset;\n"
-"font: 75 9pt \"Arial\";")
+        self.restore_btn.setStyleSheet("QPushButton {\n"
+"    background-color: rgb(39, 174, 96);\n"
+"    color: rgb(255, 255, 255);\n"
+"    border-radius: 7px;\n"
+"    border: 2px groove gray;\n"
+"    border-style: outset;\n"
+"    font: 75 9pt \"Arial\";\n"
+"}\n"
+"QPushButton:disabled {\n"
+"    background-color:gray;\n"
+"    color: rgb(255, 255, 255);\n"
+"    border-radius: 7px;\n"
+"    border: 2px groove gray;\n"
+"    border-style: outset;\n"
+"    font: 75 9pt \"Arial\";\n"
+"}\n"
+"")
         self.restore_btn.setObjectName("restore_btn")
         self.horizontalLayout_10.addWidget(self.restore_btn)
         self.start_detection_btn = QtWidgets.QPushButton(self.widget_24)
@@ -337,19 +491,33 @@ class Ui_Operation(object):
         sizePolicy.setHeightForWidth(self.start_detection_btn.sizePolicy().hasHeightForWidth())
         self.start_detection_btn.setSizePolicy(sizePolicy)
         self.start_detection_btn.setMinimumSize(QtCore.QSize(0, 30))
-        self.start_detection_btn.setStyleSheet("background-color:rgb(41, 128, 185);\n"
-"color: rgb(255, 255, 255);\n"
-"border-radius: 10px;\n"
-"border: 2px groove gray;\n"
-"border-style: outset;\n"
-"font: 75 9pt \"Arial\";")
+        self.start_detection_btn.setStyleSheet("QPushButton {\n"
+"    background-color:rgb(41, 128, 185);\n"
+"    color: rgb(255, 255, 255);\n"
+"    border-radius: 10px;\n"
+"    border: 2px groove gray;\n"
+"    border-style: outset;\n"
+"    font: 75 9pt \"Arial\";\n"
+"}\n"
+"QPushButton:disabled {\n"
+"    background-color:gray;\n"
+"    color: rgb(255, 255, 255);\n"
+"    border-radius: 7px;\n"
+"    border: 2px groove gray;\n"
+"    border-style: outset;\n"
+"    font: 75 9pt \"Arial\";\n"
+"}\n"
+"")
         self.start_detection_btn.setCheckable(True)
         self.start_detection_btn.setObjectName("start_detection_btn")
         self.horizontalLayout_10.addWidget(self.start_detection_btn)
         self.verticalLayout_11.addWidget(self.widget_24)
-        self.verticalLayout_3.addWidget(self.widget_22)
+        self.verticalLayout_4.addWidget(self.functional_testing_panel)
+        self.scrollArea.setWidget(self.scrollAreaWidgetContents)
+        self.verticalLayout_3.addWidget(self.scrollArea)
+        self.verticalLayout_3.setStretch(0, 2)
         self.horizontalLayout.addWidget(self.widget_left)
-        self.widget_right = QtWidgets.QWidget(self.scrollAreaWidgetContents)
+        self.widget_right = QtWidgets.QWidget(Operation)
         self.widget_right.setStyleSheet("background-color: rgb(218, 218, 218);\n"
 "border-radius: 5px;")
         self.widget_right.setObjectName("widget_right")
@@ -397,12 +565,23 @@ class Ui_Operation(object):
         self.horizontalLayout_12.addItem(spacerItem)
         self.log_clear = QtWidgets.QPushButton(self.widget)
         self.log_clear.setMinimumSize(QtCore.QSize(0, 30))
-        self.log_clear.setStyleSheet("background-color: rgb(39, 174, 96);\n"
-"color: rgb(255, 255, 255);\n"
-"border-radius: 7px;\n"
-"border: 2px groove gray;\n"
-"border-style: outset;\n"
-"font: 75 9pt \"Arial\";")
+        self.log_clear.setStyleSheet("QPushButton {\n"
+"    background-color: rgb(39, 174, 96);\n"
+"    color: rgb(255, 255, 255);\n"
+"    border-radius: 7px;\n"
+"    border: 2px groove gray;\n"
+"    border-style: outset;\n"
+"    font: 75 9pt \"Arial\";\n"
+"}\n"
+"QPushButton:disabled {\n"
+"    background-color:gray;\n"
+"    color: rgb(255, 255, 255);\n"
+"    border-radius: 7px;\n"
+"    border: 2px groove gray;\n"
+"    border-style: outset;\n"
+"    font: 75 9pt \"Arial\";\n"
+"}\n"
+"")
         self.log_clear.setObjectName("log_clear")
         self.horizontalLayout_12.addWidget(self.log_clear)
         self.horizontalLayout_12.setStretch(0, 1)
@@ -486,11 +665,19 @@ class Ui_Operation(object):
         self.horizontalLayout_31 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_31.setObjectName("horizontalLayout_31")
         self.backup_battery_state = QtWidgets.QLabel(self.widget_18)
+        self.backup_battery_state.setEnabled(False)
         self.backup_battery_state.setMinimumSize(QtCore.QSize(18, 18))
         self.backup_battery_state.setMaximumSize(QtCore.QSize(18, 18))
-        self.backup_battery_state.setStyleSheet("border-radius: 9px;\n"
-"background-color:grey;\n"
-"border: 1px solid")
+        self.backup_battery_state.setStyleSheet("QLabel {\n"
+"    background-color:green;\n"
+"    border-radius: 9px;\n"
+"    border: 1px solid lightgreen;\n"
+"}\n"
+"QLabel:disabled {\n"
+"    border-radius: 9px;\n"
+"    background-color:grey;\n"
+"    border: 1px solid\n"
+"}")
         self.backup_battery_state.setText("")
         self.backup_battery_state.setObjectName("backup_battery_state")
         self.horizontalLayout_31.addWidget(self.backup_battery_state)
@@ -512,11 +699,19 @@ class Ui_Operation(object):
         self.horizontalLayout_21 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_21.setObjectName("horizontalLayout_21")
         self.main_battery_state = QtWidgets.QLabel(self.widget_18)
+        self.main_battery_state.setEnabled(False)
         self.main_battery_state.setMinimumSize(QtCore.QSize(18, 18))
         self.main_battery_state.setMaximumSize(QtCore.QSize(18, 18))
-        self.main_battery_state.setStyleSheet("border-radius: 9px;\n"
-"background-color:grey;\n"
-"border: 1px solid")
+        self.main_battery_state.setStyleSheet("QLabel {\n"
+"    background-color:green;\n"
+"    border-radius: 9px;\n"
+"    border: 1px solid lightgreen;\n"
+"}\n"
+"QLabel:disabled {\n"
+"    border-radius: 9px;\n"
+"    background-color:grey;\n"
+"    border: 1px solid\n"
+"}")
         self.main_battery_state.setText("")
         self.main_battery_state.setObjectName("main_battery_state")
         self.horizontalLayout_21.addWidget(self.main_battery_state)
@@ -559,11 +754,19 @@ class Ui_Operation(object):
         self.horizontalLayout_24 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_24.setObjectName("horizontalLayout_24")
         self.radar_status = QtWidgets.QLabel(self.widget_18)
+        self.radar_status.setEnabled(False)
         self.radar_status.setMinimumSize(QtCore.QSize(18, 18))
         self.radar_status.setMaximumSize(QtCore.QSize(18, 18))
-        self.radar_status.setStyleSheet("border-radius: 9px;\n"
-"background-color:grey;\n"
-"border: 1px solid")
+        self.radar_status.setStyleSheet("QLabel {\n"
+"    background-color:green;\n"
+"    border-radius: 9px;\n"
+"    border: 1px solid lightgreen;\n"
+"}\n"
+"QLabel:disabled {\n"
+"    border-radius: 9px;\n"
+"    background-color:grey;\n"
+"    border: 1px solid\n"
+"}")
         self.radar_status.setText("")
         self.radar_status.setObjectName("radar_status")
         self.horizontalLayout_24.addWidget(self.radar_status)
@@ -596,11 +799,19 @@ class Ui_Operation(object):
         self.horizontalLayout_25 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_25.setObjectName("horizontalLayout_25")
         self.motor_status = QtWidgets.QLabel(self.widget_18)
+        self.motor_status.setEnabled(False)
         self.motor_status.setMinimumSize(QtCore.QSize(18, 18))
         self.motor_status.setMaximumSize(QtCore.QSize(18, 18))
-        self.motor_status.setStyleSheet("border-radius: 9px;\n"
-"background-color:grey;\n"
-"border: 1px solid")
+        self.motor_status.setStyleSheet("QLabel {\n"
+"    background-color:green;\n"
+"    border-radius: 9px;\n"
+"    border: 1px solid lightgreen;\n"
+"}\n"
+"QLabel:disabled {\n"
+"    border-radius: 9px;\n"
+"    background-color:grey;\n"
+"    border: 1px solid\n"
+"}")
         self.motor_status.setText("")
         self.motor_status.setObjectName("motor_status")
         self.horizontalLayout_25.addWidget(self.motor_status)
@@ -624,11 +835,19 @@ class Ui_Operation(object):
         self.horizontalLayout_3.setContentsMargins(0, -1, 0, -1)
         self.horizontalLayout_3.setObjectName("horizontalLayout_3")
         self.camera_3d_status = QtWidgets.QLabel(self.widget_18)
+        self.camera_3d_status.setEnabled(False)
         self.camera_3d_status.setMinimumSize(QtCore.QSize(19, 19))
         self.camera_3d_status.setMaximumSize(QtCore.QSize(19, 19))
-        self.camera_3d_status.setStyleSheet("border-radius: 9px;\n"
-"background-color:grey;\n"
-"border: 1px solid")
+        self.camera_3d_status.setStyleSheet("QLabel {\n"
+"    background-color:green;\n"
+"    border-radius: 9px;\n"
+"    border: 1px solid lightgreen;\n"
+"}\n"
+"QLabel:disabled {\n"
+"    border-radius: 9px;\n"
+"    background-color:grey;\n"
+"    border: 1px solid\n"
+"}")
         self.camera_3d_status.setText("")
         self.camera_3d_status.setObjectName("camera_3d_status")
         self.horizontalLayout_3.addWidget(self.camera_3d_status)
@@ -648,33 +867,32 @@ class Ui_Operation(object):
         self.horizontalLayout.addWidget(self.widget_right)
         self.horizontalLayout.setStretch(0, 3)
         self.horizontalLayout.setStretch(1, 5)
-        self.scrollArea.setWidget(self.scrollAreaWidgetContents)
-        self.verticalLayout_15.addWidget(self.scrollArea)
-        Operation.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(Operation)
         QtCore.QMetaObject.connectSlotsByName(Operation)
 
     def retranslateUi(self, Operation):
         _translate = QtCore.QCoreApplication.translate
-        Operation.setWindowTitle(_translate("Operation", "MyAGV "))
+        Operation.setWindowTitle(_translate("Operation", "MyAGV"))
         self.label_radar.setText(_translate("Operation", "Laser Radar"))
-        self.radar_button.setText(_translate("Operation", "ON"))
+        self.radar_control_button.setText(_translate("Operation", "ON"))
+        self.label_4.setText(_translate("Operation", "3D Camera"))
+        self.camera_3d_button.setText(_translate("Operation", "ON"))
         self.basic_control.setText(_translate("Operation", "Basic Control"))
         self.basic_control_selection.setItemText(0, _translate("Operation", "Keyboard Control"))
         self.basic_control_selection.setItemText(1, _translate("Operation", "Joystick-Alphabet"))
         self.basic_control_selection.setItemText(2, _translate("Operation", "Joystick-Number"))
         self.basic_control_button.setText(_translate("Operation", "ON"))
-        self.label_map_nav.setText(_translate("Operation", "Mapping"))
-        self.build_map_selection.setItemText(0, _translate("Operation", "GMapping"))
-        self.build_map_selection.setItemText(1, _translate("Operation", "Rtabmap"))
-        self.open_build_map.setText(_translate("Operation", "Open Build Map"))
-        self.save_map_button.setText(_translate("Operation", "Save Map"))
         self.label_3.setText(_translate("Operation", "Map Navigation"))
         self.navigation_selection.setItemText(0, _translate("Operation", "Multi-point Navigation"))
         self.navigation_selection.setItemText(1, _translate("Operation", "Single-point Navigation"))
         self.navigation_2d_button.setText(_translate("Operation", "2D Navigation"))
         self.navigation_3d_button.setText(_translate("Operation", "3D Navigation"))
+        self.label_map_nav.setText(_translate("Operation", "Slam Mapping"))
+        self.build_map_selection.setItemText(0, _translate("Operation", "GMapping"))
+        self.build_map_selection.setItemText(1, _translate("Operation", "Rtabmap"))
+        self.open_build_map.setText(_translate("Operation", "Open Build Map"))
+        self.save_mapping_button.setText(_translate("Operation", "Save Map"))
         self.label_10.setText(_translate("Operation", "LED Control"))
         self.label_11.setText(_translate("Operation", "HEX"))
         self.label_12.setText(_translate("Operation", "RGB"))

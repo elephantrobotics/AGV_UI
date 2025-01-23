@@ -109,7 +109,6 @@ class Functional:
 
     @classmethod
     def close_singlepoint_navigation(cls):
-        # Command.kill("rviz")
         Command.kill("navigation_active.launch")
 
     @classmethod
@@ -119,7 +118,6 @@ class Functional:
 
     @classmethod
     def close_multipoint_navigation(cls):
-        # Command.kill("rviz")
         Command.kill("multipoint_navigation_active.launch")
 
     @classmethod
@@ -128,5 +126,16 @@ class Functional:
 
     @classmethod
     def close_3d_navigation(cls):
-        # Command.kill("rviz")
         Command.kill("3d_navigation_active.launch")
+
+    @classmethod
+    def open_3d_camera(cls):
+        Command.run_in_terminal("roslaunch orbbec_camera astra_pro2.launch", keep=True)
+
+    @classmethod
+    def close_3d_camera(cls):
+        Command.kill("astra_pro2.launch")
+
+    @classmethod
+    def camera_3d_alive(cls):
+        return Command.alive("astra_pro2.launch")

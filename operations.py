@@ -2,13 +2,12 @@
 # -*- coding: UTF-8 -*-
 import logging
 import sys
-import threading
 import json
 import traceback
 import typing as T
 from PyQt5.QtCore import QCoreApplication, QTranslator, QTimer
 from PyQt5.QtGui import QColor
-from PyQt5.QtWidgets import QApplication, QSizePolicy, QMainWindow, QDesktopWidget
+from PyQt5.QtWidgets import QApplication, QSizePolicy, QDesktopWidget, QWidget
 
 from functions import Functional
 from functions.detector import MyAGVStatusDetector, AGVMotor, AGVBattery
@@ -17,7 +16,7 @@ from functions.ros_subscribe import MoveBaseStatusSubscriber, GoalStatus
 
 from core import GlobalVar, GpioHandler, Command, utils
 from core.handler import AgvHandler
-from core.style import ButtonStyleEnum
+from core.stylesheet import Stylesheet
 from core.resource import FileResource
 from core.console import QConsoleHandler
 from core.translate import Translate
@@ -34,7 +33,7 @@ GpioHandler.setup(GlobalVar.radar_control_pin, GpioHandler.OUT)
 _translate = QCoreApplication.translate
 
 
-class MyAGVMainWindow(QMainWindow):
+class MyAGVMainWindow(QWidget):
 
     def __init__(self):
         super().__init__()
@@ -47,6 +46,7 @@ class MyAGVMainWindow(QMainWindow):
 
         # flag
         self._3d_camera_status = False
+        self.camera_3d_flag = False
         self.in_function_testing = False  # 功能检测运行中
 
         self.basic_control_flag = False     # 记录当雷达关闭时， 是否还存在运行的ros节点
@@ -105,7 +105,6 @@ class MyAGVMainWindow(QMainWindow):
         console_handle = QConsoleHandler(formatter=formatter, level=LoggingConfiger.Console.level, parent=self)
         console_handle.outputted.connect(self.on_console_output)
         self.ui.navigation_3d_button.setEnabled(False)
-        self.ui.navigation_3d_button.setStyleSheet(ButtonStyleEnum.GRAY)
         self.console.addHandler(console_handle)
         self.setup_color_picker()
 
@@ -145,9 +144,9 @@ class MyAGVMainWindow(QMainWindow):
         }
         self.ui.retranslateUi(self)
         if self.is_radar_running is True:
-            self.ui.radar_button.setText(_translate("myAGV", "OFF"))
+            self.ui.radar_control_button.setText(_translate("myAGV", "OFF"))
         else:
-            self.ui.radar_button.setText(_translate("myAGV", "ON"))
+            self.ui.radar_control_button.setText(_translate("myAGV", "ON"))
 
     def language_initial(self, language: T.Optional[str] = None):
         if language is None:
@@ -186,16 +185,10 @@ class MyAGVMainWindow(QMainWindow):
         if is_running is True:
 
             self.ui.start_detection_btn.setEnabled(False)
-            self.ui.start_detection_btn.setStyleSheet(ButtonStyleEnum.GRAY)
-            # self.color_picker.setEnabled(False)
-            # self.ui.color_brightness_slider.setEnabled(False)
             self.ui.restore_btn.setEnabled(False)
-            self.ui.restore_btn.setStyleSheet(ButtonStyleEnum.GRAY)
-
-            self.ui.radar_status.setStyleSheet(ButtonStyleEnum.LightGreen)
-            self.ui.radar_button.setText(_translate("myAGV", "OFF"))
-            self.ui.radar_button.setStyleSheet(ButtonStyleEnum.RED)
-            self.ui.radar_button.setChecked(True)
+            self.ui.radar_status.setEnabled(True)
+            self.ui.radar_control_button.setText(_translate("myAGV", "OFF"))
+            self.ui.radar_control_button.setStyleSheet(Stylesheet.RedButtonStyle)
 
             if self.agv_status_detector is not None:
                 self.agv_status_detector.stop_detector()
@@ -204,17 +197,10 @@ class MyAGVMainWindow(QMainWindow):
                 self.agv_handler.close()
 
         else:
-            # self.color_picker.setEnabled(True)
-            # self.ui.color_brightness_slider.setEnabled(True)
             self.ui.restore_btn.setEnabled(True)
-            self.ui.restore_btn.setStyleSheet(ButtonStyleEnum.GREEN)
             self.ui.start_detection_btn.setEnabled(True)
-            self.ui.start_detection_btn.setStyleSheet(ButtonStyleEnum.BLUE)
-
-            self.ui.radar_status.setStyleSheet(ButtonStyleEnum.LightGrey)
-            self.ui.radar_button.setText(_translate("myAGV", "ON"))
-            self.ui.radar_button.setStyleSheet(ButtonStyleEnum.GREEN)
-            self.ui.radar_button.setChecked(True)
+            self.ui.radar_control_button.setText(_translate("myAGV", "ON"))
+            self.ui.radar_control_button.setStyleSheet(Stylesheet.GreenButtonStyle)
 
             self.connect_agv_handler()
             self.set_color_picker_handle()
@@ -277,30 +263,23 @@ class MyAGVMainWindow(QMainWindow):
             Functional.radar_close()
 
         if is_running and is_high:
-            self.ui.radar_status.setStyleSheet(ButtonStyleEnum.GREEN)
+            self.ui.radar_status.setEnabled(True)
 
     def connect_signals(self):
-        self.ui.radar_button.clicked.connect(self.radar_control_handle)
+        self.ui.radar_control_button.clicked.connect(self.radar_control_handle)
         self.ui.basic_control_button.clicked.connect(self.basic_control_handle)
-
-        self.ui.save_map_button.clicked.connect(self.save_gmapping_handle)
+        self.ui.save_mapping_button.clicked.connect(self.save_gmapping_handle)
         self.ui.open_build_map.clicked.connect(self.open_build_mapping_handle)
-
         self.ui.navigation_3d_button.clicked.connect(self.navigation_3D_handle)
         self.ui.navigation_2d_button.clicked.connect(self.navigation_2D_handle)
-
         self.ui.log_clear.clicked.connect(self.clear_console_handle)
-
         self.ui.language_selection.currentTextChanged.connect(self.onLanguageChange)
-
         self.ui.start_detection_btn.clicked.connect(self.start_testing)
-
         self.ui.restore_btn.clicked.connect(self.servo_restore_handle)
-
         self.color_picker.currentColorChanged.connect(self.set_color_picker_handle)
-
         self.ui.build_map_selection.currentTextChanged.connect(self.build_map_change_handle)
         self.ui.navigation_selection.currentTextChanged.connect(self.navigation_change_handle)
+        self.ui.camera_3d_button.clicked.connect(self.camera_3D_handle)
         self.timer.timeout.connect(self.system_information_query)
         self.timer.start(2000)
 
@@ -327,19 +306,15 @@ class MyAGVMainWindow(QMainWindow):
     def build_map_change_handle(self, current_text: str):
         # GMapping 需要手动保存,  rtabmap 不需要
         if current_text == "GMapping":
-            self.ui.save_map_button.setEnabled(True)
-            self.ui.save_map_button.setStyleSheet(ButtonStyleEnum.GREEN)
+            self.ui.save_mapping_button.setEnabled(True)
         else:
-            self.ui.save_map_button.setEnabled(False)
-            self.ui.save_map_button.setStyleSheet(ButtonStyleEnum.GRAY)
+            self.ui.save_mapping_button.setEnabled(False)
 
     def navigation_change_handle(self, current_text: str):
-        if current_text in ("Multi-point Navigation", "多点导航"):
+        if current_text in ("Single-point Navigation", "单点导航"):
             self.ui.navigation_3d_button.setEnabled(False)
-            self.ui.navigation_3d_button.setStyleSheet(ButtonStyleEnum.GRAY)
         else:
             self.ui.navigation_3d_button.setEnabled(True)
-            self.ui.navigation_3d_button.setStyleSheet(ButtonStyleEnum.GREEN)
 
     def set_color_picker_handle(self, color: T.Optional[QColor] = None):
         if color is None:
@@ -349,9 +324,6 @@ class MyAGVMainWindow(QMainWindow):
             return
 
         if self.check_function_testing():  # in functional testing
-            return
-
-        if self.agv_handler is None:  # not connect
             return
 
         red = color.red()
@@ -368,31 +340,20 @@ class MyAGVMainWindow(QMainWindow):
         self.console.info(_translate("myAGV", "Motor Restore"))
 
         if not self.check_radar_running(running=True):
-            self.ui.restore_btn.setStyleSheet(ButtonStyleEnum.DEEP_GREEN)
+            self.ui.restore_btn.setEnabled(False)
             self.agv_handler.restore()
-
-        self.ui.restore_btn.setStyleSheet(ButtonStyleEnum.GREEN)
+            self.ui.restore_btn.setEnabled(True)
 
     def button_status_switch(self, status):
-        buttons = [
-            {"button": self.ui.basic_control_button, "style": ButtonStyleEnum.GREEN},
-            {"button": self.ui.save_map_button, "style": ButtonStyleEnum.GREEN},
-            {"button": self.ui.navigation_2d_button, "style": ButtonStyleEnum.BLUE},
-            {"button": self.ui.radar_button, "style": ButtonStyleEnum.GREEN},
-            {"button": self.ui.open_build_map, "style": ButtonStyleEnum.BLUE},
-        ]
-        navigation_model = self.ui.navigation_selection.currentText()
-        if navigation_model in ("Single-point Navigation", "单点导航"):
-            buttons.append(
-                {"button": self.ui.navigation_3d_button, "style": ButtonStyleEnum.GREEN},
-            )
-
-        for button_item in buttons:
-            button = button_item["button"]
-            style = button_item["style"]
-            if status is False:
-                style = ButtonStyleEnum.GRAY
-            button.setStyleSheet(style)
+        for button in [
+            self.ui.basic_control_button,
+            self.ui.save_mapping_button,
+            self.ui.navigation_2d_button,
+            self.ui.navigation_3d_button,
+            self.ui.radar_control_button,
+            self.ui.open_build_map,
+            self.ui.camera_3d_button
+        ]:
             button.setEnabled(status)
 
     def clear_console_handle(self):
@@ -427,11 +388,11 @@ class MyAGVMainWindow(QMainWindow):
             if self.check_radar_running(running=False):
                 return
 
-            self.ui.basic_control_button.setStyleSheet(ButtonStyleEnum.RED)
+            self.ui.basic_control_button.setStyleSheet(Stylesheet.RedButtonStyle)
             self.ui.basic_control_button.setText(_translate("myAGV", "OFF"))
             self.ui.basic_control_selection.setEnabled(False)  # 设置下拉框不可选区
         else:
-            self.ui.basic_control_button.setStyleSheet(ButtonStyleEnum.GREEN)
+            self.ui.basic_control_button.setStyleSheet(Stylesheet.GreenButtonStyle)
             self.ui.basic_control_button.setText(_translate("myAGV", "ON"))
             self.ui.basic_control_selection.setEnabled(True)  # 设置下拉框可选区
 
@@ -497,16 +458,14 @@ class MyAGVMainWindow(QMainWindow):
                 return
 
             self.ui.open_build_map.setText(_translate("myAGV", "Close Build Map"))
-            self.ui.open_build_map.setStyleSheet(ButtonStyleEnum.RED)
+            self.ui.open_build_map.setStyleSheet(Stylesheet.RedButtonStyle)
 
             self.ui.build_map_selection.setEnabled(False)  # 建图方式不可选取
             self.ui.navigation_selection.setEnabled(False)  # 导航方式不可选取
 
             self.ui.navigation_3d_button.setEnabled(False)  # 建图打开后导航均不可用
-            self.ui.navigation_3d_button.setStyleSheet(ButtonStyleEnum.GRAY)
 
             self.ui.navigation_2d_button.setEnabled(False)
-            self.ui.navigation_2d_button.setStyleSheet(ButtonStyleEnum.GRAY)
 
             if open_build_map_method == "GMapping":
                 self.console.info(_translate("myAGV", "Open Gmapping..."))
@@ -519,7 +478,7 @@ class MyAGVMainWindow(QMainWindow):
 
         else:
             self.ui.open_build_map.setText(_translate("myAGV", "Open Build Map"))
-            self.ui.open_build_map.setStyleSheet(ButtonStyleEnum.GREEN)
+            self.ui.open_build_map.setStyleSheet(Stylesheet.GreenButtonStyle)
 
             self.ui.build_map_selection.setEnabled(True)
             self.ui.navigation_selection.setEnabled(False)  # 导航方式不可选取
@@ -527,10 +486,8 @@ class MyAGVMainWindow(QMainWindow):
             navigation_model = self.ui.navigation_selection.currentText()
             if navigation_model in ("Single-point Navigation", "单点导航"):
                 self.ui.navigation_3d_button.setEnabled(True)  # 建图关闭后导航可用
-                self.ui.navigation_3d_button.setStyleSheet(ButtonStyleEnum.BLUE)
 
             self.ui.navigation_2d_button.setEnabled(True)
-            self.ui.navigation_2d_button.setStyleSheet(ButtonStyleEnum.BLUE)
 
             if open_build_map_method == "GMapping":
                 Functional.close_gmapping_mapping()
@@ -546,43 +503,62 @@ class MyAGVMainWindow(QMainWindow):
             if self.check_radar_running(running=False):
                 return
 
-            if self._3d_camera_status is False:
+            if self.camera_3d_flag is False:
                 return self.prompt.warning(
                     _translate("myAGV", "Warning"),
-                    _translate("myAGV", "3D camera not connected")
+                    _translate("myAGV", "Please open 3D camera first!")
                 )
 
             self.ui.build_map_selection.setEnabled(False)  # 建图下拉框不可选
 
             self.ui.open_build_map.setEnabled(False)  # 打开建图不可选
-            self.ui.open_build_map.setStyleSheet(ButtonStyleEnum.GRAY)
 
             self.ui.navigation_2d_button.setEnabled(False)  # 导航不可选
-            self.ui.navigation_2d_button.setStyleSheet(ButtonStyleEnum.GRAY)
 
             self.ui.navigation_3d_button.setText(_translate("myAGV", "Close 3D Navigation"))
-            self.ui.navigation_3d_button.setStyleSheet(ButtonStyleEnum.RED)
+            self.ui.navigation_3d_button.setStyleSheet(Stylesheet.RedButtonStyle)
 
             self.console.info(_translate("myAGV", "Open 3D navigation"))
-
             Functional.open_3d_navigation()
+            self.move_base_status_subscriber = MoveBaseStatusSubscriber(parent=self)
+            self.move_base_status_subscriber.goal_status_changed.connect(self.on_navigation_goal_status_changed)
+            self.move_base_status_subscriber.start()
+
             self.navigation_3d_flag = True
 
         else:
             self.ui.build_map_selection.setEnabled(True)
 
             self.ui.open_build_map.setEnabled(True)
-            self.ui.open_build_map.setStyleSheet(ButtonStyleEnum.BLUE)
 
             self.ui.navigation_2d_button.setEnabled(True)
-            self.ui.navigation_2d_button.setStyleSheet(ButtonStyleEnum.BLUE)
 
             self.ui.navigation_3d_button.setText(_translate("myAGV", "3D Navigation"))
-            self.ui.navigation_3d_button.setStyleSheet(ButtonStyleEnum.BLUE)
+            self.ui.navigation_3d_button.setStyleSheet(Stylesheet.BlueButtonStyle)
 
             self.console.info(_translate("myAGV", "Close 3D navigation"))
             Functional.close_3d_navigation()
             self.navigation_3d_flag = False
+
+    def camera_3D_handle(self):
+        if self.camera_3d_flag is False:
+            if self._3d_camera_status is False:
+                return self.prompt.warning(
+                    _translate("myAGV", "Warning"),
+                    _translate("myAGV", "3D camera not connected")
+                )
+
+            self.console.info(_translate("myAGV", "Open 3D camera"))
+            self.ui.camera_3d_button.setText(_translate("myAGV", "OFF"))
+            self.ui.camera_3d_button.setStyleSheet(Stylesheet.RedButtonStyle)
+            Functional.open_3d_camera()
+            self.camera_3d_flag = True
+        else:
+            self.console.info(_translate("myAGV", "Close 3D camera"))
+            self.ui.camera_3d_button.setText(_translate("myAGV", "ON"))
+            self.ui.camera_3d_button.setStyleSheet(Stylesheet.BlueButtonStyle)
+            Functional.close_3d_camera()
+            self.camera_3d_flag = False
 
     def navigation_2D_handle(self):
         navigation_2d_method = self.ui.navigation_selection.currentText()
@@ -605,13 +581,11 @@ class MyAGVMainWindow(QMainWindow):
             self.ui.build_map_selection.setEnabled(False)
 
             self.ui.open_build_map.setEnabled(False)
-            self.ui.open_build_map.setStyleSheet(ButtonStyleEnum.GRAY)
 
-            self.ui.save_map_button.setEnabled(False)
-            self.ui.save_map_button.setStyleSheet(ButtonStyleEnum.GRAY)
+            self.ui.save_mapping_button.setEnabled(False)
 
             self.ui.navigation_2d_button.setText(_translate("myAGV", "Close Navigation"))
-            self.ui.navigation_2d_button.setStyleSheet(ButtonStyleEnum.RED)
+            self.ui.navigation_2d_button.setStyleSheet(Stylesheet.RedButtonStyle)
 
             self.console.info(_translate("myAGV", "Open 2D navigation"))
 
@@ -627,13 +601,11 @@ class MyAGVMainWindow(QMainWindow):
             self.ui.build_map_selection.setEnabled(True)
 
             self.ui.open_build_map.setEnabled(True)
-            self.ui.open_build_map.setStyleSheet(ButtonStyleEnum.BLUE)
 
-            self.ui.save_map_button.setEnabled(True)
-            self.ui.save_map_button.setStyleSheet(ButtonStyleEnum.GREEN)
+            self.ui.save_mapping_button.setEnabled(True)
 
             self.ui.navigation_2d_button.setText(_translate("myAGV", "2D Navigation"))
-            self.ui.navigation_2d_button.setStyleSheet(ButtonStyleEnum.BLUE)
+            self.ui.navigation_2d_button.setStyleSheet(Stylesheet.BlueButtonStyle)
             self.console.info(_translate("myAGV", "Close 2D navigation"))
             if navigation_2d_method in ("Multi-point Navigation", "多点导航"):
                 Functional.close_multipoint_navigation()
@@ -647,31 +619,24 @@ class MyAGVMainWindow(QMainWindow):
         try:
             navi_point = _translate("myAGV", "Target navigation point")
             if status.status == GoalStatus.SUCCEEDED:
-                # status_message = _translate("myAGV", "导航成功")
                 status_message = _translate("myAGV", "navigation success")
                 self.console.info(f"{navi_point} {point}, {status_message}")
             elif status.status == GoalStatus.PREEMPTED:
-                # status_message = _translate("myAGV", "导航被抢占")
                 status_message = _translate("myAGV", "navigation is preempted")
                 self.console.error(f"{navi_point} {point}, {status_message}")
             elif status.status == GoalStatus.ABORTED:
-                # status_message = _translate("myAGV", "导航失败")
                 status_message = _translate("myAGV", "navigation failed")
                 self.console.error(f"{navi_point} {point}, {status_message}")
             elif status.status == GoalStatus.REJECTED:
-                # status_message = _translate("myAGV", "导航被拒绝")
                 status_message = _translate("myAGV", "navigation is denied")
                 self.console.error(f"{navi_point} {point}, {status_message}")
             elif status.status == GoalStatus.ACTIVE:
-                # status_message = _translate("myAGV", "导航正在执行")
                 status_message = _translate("myAGV", "navigation is being performed")
                 self.console.info(f"{navi_point} {point}, {status_message}")
             elif status.status == GoalStatus.PENDING:
-                # status_message = _translate("myAGV", "导航等待执行")
                 status_message = _translate("myAGV", "navigation awaits execution")
                 self.console.info(f"{navi_point} {point}, {status_message}")
             else:
-                # status_message = _translate("myAGV", "未知导航状态")
                 status_message = _translate("myAGV", f"unknown navigation status")
                 self.console.error(f"{navi_point} {point}, {status_message}")
 
@@ -687,7 +652,7 @@ class MyAGVMainWindow(QMainWindow):
 
             self.in_function_testing = True
             self.ui.start_detection_btn.setText(_translate("myAGV", "Stop Detection"))
-            self.ui.start_detection_btn.setStyleSheet(ButtonStyleEnum.RED)
+            self.ui.start_detection_btn.setStyleSheet(Stylesheet.RedButtonStyle)
 
             self.ui.functional_selection.setEnabled(False)
             self.ui.navigation_selection.setEnabled(False)
@@ -733,7 +698,7 @@ class MyAGVMainWindow(QMainWindow):
 
         self.functional_testing = None
         self.ui.start_detection_btn.setText(_translate("myAGV", "Start Detection"))
-        self.ui.start_detection_btn.setStyleSheet(ButtonStyleEnum.BLUE)
+        self.ui.start_detection_btn.setStyleSheet(Stylesheet.BlueButtonStyle)
 
         self.ui.functional_selection.setEnabled(True)
         self.ui.navigation_selection.setEnabled(True)
@@ -750,16 +715,13 @@ class MyAGVMainWindow(QMainWindow):
             self.ui.electricity_motor3,
             self.ui.electricity_motor4
         ]
-        motor_style_status = ButtonStyleEnum.LightGreen if motors_status.state else ButtonStyleEnum.LightGrey
-        self.ui.motor_status.setStyleSheet(motor_style_status)
+        self.ui.motor_status.setEnabled(motors_status.state)
         for el, val in enumerate(zip(ui_motors, motors_status.currents)):
             val[0].setText(str(val[1]))
 
     def on_battery_status_updated(self, battery_status: AGVBattery):
-        main_battery_style = ButtonStyleEnum.LightGreen if battery_status.status[0] else ButtonStyleEnum.LightGrey
-        sub_battery_style = ButtonStyleEnum.LightGreen if battery_status.status[1] else ButtonStyleEnum.LightGrey
-        self.ui.main_battery_state.setStyleSheet(main_battery_style)
-        self.ui.backup_battery_state.setStyleSheet(sub_battery_style)
+        self.ui.main_battery_state.setEnabled(battery_status.status[0])
+        self.ui.backup_battery_state.setEnabled(battery_status.status[1])
 
         self.ui.main_battery_voltage.setText(str(battery_status.voltages[0]))
         self.ui.backup_battery_voltage.setText(str(battery_status.voltages[1]))
@@ -782,9 +744,7 @@ class MyAGVMainWindow(QMainWindow):
         camera_status = utils.get_3d_camera_status()
         self._3d_camera_status = camera_status
         self.ui.ip_address_edit.setText(ipaddress)
-        self.ui.camera_3d_status.setStyleSheet(
-            ButtonStyleEnum.LightGreen if camera_status else ButtonStyleEnum.LightGrey
-        )
+        self.ui.camera_3d_status.setEnabled(camera_status)
 
     def closeEvent(self, event):
         GpioHandler.cleanup()
