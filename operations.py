@@ -49,7 +49,7 @@ class MyAGVMainWindow(QWidget):
         self.camera_3d_flag = False
         self.in_function_testing = False  # 功能检测运行中
 
-        self.basic_control_flag = False     # 记录当雷达关闭时， 是否还存在运行的ros节点
+        self.basic_control_flag = False   # 记录当雷达关闭时， 是否还存在运行的ros节点
         self.build_mapping_flag = False
         self.navigation_2d_flag = False
         self.navigation_3d_flag = False
@@ -104,7 +104,7 @@ class MyAGVMainWindow(QWidget):
         )
         console_handle = QConsoleHandler(formatter=formatter, level=LoggingConfiger.Console.level, parent=self)
         console_handle.outputted.connect(self.on_console_output)
-        self.ui.navigation_3d_button.setEnabled(False)
+        self.navigation_change_handle()
         self.console.addHandler(console_handle)
         self.setup_color_picker()
 
@@ -310,7 +310,10 @@ class MyAGVMainWindow(QWidget):
         else:
             self.ui.save_mapping_button.setEnabled(False)
 
-    def navigation_change_handle(self, current_text: str):
+    def navigation_change_handle(self, current_text: str = None):
+        if current_text is None:
+            current_text = self.ui.navigation_selection.currentText()
+
         if current_text in ("Single-point Navigation", "单点导航"):
             self.ui.navigation_3d_button.setEnabled(False)
         else:
@@ -481,11 +484,11 @@ class MyAGVMainWindow(QWidget):
             self.ui.open_build_map.setStyleSheet(Stylesheet.GreenButtonStyle)
 
             self.ui.build_map_selection.setEnabled(True)
-            self.ui.navigation_selection.setEnabled(False)  # 导航方式不可选取
+            self.ui.navigation_selection.setEnabled(True)  # 导航方式不可选取
 
             navigation_model = self.ui.navigation_selection.currentText()
-            if navigation_model in ("Single-point Navigation", "单点导航"):
-                self.ui.navigation_3d_button.setEnabled(True)  # 建图关闭后导航可用
+            navigation_enabled = navigation_model in ("Single-point Navigation", "单点导航")
+            self.ui.navigation_3d_button.setEnabled(not navigation_enabled)  # 建图关闭后导航可用
 
             self.ui.navigation_2d_button.setEnabled(True)
 
@@ -503,16 +506,27 @@ class MyAGVMainWindow(QWidget):
             if self.check_radar_running(running=False):
                 return
 
+            # if self.basic_control_flag is False:
+            #     return self.prompt.warning(
+            #         _translate("myAGV", "Warning"),
+            #         _translate("myAGV", "Keyboard Control not open!"),
+            #     )
+
+            if self.build_mapping_flag is True:
+                return self.prompt.warning(
+                    _translate("myAGV", "Warning"),
+                    _translate("myAGV", "Build map not close!")
+                )
+
             if self.camera_3d_flag is False:
                 return self.prompt.warning(
                     _translate("myAGV", "Warning"),
                     _translate("myAGV", "Please open 3D camera first!")
                 )
 
+            self.ui.navigation_selection.setEnabled(False)  # 导航选项不可选
             self.ui.build_map_selection.setEnabled(False)  # 建图下拉框不可选
-
             self.ui.open_build_map.setEnabled(False)  # 打开建图不可选
-
             self.ui.navigation_2d_button.setEnabled(False)  # 导航不可选
 
             self.ui.navigation_3d_button.setText(_translate("myAGV", "Close 3D Navigation"))
@@ -527,10 +541,9 @@ class MyAGVMainWindow(QWidget):
             self.navigation_3d_flag = True
 
         else:
+            self.ui.navigation_selection.setEnabled(True)  # 导航选项不可选
             self.ui.build_map_selection.setEnabled(True)
-
             self.ui.open_build_map.setEnabled(True)
-
             self.ui.navigation_2d_button.setEnabled(True)
 
             self.ui.navigation_3d_button.setText(_translate("myAGV", "3D Navigation"))
@@ -566,11 +579,11 @@ class MyAGVMainWindow(QWidget):
             if self.check_radar_running(running=False):
                 return
 
-            if self.basic_control_flag is False:
-                return self.prompt.warning(
-                    _translate("myAGV", "Warning"),
-                    _translate("myAGV", "Keyboard Control not open!"),
-                )
+            # if self.basic_control_flag is False:
+            #     return self.prompt.warning(
+            #         _translate("myAGV", "Warning"),
+            #         _translate("myAGV", "Keyboard Control not open!"),
+            #     )
 
             if self.build_mapping_flag is True:
                 return self.prompt.warning(
@@ -578,10 +591,10 @@ class MyAGVMainWindow(QWidget):
                     _translate("myAGV", "Build map not close!")
                 )
 
+            self.ui.navigation_selection.setEnabled(False)  # 导航选项不可选
             self.ui.build_map_selection.setEnabled(False)
-
             self.ui.open_build_map.setEnabled(False)
-
+            self.ui.navigation_3d_button.setEnabled(False)
             self.ui.save_mapping_button.setEnabled(False)
 
             self.ui.navigation_2d_button.setText(_translate("myAGV", "Close Navigation"))
@@ -598,10 +611,10 @@ class MyAGVMainWindow(QWidget):
                 Functional.open_singlepoint_navigation()
             self.navigation_2d_flag = True
         else:
+            self.ui.navigation_selection.setEnabled(True)
             self.ui.build_map_selection.setEnabled(True)
-
             self.ui.open_build_map.setEnabled(True)
-
+            self.ui.navigation_3d_button.setEnabled(True)
             self.ui.save_mapping_button.setEnabled(True)
 
             self.ui.navigation_2d_button.setText(_translate("myAGV", "2D Navigation"))
