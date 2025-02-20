@@ -55,6 +55,9 @@ else:
     raise Exception(" * Current platform is not supported")
 
 
+GPIO.setwarnings(False)
+
+
 class GpioHandler:
     IN = GPIO.IN
     OUT = GPIO.OUT
