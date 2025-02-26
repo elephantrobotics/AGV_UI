@@ -14,204 +14,209 @@
         <translation>中文</translation>
     </message>
     <message>
-        <location filename="../../core/translate.py" line="19"/>
+        <location filename="../../core/translate.py" line="20"/>
         <source>Keyboard Control</source>
         <translation>键盘控制</translation>
     </message>
     <message>
-        <location filename="../../core/translate.py" line="20"/>
+        <location filename="../../core/translate.py" line="21"/>
         <source>Joystick-Alphabet</source>
         <translation>手柄控制(字母)</translation>
     </message>
     <message>
-        <location filename="../../core/translate.py" line="21"/>
+        <location filename="../../core/translate.py" line="22"/>
         <source>Joystick-Number</source>
         <translation>手柄控制(数字)</translation>
     </message>
     <message>
-        <location filename="../../core/translate.py" line="39"/>
+        <location filename="../../core/translate.py" line="41"/>
         <source>Motor</source>
         <translation>电机</translation>
     </message>
     <message>
-        <location filename="../../core/translate.py" line="40"/>
+        <location filename="../../core/translate.py" line="42"/>
         <source>LED</source>
         <translation>LED</translation>
     </message>
     <message>
-        <location filename="../../core/translate.py" line="43"/>
+        <location filename="../../core/translate.py" line="45"/>
         <source>3D Camera</source>
         <translation>3D相机</translation>
     </message>
     <message>
-        <location filename="../../core/translate.py" line="41"/>
+        <location filename="../../core/translate.py" line="43"/>
         <source>Pump</source>
         <translation>吸泵</translation>
     </message>
     <message>
-        <location filename="../../core/translate.py" line="42"/>
+        <location filename="../../core/translate.py" line="44"/>
         <source>2D Camera</source>
         <translation>2D相机</translation>
     </message>
     <message>
-        <location filename="../../core/translate.py" line="44"/>
+        <location filename="../../core/translate.py" line="46"/>
         <source>Radar</source>
         <translation>雷达</translation>
     </message>
     <message>
-        <location filename="../../core/translate.py" line="47"/>
+        <location filename="../../core/translate.py" line="51"/>
         <source>Red</source>
         <translation>红色</translation>
     </message>
     <message>
-        <location filename="../../core/translate.py" line="48"/>
+        <location filename="../../core/translate.py" line="52"/>
         <source>Green</source>
         <translation>绿色</translation>
     </message>
     <message>
-        <location filename="../../core/translate.py" line="49"/>
+        <location filename="../../core/translate.py" line="53"/>
         <source>Blue</source>
         <translation>蓝色</translation>
     </message>
     <message>
-        <location filename="../../core/translate.py" line="50"/>
+        <location filename="../../core/translate.py" line="54"/>
         <source>Yellow</source>
         <translation>黄色</translation>
     </message>
     <message>
-        <location filename="../../core/translate.py" line="51"/>
+        <location filename="../../core/translate.py" line="55"/>
         <source>White</source>
         <translation>白色</translation>
     </message>
     <message>
-        <location filename="../../core/translate.py" line="52"/>
+        <location filename="../../core/translate.py" line="56"/>
         <source>Black</source>
         <translation>黑色</translation>
     </message>
     <message>
-        <location filename="../../core/translate.py" line="53"/>
+        <location filename="../../core/translate.py" line="57"/>
         <source>Gray</source>
         <translation>灰色</translation>
     </message>
     <message>
-        <location filename="../../core/translate.py" line="54"/>
+        <location filename="../../core/translate.py" line="58"/>
         <source>Orange</source>
         <translation>橙色</translation>
     </message>
     <message>
-        <location filename="../../core/translate.py" line="55"/>
+        <location filename="../../core/translate.py" line="59"/>
         <source>Cyan</source>
         <translation>青色</translation>
     </message>
     <message>
-        <location filename="../../core/translate.py" line="56"/>
+        <location filename="../../core/translate.py" line="60"/>
         <source>Purple</source>
         <translation>紫色</translation>
     </message>
     <message>
-        <location filename="../../core/translate.py" line="59"/>
+        <location filename="../../core/translate.py" line="65"/>
         <source>Go ahead</source>
         <translation>向前</translation>
     </message>
     <message>
-        <location filename="../../core/translate.py" line="60"/>
+        <location filename="../../core/translate.py" line="66"/>
         <source>Retreat</source>
         <translation>向后</translation>
     </message>
     <message>
-        <location filename="../../core/translate.py" line="61"/>
+        <location filename="../../core/translate.py" line="67"/>
         <source>Pan left</source>
         <translation>左平移</translation>
     </message>
     <message>
-        <location filename="../../core/translate.py" line="62"/>
+        <location filename="../../core/translate.py" line="68"/>
         <source>Pan Right</source>
         <translation>右平移</translation>
     </message>
     <message>
-        <location filename="../../core/translate.py" line="63"/>
+        <location filename="../../core/translate.py" line="69"/>
         <source>Clockwise rotation</source>
         <translation>顺时针旋转</translation>
     </message>
     <message>
-        <location filename="../../core/translate.py" line="64"/>
+        <location filename="../../core/translate.py" line="70"/>
         <source>Counterclockwise rotation</source>
         <translation>逆时针旋转</translation>
     </message>
     <message>
-        <location filename="../../core/translate.py" line="67"/>
+        <location filename="../../core/translate.py" line="75"/>
         <source>On</source>
         <translation>打开</translation>
     </message>
     <message>
-        <location filename="../../core/translate.py" line="68"/>
+        <location filename="../../core/translate.py" line="76"/>
         <source>Off</source>
         <translation>关闭</translation>
     </message>
     <message>
-        <location filename="../../core/translate.py" line="69"/>
+        <location filename="../../core/translate.py" line="77"/>
         <source>Open</source>
         <translation>打开</translation>
     </message>
     <message>
-        <location filename="../../core/translate.py" line="70"/>
+        <location filename="../../core/translate.py" line="78"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
     <message>
-        <location filename="../../core/translate.py" line="71"/>
+        <location filename="../../core/translate.py" line="79"/>
         <source>Connect</source>
         <translation>连接</translation>
     </message>
     <message>
-        <location filename="../../core/translate.py" line="72"/>
+        <location filename="../../core/translate.py" line="80"/>
         <source>Disconnect</source>
         <translation>断开连接</translation>
     </message>
     <message>
-        <location filename="../../core/translate.py" line="73"/>
+        <location filename="../../core/translate.py" line="81"/>
         <source>Start</source>
         <translation>开始</translation>
     </message>
     <message>
-        <location filename="../../core/translate.py" line="74"/>
+        <location filename="../../core/translate.py" line="82"/>
         <source>Stop</source>
         <translation>停止</translation>
     </message>
     <message>
-        <location filename="../../core/translate.py" line="75"/>
+        <location filename="../../core/translate.py" line="83"/>
         <source>Pause</source>
         <translation>暂定</translation>
     </message>
     <message>
-        <location filename="../../core/translate.py" line="76"/>
+        <location filename="../../core/translate.py" line="84"/>
         <source>Resume</source>
         <translation>恢复</translation>
     </message>
     <message>
-        <location filename="../../core/translate.py" line="77"/>
+        <location filename="../../core/translate.py" line="85"/>
         <source>Finish</source>
         <translation>完成</translation>
     </message>
     <message>
-        <location filename="../../core/translate.py" line="78"/>
+        <location filename="../../core/translate.py" line="86"/>
         <source>Success</source>
         <translation>成功</translation>
     </message>
     <message>
-        <location filename="../../core/translate.py" line="79"/>
+        <location filename="../../core/translate.py" line="87"/>
         <source>Fail</source>
         <translation>失败</translation>
     </message>
     <message>
-        <location filename="../../core/translate.py" line="82"/>
+        <location filename="../../core/translate.py" line="92"/>
         <source>testing</source>
         <translation>测试</translation>
     </message>
     <message>
-        <location filename="../../core/translate.py" line="83"/>
+        <location filename="../../core/translate.py" line="93"/>
         <source>camera open failed</source>
         <translation>相机打开失败</translation>
+    </message>
+    <message>
+        <location filename="../../core/translate.py" line="94"/>
+        <source>camera open success</source>
+        <translation>相机打开成功</translation>
     </message>
 </context>
 <context>
@@ -420,177 +425,177 @@
 <context>
     <name>myAGV</name>
     <message>
-        <location filename="../../operations.py" line="150"/>
+        <location filename="../../operations.py" line="156"/>
         <source>Gmapping</source>
         <translation>Gmapping</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="151"/>
+        <location filename="../../operations.py" line="157"/>
         <source>3D Mapping</source>
         <translation>3DMapping</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="490"/>
+        <location filename="../../operations.py" line="503"/>
         <source>OFF</source>
         <translation>关闭</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="773"/>
+        <location filename="../../operations.py" line="786"/>
         <source>Warning</source>
         <translation>Warning</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="773"/>
+        <location filename="../../operations.py" line="786"/>
         <source>Please turn off the radar before using this function.</source>
         <translation>使用此功能前请关闭雷达.</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="294"/>
+        <location filename="../../operations.py" line="289"/>
         <source>Motor Restore</source>
         <translation>堵转恢复</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="327"/>
+        <location filename="../../operations.py" line="325"/>
         <source>Start Detection</source>
         <translation>开始检测</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="354"/>
+        <location filename="../../operations.py" line="352"/>
         <source>Please stop the detection before using the led.</source>
         <translation>使用此功能前请关闭雷达.</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="524"/>
+        <location filename="../../operations.py" line="537"/>
         <source>ON</source>
         <translation>打开</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="427"/>
+        <location filename="../../operations.py" line="440"/>
         <source>Radar open...</source>
         <translation>雷达打开中...</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="444"/>
+        <location filename="../../operations.py" line="457"/>
         <source>Other functions are running.</source>
         <translation>其他功能在运行.</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="457"/>
+        <location filename="../../operations.py" line="470"/>
         <source>close radar</source>
         <translation>关闭雷达</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="721"/>
+        <location filename="../../operations.py" line="734"/>
         <source>Radar not open!</source>
         <translation>雷达未打开!</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="498"/>
+        <location filename="../../operations.py" line="511"/>
         <source>Keyboard open...</source>
         <translation>键盘控制打开...</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="506"/>
+        <location filename="../../operations.py" line="519"/>
         <source>Open joystick control...</source>
         <translation>打开手柄控制...</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="516"/>
+        <location filename="../../operations.py" line="529"/>
         <source>Open joystick control</source>
         <translation>打开手柄控制</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="530"/>
+        <location filename="../../operations.py" line="543"/>
         <source>Close keyboard control</source>
         <translation>关闭键盘控制</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="558"/>
+        <location filename="../../operations.py" line="571"/>
         <source>close joystick control</source>
         <translation>关闭手柄控制</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="619"/>
+        <location filename="../../operations.py" line="632"/>
         <source>Please turn on keyboard control before mapping.</source>
         <translation>请在建图之前打开键盘控制。</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="639"/>
+        <location filename="../../operations.py" line="652"/>
         <source>Close Build Map</source>
         <translation>关闭建图</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="643"/>
+        <location filename="../../operations.py" line="656"/>
         <source>Open Gmapping...</source>
         <translation>打开建图...</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="647"/>
+        <location filename="../../operations.py" line="660"/>
         <source>Open Cartographer...</source>
         <translation>打开Cartographer...</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="652"/>
+        <location filename="../../operations.py" line="665"/>
         <source>Open Build Map</source>
         <translation>打开建图</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="655"/>
+        <location filename="../../operations.py" line="668"/>
         <source>Close Gmapping</source>
         <translation>关闭建图</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="659"/>
+        <location filename="../../operations.py" line="672"/>
         <source>Close Cartographer</source>
         <translation>关闭Cartographer</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="692"/>
+        <location filename="../../operations.py" line="705"/>
         <source>Close 3D Navigation</source>
         <translation>关闭3D导航</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="695"/>
+        <location filename="../../operations.py" line="708"/>
         <source>Open 3D navigation</source>
         <translation>打开3D导航</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="708"/>
+        <location filename="../../operations.py" line="721"/>
         <source>3D Navigation</source>
         <translation>3D导航</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="711"/>
+        <location filename="../../operations.py" line="724"/>
         <source>Close 3D navigation</source>
         <translation>关闭3D导航</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="729"/>
+        <location filename="../../operations.py" line="742"/>
         <source>Keyboard Control not open!</source>
         <translation>键盘控制未打开!</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="743"/>
+        <location filename="../../operations.py" line="756"/>
         <source>Close Navigation</source>
         <translation>关闭导航</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="746"/>
+        <location filename="../../operations.py" line="759"/>
         <source>Open navigation</source>
         <translation>打开导航</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="760"/>
+        <location filename="../../operations.py" line="773"/>
         <source>Navigation</source>
         <translation>导航</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="762"/>
+        <location filename="../../operations.py" line="775"/>
         <source>Close navigation</source>
         <translation>关闭导航</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="781"/>
+        <location filename="../../operations.py" line="794"/>
         <source>Stop Detection</source>
         <translation>停止检测</translation>
     </message>

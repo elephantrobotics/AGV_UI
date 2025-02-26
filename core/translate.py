@@ -91,6 +91,7 @@ class _Other:
     def __init__(self):
         self.Testing = _translate("Communal", "testing")
         self.CameraOpenFailed = _translate("Communal", "camera open failed")
+        self.CameraOpenSuccess = _translate("Communal", "camera open success")
 
 
 class Translate:

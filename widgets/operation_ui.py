@@ -678,7 +678,7 @@ class Ui_Operation(object):
 
     def retranslateUi(self, Operation):
         _translate = QtCore.QCoreApplication.translate
-        Operation.setWindowTitle(_translate("Operation", "MainWindow"))
+        Operation.setWindowTitle(_translate("Operation", "MYAGV Testtool"))
         self.title.setText(_translate("Operation", "myAGV"))
         self.label_language.setText(_translate("Operation", "language"))
         self.languageSelection.setItemText(0, _translate("Operation", "English"))

@@ -71,25 +71,11 @@ class AgvMotorAging(QThread):
         func(speed=speed, timeout=timeout)
         self.aging_notification(direction, AGVStateEnum.FINISHED, timeout=timeout)
 
-    def get_battery_info(self):
-        info = None
-        while info is None:
-            try:
-                info = self.agv.get_battery_info()
-            except Exception as e:
-                info = None
-                print(e)
-            time.sleep(0.3)
-        return info
-
     def run(self):
         difference = []
         try:
             self.agv.stop()
-            _, *before_aging_vol = self.get_battery_info()
             self.motor_movement_testing(timeout=self.timeout, is_aging=True)
-            _, *after_aging_vol = self.get_battery_info()
-            difference = [abs(after - before) for after, before in zip(after_aging_vol, before_aging_vol)]
         except Exception as e:
             print(e)
             print(traceback.format_exc())

@@ -18,6 +18,7 @@ class RealtimeCameraThread(QThread):
         self.__timeout = timeout
         self.__capture = cv2.VideoCapture(GlobalVar.camera2D_pipline)
         self.__capture.set(cv2.CAP_PROP_FPS, 30)
+        self.__is_opened = False
 
     def set_size(self, size: QSize):
         self.__size = size
@@ -27,11 +28,13 @@ class RealtimeCameraThread(QThread):
 
     @property
     def is_opened(self):
-        return self.__capture.isOpened()
+        return self.__is_opened
 
     def run(self):
         start_time = time.time()
-        is_opened = self.is_opened
+        is_opened = self.__capture.isOpened()
+        print("camera opened: ", is_opened)
+        self.__is_opened = is_opened
         while time.time() - start_time < 10 and is_opened:
             ret, frame = self.__capture.read()
             if self.__running is False:

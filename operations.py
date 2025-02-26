@@ -5,6 +5,7 @@ import sys
 import threading
 import time
 import json
+import traceback
 import typing as T
 from PyQt5.QtCore import QCoreApplication, QTranslator, QTimer
 from PyQt5.QtWidgets import QWidget, QApplication, QMessageBox, QSizePolicy, QMainWindow
@@ -51,7 +52,7 @@ elif system_model.startswith("NVIDIA Jetson Nano Developer Kit"):
     comport = "/dev/ttyS0"
     suction_pump_pins = (19, 26)
     radar_control_pin = 20
-    GlobalVar.camera2D_pipline = core.gstreamer_pipeline(0)
+    GlobalVar.camera2D_pipline = core.gstreamer_pipeline(0, flip_method=2)
 
 else:
     raise Exception(" * Current platform is not supported")
@@ -94,7 +95,8 @@ class MyAGVMainWindow(QMainWindow):
         self.in_function_testing = False  # 功能检测运行中
         self.flag_all = False
         self.flag_build = False
-        self.battery_voltages = []
+        self.current_battery_voltage = (0, 0)
+        self.before_battery_voltage = (0, 0)
         self.functional_testing_mapping: T.Dict = {
             Translate.Functional.Led: AGVLEDTesting,
             Translate.Functional.Pump: AGVPUMPTesting,
@@ -110,6 +112,7 @@ class MyAGVMainWindow(QMainWindow):
 
     def setup_ui(self):
         self.ui.setupUi(self)
+        self.setWindowTitle("MyAGV Testtool V0.0.3")
         self.ui.lineEdit_RGB.setStyleSheet("background:None")
         self.ui.lineEdit_HEX.setStyleSheet("background:None")
         self.ui.color_palette.setVisible(False)
@@ -165,7 +168,7 @@ class MyAGVMainWindow(QMainWindow):
                 _translate("myAGV", "Please turn off the radar before using this function.")
             )
         else:
-            agv = MyAgv(port=GlobalVar.comport, baudrate=GlobalVar.baudrate, debug=GlobalVar.debug)
+            agv = MyAgv(GlobalVar.comport, GlobalVar.baudrate, GlobalVar.debug)
             self.agv_handler = AgvHandler(agv=agv, radar_pin=radar_control_pin, suction_pump_pins=suction_pump_pins)
             self.agv_handler.agv.stop()
         return not self.radar_flag
@@ -249,15 +252,20 @@ class MyAGVMainWindow(QMainWindow):
         self.agv_motor_aging = None
 
     def charge_btn(self):
-        BATTERY_TIMEOUT = 30 * 60 * 1000
-        self.battery_voltages = self.get_battery_voltage()
-        self.ui.Charge_btn.setStyleSheet(ButtonStyleEnum.GRAY)
-        self.ui.Charge_btn.setEnabled(False)
-        self.battery_voltage_timer = QTimer(self)
-        self.battery_voltage_timer.setSingleShot(True)  # 只触发一次
-        self.battery_voltage_timer.timeout.connect(self.voltage_timeout)
-        self.battery_voltage_timer.start(BATTERY_TIMEOUT)
-        self.console.echo(f"【电池测试】开始监听电池的电压，当前电压 => {self.battery_voltages}")
+        try:
+            BATTERY_TIMEOUT = 30 * 60 * 1000
+            cur_vol = self.current_battery_voltage
+            self.before_battery_voltage = cur_vol
+            self.ui.Charge_btn.setStyleSheet(ButtonStyleEnum.GRAY)
+            self.ui.Charge_btn.setEnabled(False)
+            self.battery_voltage_timer = QTimer(self)
+            self.battery_voltage_timer.setSingleShot(True)  # 只触发一次
+            self.battery_voltage_timer.timeout.connect(self.voltage_timeout)
+            self.battery_voltage_timer.start(BATTERY_TIMEOUT)
+            self.console.echo(f"【电池测试】开始监听电池的电压，当前电压 => {cur_vol}")
+        except Exception as e:
+            self.console.echo(f"【电池测试】监听电池电压失败，{e}")
+            print(traceback.format_exc())
 
     def update_btn(self):
         source_path = self.file_resource.get("bin", "pymycobot-3.6.6-py3-none-any.whl")
@@ -265,24 +273,13 @@ class MyAGVMainWindow(QMainWindow):
         threading.Thread(target=ShellAPI.run_in_terminal, args=(update_command, True)).start()
 
     def voltage_timeout(self):
-        battery_voltages = self.get_battery_voltage()
+        battery_voltages = self.current_battery_voltage
         self.console.echo(f"【电池测试】监听电池电压结束，当前电压 => {battery_voltages}")
-        diffs = [abs(after - before) for after, before in zip(self.battery_voltages, battery_voltages)]
+        diffs = [abs(after - before) for after, before in zip(self.before_battery_voltage, battery_voltages)]
         for idx, vol in enumerate(diffs, start=1):
             self.console.echo(f"电池【{idx}】前后电压差范围为{vol}V")
         self.ui.Charge_btn.setStyleSheet(ButtonStyleEnum.GREEN)
         self.ui.Charge_btn.setEnabled(True)
-
-    def get_battery_voltage(self) -> list:
-        info = None
-        while info is None:
-            try:
-                info = self.agv_handler.agv.get_battery_info()
-            except Exception as e:
-                info = None
-                print(e)
-            time.sleep(0.3)
-        return info[1:]
 
     def restore_btn(self):
         self.console.echo(_translate("myAGV", "Motor Restore"))
@@ -309,8 +306,11 @@ class MyAGVMainWindow(QMainWindow):
     def on_functional_finished(self, test_name, is_stop=False):
         if is_stop is True:
             self.console.echo(Translate.State.Stop, test_name, Translate.Other.Testing)
-        elif isinstance(self.functional_testing, AGVCameraWidget) and not self.functional_testing.opened():
-            self.console.echo(Translate.State.Fail, Translate.Other.CameraOpenFailed)
+        elif isinstance(self.functional_testing, AGVCameraWidget):
+            if self.functional_testing.opened():
+                self.console.echo(Translate.State.Success, Translate.Other.CameraOpenSuccess)
+            else:
+                self.console.echo(Translate.State.Fail, Translate.Other.CameraOpenFailed)
         else:
             self.console.echo(Translate.State.Finish, test_name, Translate.Other.Testing)
 
@@ -816,6 +816,7 @@ class MyAGVMainWindow(QMainWindow):
     def status_detecting(self):
 
         def voltage_set(vol_1, vol_2):
+            self.current_battery_voltage = (vol_1, vol_2)
             self.ui.lineEdit_voltage.setText(str(vol_1))
             self.ui.lineEdit_voltage_backup.setText(str(vol_2))
 
