@@ -757,7 +757,12 @@ class MyAGVMainWindow(QWidget):
             else:
                 self.console.error(_translate("MyAGV", "The motor is blocked"))
 
-            self.console.error(f"Please check whether the motor is blocked")
+            # 请检查电机编码器是否异常！
+            self.console.warning(_translate("MyAGV", "Please check whether the motor encoder is abnormal!"))
+            # 请检查电机通讯线是否正常！
+            self.console.warning(_translate("MyAGV", "Please check whether the motor communication line is normal!"))
+            # 如果以上都没有异常, 则需要更换电机！
+            self.console.warning(_translate("MyAGV", "If none of the above is abnormal, the motor needs to be replaced!"))
 
         print(f"{motors_status.encoder_states = }")
         for motor_id, encoder_state in enumerate(motors_status.encoder_states, start=1):
@@ -774,7 +779,7 @@ class MyAGVMainWindow(QWidget):
                 self.console.error(_translate("MyAGV", "The encoder of the lower right motor is abnormal"))
             else:
                 self.console.error(_translate("MyAGV", "The encoder of the motor is abnormal"))
-            self.console.error(f"Please check whether the communication line is normal")
+            self.console.warning(_translate("MyAGV", "Please check whether the motor communication line is normal!"))
 
     def on_battery_status_updated(self, battery_status: AGVBattery):
         self.ui.main_battery_state.setEnabled(battery_status.status[0])

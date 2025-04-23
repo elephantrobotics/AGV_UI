@@ -227,72 +227,72 @@
         <translation>电机堵转</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="768"/>
+        <location filename="../../operations.py" line="773"/>
         <source>The encoder of the upper left motor is abnormal</source>
         <translation>左上角电机编码器异常</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="770"/>
+        <location filename="../../operations.py" line="775"/>
         <source>The encoder of the upper right motor is abnormal</source>
         <translation>右上角电机编码器异常</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="772"/>
+        <location filename="../../operations.py" line="777"/>
         <source>The encoder of the lower left motor is abnormal</source>
         <translation>左下角电机编码器异常</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="774"/>
+        <location filename="../../operations.py" line="779"/>
         <source>The encoder of the lower right motor is abnormal</source>
         <translation>右下角电机编码器异常</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="776"/>
+        <location filename="../../operations.py" line="781"/>
         <source>The encoder of the motor is abnormal</source>
         <translation>电机编码器异常</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="809"/>
+        <location filename="../../operations.py" line="814"/>
         <source>Motor persistent aging is running, do you want to stop it?</source>
         <translation>电机持续老化正在运行，是否要停止？</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="815"/>
+        <location filename="../../operations.py" line="820"/>
         <source>Motor Persistent Aging Stopped</source>
         <translation>运动持续老化停止</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="818"/>
+        <location filename="../../operations.py" line="823"/>
         <source>Cancel Stop Motor Persistent Aging</source>
         <translation>取消停止电机持续老化</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="823"/>
+        <location filename="../../operations.py" line="828"/>
         <source>Start Motor Persistent Aging</source>
         <translation>启动电机持续老化</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="829"/>
+        <location filename="../../operations.py" line="834"/>
         <source>Stop Aging</source>
         <translation>停止老化</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="841"/>
+        <location filename="../../operations.py" line="845"/>
         <source>The AGV has finished moving forward</source>
         <translation>AGV 已完成前进</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="850"/>
+        <location filename="../../operations.py" line="853"/>
         <source>The AGV has finished moving backward</source>
         <translation>AGV 已完成后退</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="858"/>
+        <location filename="../../operations.py" line="860"/>
         <source>The AGV has finished moving left</source>
         <translation>AGV 已完成左移动</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="866"/>
+        <location filename="../../operations.py" line="867"/>
         <source>The AGV has finished moving right</source>
         <translation>AGV 已完成右移动</translation>
     </message>
@@ -302,42 +302,42 @@
         <translation>AGV已完成顺时针旋转</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="882"/>
+        <location filename="../../operations.py" line="881"/>
         <source>The AGV has finished counterclockwise rotation</source>
         <translation>AGV已完成逆时针旋转</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="885"/>
+        <location filename="../../operations.py" line="884"/>
         <source>Motor Persistent Aging Finished</source>
         <translation>电机持续老化完成</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="889"/>
+        <location filename="../../operations.py" line="888"/>
         <source>Start Aging</source>
         <translation>开始老化</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="836"/>
+        <location filename="../../operations.py" line="841"/>
         <source>The AGV starts to move forward, duration:</source>
         <translation>AGV开始前进，持续时间：</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="845"/>
+        <location filename="../../operations.py" line="849"/>
         <source>The AGV starts to move backward, duration:</source>
         <translation>AGV开始后退，持续时间：</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="853"/>
+        <location filename="../../operations.py" line="856"/>
         <source>The AGV starts to move left, duration:</source>
         <translation>AGV开始左移动，持续时间：</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="861"/>
+        <location filename="../../operations.py" line="863"/>
         <source>The AGV starts to move right, duration:</source>
         <translation>AGV开始向右移动，持续时间：</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="869"/>
+        <location filename="../../operations.py" line="870"/>
         <source>The AGV starts to clockwise rotation, duration:</source>
         <translation>AGV开始顺时针旋转，持续时间：</translation>
     </message>
@@ -345,6 +345,21 @@
         <location filename="../../operations.py" line="877"/>
         <source>The AGV starts to counterclockwise rotation, duration:</source>
         <translation>AGV开始逆时针旋转，持续时间:</translation>
+    </message>
+    <message>
+        <location filename="../../operations.py" line="761"/>
+        <source>Please check whether the motor encoder is abnormal!</source>
+        <translation>请检查电机编码器是否异常！</translation>
+    </message>
+    <message>
+        <location filename="../../operations.py" line="782"/>
+        <source>Please check whether the motor communication line is normal!</source>
+        <translation>请检查电机通讯线是否正常！</translation>
+    </message>
+    <message>
+        <location filename="../../operations.py" line="765"/>
+        <source>If none of the above is abnormal, the motor needs to be replaced!</source>
+        <translation>如果以上均无异常，则需要更换电机！</translation>
     </message>
 </context>
 <context>
