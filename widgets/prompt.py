@@ -16,3 +16,5 @@ class QPrompt(QObject):
     def warning(self, title: str, message: str):
         return QMessageBox.warning(self._parent, title, message, QMessageBox.Ok)
 
+    def question(self, title: str, message: str):
+        return QMessageBox.question(self._parent, title, message, QMessageBox.Yes | QMessageBox.No) == QMessageBox.Yes

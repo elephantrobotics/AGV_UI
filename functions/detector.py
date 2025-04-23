@@ -20,6 +20,8 @@ class AGVBattery:
 class AGVMotor:
     state: bool = False
     currents: T.List[float] = dataclasses.field(default_factory=lambda: [0.0, 0.0, 0.0, 0.0])
+    stall_states: T.List[int] = dataclasses.field(default_factory=lambda: [0, 0, 0, 0])
+    encoder_states: T.List[int] = dataclasses.field(default_factory=lambda: [0, 0, 0, 0])
 
 
 class MyAGVStatusDetector(QThread):
@@ -32,9 +34,6 @@ class MyAGVStatusDetector(QThread):
         self.__agv_handler = agv_handler
         self.__detector = True
         self.__interval = interval
-
-    def _dynamic_update_state(self):
-        self.updated.emit(self.agv_state)
 
     def stop_detector(self):
         self.__detector = False
@@ -54,7 +53,14 @@ class MyAGVStatusDetector(QThread):
 
         # 电机电流
         currents = data[12:16]
-        self.motor_stated.emit(AGVMotor(state=any(map(lambda c: c != 0, currents)), currents=currents))
+        self.motor_stated.emit(
+            AGVMotor(
+                state=any(map(lambda c: c != 0, currents)),
+                currents=currents,
+                stall_states=data[20:24],
+                encoder_states=data[24:28]
+            ),
+        )
 
         # 电池状态 【电池2接入、电池1接入、适配器接入、充电桩接入、电池2充电灯， 电池1充电灯】
         # main_battery_state, backup_battery_state, *_ = tuple(map(lambda n: int(n) == 1, data[9]))
@@ -90,6 +96,5 @@ class MyAGVStatusDetector(QThread):
                 pass
             except Exception as e:
                 print(f"@MyAGVStatusDetector::run exception: {e}")
-                print(traceback.format_exc())
             finally:
                 time.sleep(self.__interval)

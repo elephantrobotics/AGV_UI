@@ -82,15 +82,15 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
          <property name="geometry">
           <rect>
            <x>0</x>
-           <y>0</y>
-           <width>427</width>
-           <height>758</height>
+           <y>-79</y>
+           <width>410</width>
+           <height>837</height>
           </rect>
          </property>
          <property name="styleSheet">
           <string notr="true"/>
          </property>
-         <layout class="QVBoxLayout" name="verticalLayout_4" stretch="0,0,0,0,0,0,0">
+         <layout class="QVBoxLayout" name="verticalLayout_4" stretch="0,0,0,0,0,0,0,0">
           <property name="spacing">
            <number>11</number>
           </property>
@@ -353,136 +353,6 @@ QPushButton:disabled {
            </widget>
           </item>
           <item>
-           <widget class="QWidget" name="map_navigation_panel" native="true">
-            <property name="styleSheet">
-             <string notr="true">background-color: rgb(236, 240, 241);</string>
-            </property>
-            <layout class="QVBoxLayout" name="verticalLayout">
-             <item>
-              <widget class="QWidget" name="widget_9" native="true">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <layout class="QHBoxLayout" name="horizontalLayout_5">
-                <property name="topMargin">
-                 <number>0</number>
-                </property>
-                <property name="bottomMargin">
-                 <number>0</number>
-                </property>
-                <item>
-                 <widget class="QLabel" name="label_3">
-                  <property name="styleSheet">
-                   <string notr="true">font: 13pt &quot;Arial&quot;;</string>
-                  </property>
-                  <property name="text">
-                   <string>Map Navigation</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QComboBox" name="navigation_selection">
-                  <property name="styleSheet">
-                   <string notr="true">color:black;</string>
-                  </property>
-                  <item>
-                   <property name="text">
-                    <string>Multi-point Navigation</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>Single-point Navigation</string>
-                   </property>
-                  </item>
-                 </widget>
-                </item>
-               </layout>
-              </widget>
-             </item>
-             <item>
-              <widget class="QWidget" name="widget_2" native="true">
-               <layout class="QHBoxLayout" name="horizontalLayout_8">
-                <item>
-                 <widget class="QPushButton" name="navigation_2d_button">
-                  <property name="minimumSize">
-                   <size>
-                    <width>0</width>
-                    <height>30</height>
-                   </size>
-                  </property>
-                  <property name="styleSheet">
-                   <string notr="true">QPushButton {
-	background-color:rgb(41, 128, 185);
-	color: rgb(255, 255, 255);
-	border-radius: 10px;
-	border: 2px groove gray;
-	border-style: outset;
-	font: 75 9pt &quot;Arial&quot;;
-}
-QPushButton:disabled {
-	background-color:gray;
-	color: rgb(255, 255, 255);
-	border-radius: 7px;
-	border: 2px groove gray;
-	border-style: outset;
-	font: 75 9pt &quot;Arial&quot;;
-}
-</string>
-                  </property>
-                  <property name="text">
-                   <string>2D Navigation</string>
-                  </property>
-                  <property name="checkable">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="navigation_3d_button">
-                  <property name="minimumSize">
-                   <size>
-                    <width>0</width>
-                    <height>30</height>
-                   </size>
-                  </property>
-                  <property name="styleSheet">
-                   <string notr="true">QPushButton {
-	background-color:rgb(41, 128, 185);
-	color: rgb(255, 255, 255);
-	border-radius: 10px;
-	border: 2px groove gray;
-	border-style: outset;
-	font: 75 9pt &quot;Arial&quot;;
-}
-QPushButton:disabled {
-	background-color:gray;
-	color: rgb(255, 255, 255);
-	border-radius: 7px;
-	border: 2px groove gray;
-	border-style: outset;
-	font: 75 9pt &quot;Arial&quot;;
-}
-</string>
-                  </property>
-                  <property name="text">
-                   <string>3D Navigation</string>
-                  </property>
-                  <property name="checkable">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </widget>
-             </item>
-            </layout>
-           </widget>
-          </item>
-          <item>
            <widget class="QWidget" name="slam_mapping_panel" native="true">
             <property name="styleSheet">
              <string notr="true">background-color: rgb(236, 240, 241);</string>
@@ -619,6 +489,136 @@ QPushButton:disabled {
            </widget>
           </item>
           <item>
+           <widget class="QWidget" name="map_navigation_panel" native="true">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(236, 240, 241);</string>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout">
+             <item>
+              <widget class="QWidget" name="widget_9" native="true">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <layout class="QHBoxLayout" name="horizontalLayout_5">
+                <property name="topMargin">
+                 <number>0</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>0</number>
+                </property>
+                <item>
+                 <widget class="QLabel" name="label_3">
+                  <property name="styleSheet">
+                   <string notr="true">font: 13pt &quot;Arial&quot;;</string>
+                  </property>
+                  <property name="text">
+                   <string>Map Navigation</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QComboBox" name="navigation_selection">
+                  <property name="styleSheet">
+                   <string notr="true">color:black;</string>
+                  </property>
+                  <item>
+                   <property name="text">
+                    <string>Multi-point Navigation</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>Single-point Navigation</string>
+                   </property>
+                  </item>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item>
+              <widget class="QWidget" name="widget_2" native="true">
+               <layout class="QHBoxLayout" name="horizontalLayout_8">
+                <item>
+                 <widget class="QPushButton" name="navigation_2d_button">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>30</height>
+                   </size>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">QPushButton {
+	background-color:rgb(41, 128, 185);
+	color: rgb(255, 255, 255);
+	border-radius: 10px;
+	border: 2px groove gray;
+	border-style: outset;
+	font: 75 9pt &quot;Arial&quot;;
+}
+QPushButton:disabled {
+	background-color:gray;
+	color: rgb(255, 255, 255);
+	border-radius: 7px;
+	border: 2px groove gray;
+	border-style: outset;
+	font: 75 9pt &quot;Arial&quot;;
+}
+</string>
+                  </property>
+                  <property name="text">
+                   <string>2D Navigation</string>
+                  </property>
+                  <property name="checkable">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="navigation_3d_button">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>30</height>
+                   </size>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">QPushButton {
+	background-color:rgb(41, 128, 185);
+	color: rgb(255, 255, 255);
+	border-radius: 10px;
+	border: 2px groove gray;
+	border-style: outset;
+	font: 75 9pt &quot;Arial&quot;;
+}
+QPushButton:disabled {
+	background-color:gray;
+	color: rgb(255, 255, 255);
+	border-radius: 7px;
+	border: 2px groove gray;
+	border-style: outset;
+	font: 75 9pt &quot;Arial&quot;;
+}
+</string>
+                  </property>
+                  <property name="text">
+                   <string>3D Navigation</string>
+                  </property>
+                  <property name="checkable">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
            <widget class="QWidget" name="led_control_panel" native="true">
             <property name="styleSheet">
              <string notr="true">background-color: rgb(236, 240, 241);</string>
@@ -715,6 +715,72 @@ QPushButton:disabled {
                     </widget>
                    </item>
                   </layout>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="QWidget" name="motor_aging_panel" native="true">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(236, 240, 241);</string>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_7">
+             <item>
+              <widget class="QLabel" name="label_6">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="font">
+                <font>
+                 <family>Arial</family>
+                 <pointsize>13</pointsize>
+                </font>
+               </property>
+               <property name="text">
+                <string>Motor Aging</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QWidget" name="widget_6" native="true">
+               <layout class="QVBoxLayout" name="verticalLayout_12">
+                <item>
+                 <widget class="QPushButton" name="start_aging_btn">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>30</height>
+                   </size>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">QPushButton {
+	background-color: rgb(39, 174, 96);
+	color: rgb(255, 255, 255);
+	border-radius: 7px;
+	border: 2px groove gray;
+	border-style: outset;
+	font: 75 9pt &quot;Arial&quot;;
+}
+QPushButton:disabled {
+	background-color:gray;
+	color: rgb(255, 255, 255);
+	border-radius: 7px;
+	border: 2px groove gray;
+	border-style: outset;
+	font: 75 9pt &quot;Arial&quot;;
+}
+</string>
+                  </property>
+                  <property name="text">
+                   <string>Start Aging</string>
+                  </property>
                  </widget>
                 </item>
                </layout>

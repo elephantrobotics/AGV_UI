@@ -2,9 +2,11 @@
 # -*- coding: UTF-8 -*-
 import pymycobot
 from pymycobot import MyAgv
+from .singleton import Singleton
+
 
 if pymycobot.__version__ >= "3.8.0":
-    class AgvHandler(MyAgv):
+    class AgvHandler(MyAgv, metaclass=Singleton):
 
         def __init__(self, port: str, baudrate: int, debug=False):
             super().__init__(comport=port, baudrate=baudrate, debug=debug)
@@ -14,7 +16,7 @@ if pymycobot.__version__ >= "3.8.0":
             return self._serial_port.is_open
 
 else:
-    class AgvHandler(MyAgv):
+    class AgvHandler(MyAgv, metaclass=Singleton):
 
         def __init__(self, port: str, baudrate: int, debug=False):
             super().__init__(port, baudrate, debug)

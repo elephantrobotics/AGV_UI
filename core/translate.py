@@ -45,6 +45,7 @@ class _Direction:
         self.PanRight = _translate("Communal", "Pan Right")
         self.CRotation = _translate("Communal", "Clockwise rotation")
         self.CCRotation = _translate("Communal", "Counterclockwise rotation")
+        self.Stop = _translate("Communal", "Stop")
 
 
 class _State:

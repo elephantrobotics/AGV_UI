@@ -58,7 +58,7 @@ class Ui_Operation(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setObjectName("scrollArea")
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 427, 758))
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, -79, 410, 837))
         self.scrollAreaWidgetContents.setStyleSheet("")
         self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
         self.verticalLayout_4 = QtWidgets.QVBoxLayout(self.scrollAreaWidgetContents)
@@ -211,82 +211,6 @@ class Ui_Operation(object):
         self.horizontalLayout_13.addWidget(self.basic_control_button)
         self.verticalLayout_5.addWidget(self.widget_8)
         self.verticalLayout_4.addWidget(self.basic_control_panel)
-        self.map_navigation_panel = QtWidgets.QWidget(self.scrollAreaWidgetContents)
-        self.map_navigation_panel.setStyleSheet("background-color: rgb(236, 240, 241);")
-        self.map_navigation_panel.setObjectName("map_navigation_panel")
-        self.verticalLayout = QtWidgets.QVBoxLayout(self.map_navigation_panel)
-        self.verticalLayout.setObjectName("verticalLayout")
-        self.widget_9 = QtWidgets.QWidget(self.map_navigation_panel)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.widget_9.sizePolicy().hasHeightForWidth())
-        self.widget_9.setSizePolicy(sizePolicy)
-        self.widget_9.setObjectName("widget_9")
-        self.horizontalLayout_5 = QtWidgets.QHBoxLayout(self.widget_9)
-        self.horizontalLayout_5.setContentsMargins(-1, 0, -1, 0)
-        self.horizontalLayout_5.setObjectName("horizontalLayout_5")
-        self.label_3 = QtWidgets.QLabel(self.widget_9)
-        self.label_3.setStyleSheet("font: 13pt \"Arial\";")
-        self.label_3.setObjectName("label_3")
-        self.horizontalLayout_5.addWidget(self.label_3)
-        self.navigation_selection = QtWidgets.QComboBox(self.widget_9)
-        self.navigation_selection.setStyleSheet("color:black;")
-        self.navigation_selection.setObjectName("navigation_selection")
-        self.navigation_selection.addItem("")
-        self.navigation_selection.addItem("")
-        self.horizontalLayout_5.addWidget(self.navigation_selection)
-        self.verticalLayout.addWidget(self.widget_9)
-        self.widget_2 = QtWidgets.QWidget(self.map_navigation_panel)
-        self.widget_2.setObjectName("widget_2")
-        self.horizontalLayout_8 = QtWidgets.QHBoxLayout(self.widget_2)
-        self.horizontalLayout_8.setObjectName("horizontalLayout_8")
-        self.navigation_2d_button = QtWidgets.QPushButton(self.widget_2)
-        self.navigation_2d_button.setMinimumSize(QtCore.QSize(0, 30))
-        self.navigation_2d_button.setStyleSheet("QPushButton {\n"
-"    background-color:rgb(41, 128, 185);\n"
-"    color: rgb(255, 255, 255);\n"
-"    border-radius: 10px;\n"
-"    border: 2px groove gray;\n"
-"    border-style: outset;\n"
-"    font: 75 9pt \"Arial\";\n"
-"}\n"
-"QPushButton:disabled {\n"
-"    background-color:gray;\n"
-"    color: rgb(255, 255, 255);\n"
-"    border-radius: 7px;\n"
-"    border: 2px groove gray;\n"
-"    border-style: outset;\n"
-"    font: 75 9pt \"Arial\";\n"
-"}\n"
-"")
-        self.navigation_2d_button.setCheckable(True)
-        self.navigation_2d_button.setObjectName("navigation_2d_button")
-        self.horizontalLayout_8.addWidget(self.navigation_2d_button)
-        self.navigation_3d_button = QtWidgets.QPushButton(self.widget_2)
-        self.navigation_3d_button.setMinimumSize(QtCore.QSize(0, 30))
-        self.navigation_3d_button.setStyleSheet("QPushButton {\n"
-"    background-color:rgb(41, 128, 185);\n"
-"    color: rgb(255, 255, 255);\n"
-"    border-radius: 10px;\n"
-"    border: 2px groove gray;\n"
-"    border-style: outset;\n"
-"    font: 75 9pt \"Arial\";\n"
-"}\n"
-"QPushButton:disabled {\n"
-"    background-color:gray;\n"
-"    color: rgb(255, 255, 255);\n"
-"    border-radius: 7px;\n"
-"    border: 2px groove gray;\n"
-"    border-style: outset;\n"
-"    font: 75 9pt \"Arial\";\n"
-"}\n"
-"")
-        self.navigation_3d_button.setCheckable(True)
-        self.navigation_3d_button.setObjectName("navigation_3d_button")
-        self.horizontalLayout_8.addWidget(self.navigation_3d_button)
-        self.verticalLayout.addWidget(self.widget_2)
-        self.verticalLayout_4.addWidget(self.map_navigation_panel)
         self.slam_mapping_panel = QtWidgets.QWidget(self.scrollAreaWidgetContents)
         self.slam_mapping_panel.setStyleSheet("background-color: rgb(236, 240, 241);")
         self.slam_mapping_panel.setObjectName("slam_mapping_panel")
@@ -364,6 +288,82 @@ class Ui_Operation(object):
         self.horizontalLayout_6.addWidget(self.save_mapping_button)
         self.verticalLayout_2.addWidget(self.widget_10)
         self.verticalLayout_4.addWidget(self.slam_mapping_panel)
+        self.map_navigation_panel = QtWidgets.QWidget(self.scrollAreaWidgetContents)
+        self.map_navigation_panel.setStyleSheet("background-color: rgb(236, 240, 241);")
+        self.map_navigation_panel.setObjectName("map_navigation_panel")
+        self.verticalLayout = QtWidgets.QVBoxLayout(self.map_navigation_panel)
+        self.verticalLayout.setObjectName("verticalLayout")
+        self.widget_9 = QtWidgets.QWidget(self.map_navigation_panel)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.widget_9.sizePolicy().hasHeightForWidth())
+        self.widget_9.setSizePolicy(sizePolicy)
+        self.widget_9.setObjectName("widget_9")
+        self.horizontalLayout_5 = QtWidgets.QHBoxLayout(self.widget_9)
+        self.horizontalLayout_5.setContentsMargins(-1, 0, -1, 0)
+        self.horizontalLayout_5.setObjectName("horizontalLayout_5")
+        self.label_3 = QtWidgets.QLabel(self.widget_9)
+        self.label_3.setStyleSheet("font: 13pt \"Arial\";")
+        self.label_3.setObjectName("label_3")
+        self.horizontalLayout_5.addWidget(self.label_3)
+        self.navigation_selection = QtWidgets.QComboBox(self.widget_9)
+        self.navigation_selection.setStyleSheet("color:black;")
+        self.navigation_selection.setObjectName("navigation_selection")
+        self.navigation_selection.addItem("")
+        self.navigation_selection.addItem("")
+        self.horizontalLayout_5.addWidget(self.navigation_selection)
+        self.verticalLayout.addWidget(self.widget_9)
+        self.widget_2 = QtWidgets.QWidget(self.map_navigation_panel)
+        self.widget_2.setObjectName("widget_2")
+        self.horizontalLayout_8 = QtWidgets.QHBoxLayout(self.widget_2)
+        self.horizontalLayout_8.setObjectName("horizontalLayout_8")
+        self.navigation_2d_button = QtWidgets.QPushButton(self.widget_2)
+        self.navigation_2d_button.setMinimumSize(QtCore.QSize(0, 30))
+        self.navigation_2d_button.setStyleSheet("QPushButton {\n"
+"    background-color:rgb(41, 128, 185);\n"
+"    color: rgb(255, 255, 255);\n"
+"    border-radius: 10px;\n"
+"    border: 2px groove gray;\n"
+"    border-style: outset;\n"
+"    font: 75 9pt \"Arial\";\n"
+"}\n"
+"QPushButton:disabled {\n"
+"    background-color:gray;\n"
+"    color: rgb(255, 255, 255);\n"
+"    border-radius: 7px;\n"
+"    border: 2px groove gray;\n"
+"    border-style: outset;\n"
+"    font: 75 9pt \"Arial\";\n"
+"}\n"
+"")
+        self.navigation_2d_button.setCheckable(True)
+        self.navigation_2d_button.setObjectName("navigation_2d_button")
+        self.horizontalLayout_8.addWidget(self.navigation_2d_button)
+        self.navigation_3d_button = QtWidgets.QPushButton(self.widget_2)
+        self.navigation_3d_button.setMinimumSize(QtCore.QSize(0, 30))
+        self.navigation_3d_button.setStyleSheet("QPushButton {\n"
+"    background-color:rgb(41, 128, 185);\n"
+"    color: rgb(255, 255, 255);\n"
+"    border-radius: 10px;\n"
+"    border: 2px groove gray;\n"
+"    border-style: outset;\n"
+"    font: 75 9pt \"Arial\";\n"
+"}\n"
+"QPushButton:disabled {\n"
+"    background-color:gray;\n"
+"    color: rgb(255, 255, 255);\n"
+"    border-radius: 7px;\n"
+"    border: 2px groove gray;\n"
+"    border-style: outset;\n"
+"    font: 75 9pt \"Arial\";\n"
+"}\n"
+"")
+        self.navigation_3d_button.setCheckable(True)
+        self.navigation_3d_button.setObjectName("navigation_3d_button")
+        self.horizontalLayout_8.addWidget(self.navigation_3d_button)
+        self.verticalLayout.addWidget(self.widget_2)
+        self.verticalLayout_4.addWidget(self.map_navigation_panel)
         self.led_control_panel = QtWidgets.QWidget(self.scrollAreaWidgetContents)
         self.led_control_panel.setStyleSheet("background-color: rgb(236, 240, 241);")
         self.led_control_panel.setObjectName("led_control_panel")
@@ -422,6 +422,50 @@ class Ui_Operation(object):
         self.verticalLayout_10.addWidget(self.widget_19)
         self.verticalLayout_9.addWidget(self.widget_16)
         self.verticalLayout_4.addWidget(self.led_control_panel)
+        self.motor_aging_panel = QtWidgets.QWidget(self.scrollAreaWidgetContents)
+        self.motor_aging_panel.setStyleSheet("background-color: rgb(236, 240, 241);")
+        self.motor_aging_panel.setObjectName("motor_aging_panel")
+        self.verticalLayout_7 = QtWidgets.QVBoxLayout(self.motor_aging_panel)
+        self.verticalLayout_7.setObjectName("verticalLayout_7")
+        self.label_6 = QtWidgets.QLabel(self.motor_aging_panel)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.label_6.sizePolicy().hasHeightForWidth())
+        self.label_6.setSizePolicy(sizePolicy)
+        font = QtGui.QFont()
+        font.setFamily("Arial")
+        font.setPointSize(13)
+        self.label_6.setFont(font)
+        self.label_6.setObjectName("label_6")
+        self.verticalLayout_7.addWidget(self.label_6)
+        self.widget_6 = QtWidgets.QWidget(self.motor_aging_panel)
+        self.widget_6.setObjectName("widget_6")
+        self.verticalLayout_12 = QtWidgets.QVBoxLayout(self.widget_6)
+        self.verticalLayout_12.setObjectName("verticalLayout_12")
+        self.start_aging_btn = QtWidgets.QPushButton(self.widget_6)
+        self.start_aging_btn.setMinimumSize(QtCore.QSize(0, 30))
+        self.start_aging_btn.setStyleSheet("QPushButton {\n"
+"    background-color: rgb(39, 174, 96);\n"
+"    color: rgb(255, 255, 255);\n"
+"    border-radius: 7px;\n"
+"    border: 2px groove gray;\n"
+"    border-style: outset;\n"
+"    font: 75 9pt \"Arial\";\n"
+"}\n"
+"QPushButton:disabled {\n"
+"    background-color:gray;\n"
+"    color: rgb(255, 255, 255);\n"
+"    border-radius: 7px;\n"
+"    border: 2px groove gray;\n"
+"    border-style: outset;\n"
+"    font: 75 9pt \"Arial\";\n"
+"}\n"
+"")
+        self.start_aging_btn.setObjectName("start_aging_btn")
+        self.verticalLayout_12.addWidget(self.start_aging_btn)
+        self.verticalLayout_7.addWidget(self.widget_6)
+        self.verticalLayout_4.addWidget(self.motor_aging_panel)
         self.functional_testing_panel = QtWidgets.QWidget(self.scrollAreaWidgetContents)
         self.functional_testing_panel.setStyleSheet("background-color: rgb(236, 240, 241);")
         self.functional_testing_panel.setObjectName("functional_testing_panel")
@@ -495,7 +539,7 @@ class Ui_Operation(object):
 "    background-color:rgb(41, 128, 185);\n"
 "    color: rgb(255, 255, 255);\n"
 "    border-radius: 10px;\n"
-"    border: 2px groove gray;\n"
+"    border: 2px groove gray;\n" 
 "    border-style: outset;\n"
 "    font: 75 9pt \"Arial\";\n"
 "}\n"
@@ -883,21 +927,23 @@ class Ui_Operation(object):
         self.basic_control_selection.setItemText(1, _translate("Operation", "Joystick-Alphabet"))
         self.basic_control_selection.setItemText(2, _translate("Operation", "Joystick-Number"))
         self.basic_control_button.setText(_translate("Operation", "ON"))
-        self.label_3.setText(_translate("Operation", "Map Navigation"))
-        self.navigation_selection.setItemText(0, _translate("Operation", "Multi-point Navigation"))
-        self.navigation_selection.setItemText(1, _translate("Operation", "Single-point Navigation"))
-        self.navigation_2d_button.setText(_translate("Operation", "2D Navigation"))
-        self.navigation_3d_button.setText(_translate("Operation", "3D Navigation"))
         self.label_map_nav.setText(_translate("Operation", "Slam Mapping"))
         self.build_map_selection.setItemText(0, _translate("Operation", "GMapping"))
         self.build_map_selection.setItemText(1, _translate("Operation", "Rtabmap"))
         self.open_build_map.setText(_translate("Operation", "Open Build Map"))
         self.save_mapping_button.setText(_translate("Operation", "Save Map"))
+        self.label_3.setText(_translate("Operation", "Map Navigation"))
+        self.navigation_selection.setItemText(0, _translate("Operation", "Multi-point Navigation"))
+        self.navigation_selection.setItemText(1, _translate("Operation", "Single-point Navigation"))
+        self.navigation_2d_button.setText(_translate("Operation", "2D Navigation"))
+        self.navigation_3d_button.setText(_translate("Operation", "3D Navigation"))
         self.label_10.setText(_translate("Operation", "LED Control"))
         self.label_11.setText(_translate("Operation", "HEX"))
         self.label_12.setText(_translate("Operation", "RGB"))
         self.label_luminance.setText(_translate("Operation", "Luminance"))
         self.label_value.setText(_translate("Operation", "value"))
+        self.label_6.setText(_translate("Operation", "Motor Aging"))
+        self.start_aging_btn.setText(_translate("Operation", "Start Aging"))
         self.label_2.setText(_translate("Operation", "Functional testing"))
         self.restore_btn.setText(_translate("Operation", "Restore"))
         self.start_detection_btn.setText(_translate("Operation", "Start Detection"))
