@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" autoUpload="Always" serverName="er@192.168.1.252:22 password" remoteFilesAllowedToDisappearOnAutoupload="false">
+  <component name="PublishConfigData" autoUpload="Always" serverName="er@192.168.1.211:22 password (2)" remoteFilesAllowedToDisappearOnAutoupload="false">
     <serverData>
       <paths name="elephant@192.168.1.141:22 password">
         <serverdata>
@@ -24,6 +24,20 @@
         </serverdata>
       </paths>
       <paths name="elephant@192.168.1.214:22 password (3)">
+        <serverdata>
+          <mappings>
+            <mapping local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="elephant@192.168.1.247:22 password">
+        <serverdata>
+          <mappings>
+            <mapping local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="elephant@192.168.1.43:22 password">
         <serverdata>
           <mappings>
             <mapping local="$PROJECT_DIR$" web="/" />
@@ -170,6 +184,27 @@
           </mappings>
         </serverdata>
       </paths>
+      <paths name="er@192.168.1.211:22 password">
+        <serverdata>
+          <mappings>
+            <mapping local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="er@192.168.1.211:22 password (2)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/home/er/AGV_UI" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="er@192.168.1.212:22 password">
+        <serverdata>
+          <mappings>
+            <mapping local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
       <paths name="er@192.168.1.213:22 password">
         <serverdata>
           <mappings>
@@ -254,6 +289,20 @@
           </mappings>
         </serverdata>
       </paths>
+      <paths name="er@192.168.123.45:22 password">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/home/er/AGV_UI" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="er@192.168.123.45:22 password (2)">
+        <serverdata>
+          <mappings>
+            <mapping local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
       <paths name="er@192.168.14.135:22 password">
         <serverdata>
           <mappings>
@@ -332,6 +381,13 @@
         </serverdata>
       </paths>
       <paths name="sunrise@192.168.1.246:22 password (2)">
+        <serverdata>
+          <mappings>
+            <mapping local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="sunrise@192.168.1.250:22 password">
         <serverdata>
           <mappings>
             <mapping local="$PROJECT_DIR$" web="/" />

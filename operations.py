@@ -13,19 +13,20 @@ from functions import Functional
 from functions.detector import MyAGVStatusDetector, AGVMotor, AGVBattery
 from functions.functional import FunctionalBaseTesting, AGVMotorTesting, AGVLEDTesting, AGVPUMPTesting
 from functions.ros_subscribe import MoveBaseStatusSubscriber, GoalStatus
-from functions.aging import AgvMotorPersistentAging, AgingDirectionFlag
+from functions.aging import AgvMotorPersistentAging, AgingDirectionFlag, AgingState, AgingStateFlag
 
-from core import GlobalVar, GpioHandler, Command, utils
+from core import GlobalVar, GpioHandler, Command, utils, System
 from core.handler import AgvHandler
 from core.stylesheet import Stylesheet
 from core.resource import FileResource
 from core.console import QConsoleHandler
 from core.translate import Translate
 
-from config import LoggingConfiger
+from config import LoggingConfiger, __version__
 
 from widgets.operation_ui import Ui_Operation as OperationUI
 from widgets.color_picker import ColorPickerWidget
+from widgets.button import SwitchButton
 from widgets.camera import AGVCameraWidget
 from widgets.prompt import QPrompt
 
@@ -41,6 +42,7 @@ class MyAGVMainWindow(QWidget):
         super().__init__()
         self.ui = OperationUI()
         self.color_picker: T.Optional[ColorPickerWidget] = None
+        self.led_mode_toggle_btn: T.Optional[SwitchButton] = None
         self.agv_handler: T.Optional[AgvHandler] = None
         self.functional_testing: T.Optional[FunctionalBaseTesting, AGVCameraWidget] = None
         self.agv_status_detector: T.Optional[MyAGVStatusDetector] = None
@@ -48,6 +50,10 @@ class MyAGVMainWindow(QWidget):
         self.agv_motor_persistent_aging: T.Optional[AgvMotorPersistentAging] = None
 
         # flag
+        self.is_diy_mode = False        # LED 自定义模式
+        self.is_motor_stalled = False   # 电机堵转
+        self.is_motor_encoder_abnormal = False  # 电机编码器异常
+
         self._3d_camera_status = False
         self.camera_3d_flag = False
         self.in_function_testing = False  # 功能检测运行中
@@ -68,7 +74,7 @@ class MyAGVMainWindow(QWidget):
         }
 
         # handler
-        self.led_default = (255, 0, 0)  # red light
+        self.led_default = (255, 255, 255)
         self._app = QApplication.instance()
         self.translator = QTranslator(self)
         self.file_resource = FileResource('assets')
@@ -90,7 +96,6 @@ class MyAGVMainWindow(QWidget):
 
     def setup_ui(self):
         self.ui.setupUi(self)
-
         # Displayed in the middle of the screen
         size = self.geometry()
         screen = QDesktopWidget().screenGeometry()
@@ -110,28 +115,65 @@ class MyAGVMainWindow(QWidget):
         )
         console_handle = QConsoleHandler(formatter=formatter, level=LoggingConfiger.Console.level, parent=self)
         console_handle.outputted.connect(self.on_console_output)
-        self.navigation_change_handle()
         self.console.addHandler(console_handle)
+
+        self.navigation_change_handle()
         self.setup_color_picker()
+        self.setup_color_button()
+
+    def setup_color_button(self):
+        switch_button = SwitchButton(on_color="rgb(39, 174, 96)", off_color="#dadada")
+        self.ui.led_color_picker_panel.setEnabled(False)
+        self.ui.led_control_header.layout().addWidget(switch_button)
+        self.color_picker.setValue(0.5)
+        self.color_picker.setEnabled(True)
+        self.led_mode_toggle_btn = switch_button
+
+    def on_color_button_state_changed(self, switch_state: bool):
+        if not self.agv_handler.is_opened:
+            return
+        
+        print(f" # switch button state changed: {switch_state}")
+        led_mode = int(switch_state)
+        print(f" # toggle led mode: {led_mode}")
+        self.agv_handler.set_led_mode(led_mode)
+        self.ui.led_color_picker_panel.setEnabled(switch_state)
+
+        if switch_state is False:
+            print(f" # close diy mode")
+            self.color_picker.setValue(0.5)
+        else:
+            print(f" # open diy mode")
+            value = self.ui.color_brightness_slider.value()
+            self.color_picker.setValue(value / 510)
+
+            if self.check_radar_running(running=True):
+                return
+
+            self.set_color_picker_handle()
 
     def setup_color_picker(self):
         label_policy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
         label_policy.setHeightForWidth(True)
 
-        color = ColorPickerWidget(parent=self, color=self.led_default)
-        color.setSizePolicy(label_policy)
-        color.setMaximumWidth(200)
-        color.setMaximumHeight(150)
-        color.setMinimumWidth(200)
-        color.setMinimumHeight(150)
+        color_picker = ColorPickerWidget(parent=self, color=self.led_default)
+        color_picker.setMaximumWidth(200)
+        color_picker.setMaximumHeight(150)
+        color_picker.setMinimumWidth(200)
+        color_picker.setMinimumHeight(150)
+        color_picker.setSizePolicy(label_policy)
 
-        self.color_picker = color
-        self.ui.horizontalLayout_palette.insertWidget(0, color)
+        self.color_picker = color_picker
+        self.ui.horizontalLayout_palette.insertWidget(0, color_picker)
         self.ui.horizontalLayout_palette.setStretch(0, 2)
         self.ui.horizontalLayout_palette.setStretch(1, 0)
-        self.ui.color_brightness_slider.setRange(0, 511)
-        self.ui.color_brightness_slider.setValue(511)
-        self.ui.color_brightness_slider.valueChanged.connect((lambda x: color.setValue(x / 511)))
+        self.ui.color_brightness_slider.setRange(0, 510)
+        self.ui.color_brightness_slider.setValue(510)
+        self.ui.color_brightness_slider.valueChanged.connect((lambda x: color_picker.setValue(x / 510)))
+
+        color = self.color_picker.getColor()
+        self.ui.lineEdit_HEX.setText(color.name())
+        self.ui.lineEdit_RGB.setText(f"({color.red()}, {color.green()}, {color.blue()})")
 
     def retranslate_operation(self):
         Translate.reload()  # reload the translation file
@@ -154,6 +196,11 @@ class MyAGVMainWindow(QWidget):
         else:
             self.ui.radar_control_button.setText(_translate("myAGV", "ON"))
 
+        if self.agv_motor_persistent_aging is not None:
+            self.ui.start_aging_btn.setText(_translate("myAGV", "Stop Aging"))
+        else:
+            self.ui.start_aging_btn.setText(_translate("myAGV", "Start Aging"))
+
     def language_initial(self, language: T.Optional[str] = None):
         if language is None:
             language_filepath = self.file_resource.get('translation', 'language.json')
@@ -174,7 +221,9 @@ class MyAGVMainWindow(QWidget):
 
             self.retranslate_operation()
             self.ui.language_selection.setCurrentText("中文")
+
         self.ui.language_selection.currentTextChanged.connect(self.onLanguageChange)
+        self.setWindowTitle(f"AGV_UI v{__version__}")
 
     def onLanguageChange(self, language: str):
         language_filepath = self.file_resource.get('translation', 'language.json')
@@ -190,10 +239,10 @@ class MyAGVMainWindow(QWidget):
             is_running = self.is_radar_running
 
         if is_running is True:
-
-            self.ui.start_detection_btn.setEnabled(False)
-            self.ui.restore_btn.setEnabled(False)
             self.ui.radar_status.setEnabled(True)
+            self.ui.restore_btn.setEnabled(False)
+            self.ui.start_aging_btn.setEnabled(False)
+            self.ui.start_detection_btn.setEnabled(False)
             self.ui.radar_control_button.setText(_translate("myAGV", "OFF"))
             self.ui.radar_control_button.setStyleSheet(Stylesheet.RedButtonStyle)
 
@@ -203,14 +252,16 @@ class MyAGVMainWindow(QWidget):
             if self.agv_handler is not None:
                 self.agv_handler.close()
 
+            self.led_mode_toggle_btn.switch_state(False)
+            self.led_mode_toggle_btn.setEnabled(False)
         else:
             self.ui.restore_btn.setEnabled(True)
+            self.ui.start_aging_btn.setEnabled(True)
             self.ui.start_detection_btn.setEnabled(True)
+            self.led_mode_toggle_btn.setEnabled(True)
             self.ui.radar_control_button.setText(_translate("myAGV", "ON"))
             self.ui.radar_control_button.setStyleSheet(Stylesheet.GreenButtonStyle)
-
             self.connect_agv_handler()
-            self.set_color_picker_handle()
             self.status_detecting()
 
     def check_function_testing(self):
@@ -284,11 +335,12 @@ class MyAGVMainWindow(QWidget):
         self.ui.language_selection.currentTextChanged.connect(self.onLanguageChange)
         self.ui.start_detection_btn.clicked.connect(self.start_testing)
         self.ui.restore_btn.clicked.connect(self.servo_restore_handle)
-        self.color_picker.currentColorChanged.connect(self.set_color_picker_handle)
         self.ui.build_map_selection.currentTextChanged.connect(self.build_map_change_handle)
         self.ui.navigation_selection.currentTextChanged.connect(self.navigation_change_handle)
         self.ui.camera_3d_button.clicked.connect(self.camera_3D_handle)
         self.ui.start_aging_btn.clicked.connect(self.start_motor_persistent_aging)
+        self.color_picker.currentColorChanged.connect(self.set_color_picker_handle)
+        self.led_mode_toggle_btn.switched.connect(self.on_color_button_state_changed)
         self.timer.timeout.connect(self.system_information_query)
         self.timer.start(2000)
 
@@ -329,6 +381,7 @@ class MyAGVMainWindow(QWidget):
             self.ui.navigation_3d_button.setEnabled(True)
 
     def set_color_picker_handle(self, color: T.Optional[QColor] = None):
+        print(f" # set led color")
         if color is None:
             color = self.color_picker.selected_color
 
@@ -338,15 +391,19 @@ class MyAGVMainWindow(QWidget):
         if self.check_function_testing():  # in functional testing
             return
 
+        if not self.led_mode_toggle_btn.isChecked():
+            print(f" # led diy mode already off")
+            return
+
         red = color.red()
         green = color.green()
         blue = color.blue()
 
         color_hex = color.name()
-        self.agv_handler.set_led_mode(1)
         self.ui.lineEdit_HEX.setText(color_hex)
         self.ui.lineEdit_RGB.setText(f"({red}, {green}, {blue})")
         self.agv_handler.set_led(1, red, green, blue)
+        print(f" # {color_hex} ({red}, {green}, {blue})")
 
     def servo_restore_handle(self):
         self.console.info(_translate("myAGV", "Motor Restore"))
@@ -659,7 +716,6 @@ class MyAGVMainWindow(QWidget):
 
     def start_testing(self):
         if self.agv_motor_persistent_aging is not None:
-            self.console.warning(_translate("myAGV", "Warning"), _translate("myAGV", "Aging is running."))
             self.prompt.warning(_translate("myAGV", "Warning"), _translate("myAGV", "Aging is running."))
             return
 
@@ -706,15 +762,11 @@ class MyAGVMainWindow(QWidget):
 
     def on_functional_finished(self, test_name, is_stop=False):
         if is_stop is True:
-            self.console.info(self.format_language(
-                Translate.State.Stop, test_name, Translate.Other.Testing
-            ))
+            self.console.info(self.format_language(Translate.State.Stop, test_name, Translate.Other.Testing))
         elif isinstance(self.functional_testing, AGVCameraWidget) and self.functional_testing.opened():
             self.console.info(self.format_language(Translate.Other.CameraOpenFailed))
         else:
-            self.console.info(self.format_language(
-                Translate.State.Finish, test_name, Translate.Other.Testing
-            ))
+            self.console.info(self.format_language(Translate.State.Finish, test_name, Translate.Other.Testing))
 
         self.functional_testing = None
         self.ui.start_detection_btn.setText(_translate("myAGV", "Start Detection"))
@@ -741,7 +793,7 @@ class MyAGVMainWindow(QWidget):
         for display_panel, current in zip(ui_motors, map(str, motors_status.currents)):
             display_panel.setText(current)
 
-        print(f"{motors_status.stall_states = }")
+        self.is_motor_stalled = any(motors_status.stall_states)
         for motor_id, stall_state in enumerate(motors_status.stall_states, start=1):
             if stall_state == 0:
                 continue
@@ -757,29 +809,46 @@ class MyAGVMainWindow(QWidget):
             else:
                 self.console.error(_translate("MyAGV", "The motor is blocked"))
 
-            # 请检查电机编码器是否异常！
-            self.console.warning(_translate("MyAGV", "Please check whether the motor encoder is abnormal!"))
-            # 请检查电机通讯线是否正常！
-            self.console.warning(_translate("MyAGV", "Please check whether the motor communication line is normal!"))
-            # 如果以上都没有异常, 则需要更换电机！
-            self.console.warning(_translate("MyAGV", "If none of the above is abnormal, the motor needs to be replaced!"))
+        if self.is_motor_stalled:
+            # 请尝试恢复!
+            self.console.error(_translate("MyAGV", "Please try to recover!"))
 
-        print(f"{motors_status.encoder_states = }")
+            # 请检查电机编码器是否异常！
+            self.console.error(_translate("MyAGV", "Please check whether the motor encoder is abnormal!"))
+
+            if self.agv_motor_persistent_aging is not None:
+                title = _translate("MyAGV", "Warning")
+                # AGV 电机持续老化测试停止
+                message = _translate("MyAGV", "AGV motor persistent aging test is stopped")
+                self.console.error(message)
+                self.agv_motor_persistent_aging.stopped()
+                self.prompt.warning(title, message)
+
+        self.is_motor_encoder_abnormal = any(motors_status.encoder_states)
         for motor_id, encoder_state in enumerate(motors_status.encoder_states, start=1):
             if encoder_state == 0:
                 continue
 
             if motor_id == 1:
+                # 左上角电机编码器异常
                 self.console.error(_translate("MyAGV", "The encoder of the upper left motor is abnormal"))
+                # 请检查左上角的电机通讯线是否连接正常！
+                self.console.error(_translate("MyAGV", "Please check whether the motor communication cable in the upper left corner is connected normally!"))
             elif motor_id == 2:
+                # 右上角电机编码器异常
                 self.console.error(_translate("MyAGV", "The encoder of the upper right motor is abnormal"))
+                # 请检查右上角的电机通讯线是否连接正常！
+                self.console.error(_translate("MyAGV", "Please check whether the motor communication cable in the upper right corner is connected normally!"))
             elif motor_id == 3:
+                # 左下角电机编码器异常
                 self.console.error(_translate("MyAGV", "The encoder of the lower left motor is abnormal"))
+                # 请检查左下角的电机通讯线是否连接正常！
+                self.console.error(_translate("MyAGV", "Please check whether the motor communication cable in the lower left corner is connected normally!"))
             elif motor_id == 4:
+                # 右下角电机编码器异常
                 self.console.error(_translate("MyAGV", "The encoder of the lower right motor is abnormal"))
-            else:
-                self.console.error(_translate("MyAGV", "The encoder of the motor is abnormal"))
-            self.console.warning(_translate("MyAGV", "Please check whether the motor communication line is normal!"))
+                # 请检查右下角的电机通讯线是否连接正常！
+                self.console.error(_translate("MyAGV", "Please check whether the motor communication cable in the lower right corner is connected normally!"))
 
     def on_battery_status_updated(self, battery_status: AGVBattery):
         self.ui.main_battery_state.setEnabled(battery_status.status[0])
@@ -788,8 +857,8 @@ class MyAGVMainWindow(QWidget):
         self.ui.main_battery_voltage.setText(str(battery_status.voltages[0]))
         self.ui.backup_battery_voltage.setText(str(battery_status.voltages[1]))
 
-        self.ui.main_battery_power.setText(str(battery_status.powers[0]))
-        self.ui.backup_battery_power.setText(str(battery_status.powers[1]))
+        self.ui.main_battery_power.setText(f"{battery_status.powers[0]}%")
+        self.ui.backup_battery_power.setText(f"{battery_status.powers[1]}%")
 
     def on_version_updated(self, version: str):
         self.ui.firmware_version_edit.setText(version)
@@ -810,19 +879,39 @@ class MyAGVMainWindow(QWidget):
 
     def start_motor_persistent_aging(self):
         self.ui.start_aging_btn.setEnabled(False)
+
         if self.agv_motor_persistent_aging is not None:
             is_stopping = self.prompt.question(
                 title="MyAGV",
+                # 电机持续老化正在运行，您要停止吗？
                 message=_translate("MyAGV", "Motor persistent aging is running, do you want to stop it?")
             )
             if is_stopping is True:
-                self.agv_motor_persistent_aging.terminate()
-                self.console.info(_translate("MyAGV", "Motor Persistent Aging Stopped"))
+                self.ui.start_aging_btn.setEnabled(False)
+                self.agv_motor_persistent_aging.stopped()
+                # 确认停止电机持续老化
+                self.console.info(_translate("MyAGV", "Confirm that the stop motor continues to deteriorate"))
             else:
                 # 提示已取消停止老化
-                self.console.info(_translate("MyAGV", "Cancel Stop Motor Persistent Aging"))
+                # 取消停止电机持续老化
+                self.console.info(_translate("MyAGV", "Cancel the stop and the motor continues to age"))
                 self.ui.start_aging_btn.setEnabled(True)
             return
+
+        if self.check_radar_running(running=True):
+            self.ui.start_aging_btn.setEnabled(True)
+            return
+
+        if self.is_motor_stalled is True:
+            # 电机存在堵转, 请检查电机编码器是否正常
+            message = _translate(
+                "MyAGV",
+                "There is stalled rotor in the motor, please check whether the motor encoder is normal"
+            )
+            self.console.error(message)
+            self.prompt.warning(_translate("myAGV", "Warning"), message)
+            self.ui.start_aging_btn.setEnabled(True)
+            return False
 
         # 提示开始进行老化
         self.console.info(_translate("MyAGV", "Start Motor Persistent Aging"))
@@ -830,58 +919,91 @@ class MyAGVMainWindow(QWidget):
         self.agv_motor_persistent_aging.noticed.connect(self.on_motor_persistent_aging_noticed)
         self.agv_motor_persistent_aging.finished.connect(self.on_motor_persistent_aging_finished)
         self.agv_motor_persistent_aging.start()
+
         self.ui.start_aging_btn.setEnabled(True)
         self.ui.start_aging_btn.setText(_translate("MyAGV", "Stop Aging"))
         self.ui.start_aging_btn.setStyleSheet(Stylesheet.RedButtonStyle)
 
-    def on_motor_persistent_aging_noticed(self, direction_id: int, state: int, timeout: int):
-        if direction_id == AgingDirectionFlag.FORWARD:
-            # 提示AGV向前运动，持续 timeout 秒，状态为 state_name 显示为开始或结束
-            if state == 0:
-                self.console.info(
-                    _translate("MyAGV", "The AGV starts to move forward, duration:") + f" {timeout}s"
-                )
-            else:
-                self.console.info(_translate("MyAGV", "The AGV has finished moving forward"))
-        elif direction_id == AgingDirectionFlag.BACKWARD:
-            # 提示AGV向后运动，持续 timeout 秒，状态为 state_name 显示为开始或结束
-            if state == 0:
-                self.console.info(
-                    _translate("MyAGV", "The AGV starts to move backward, duration:") + f" {timeout}s"
-                )
-            else:
-                self.console.info(_translate("MyAGV", "The AGV has finished moving backward"))
-        elif direction_id == AgingDirectionFlag.PAN_LEFT:
-            if state == 0:
-                self.console.info(
-                    _translate("MyAGV", "The AGV starts to move left, duration:") + f"{timeout}s"
-                )
-            else:
-                self.console.info(_translate("MyAGV", "The AGV has finished moving left"))
-        elif direction_id == AgingDirectionFlag.PAN_RIGHT:
-            if state == 0:
-                self.console.info(
-                    _translate("MyAGV", "The AGV starts to move right, duration:") + f" {timeout}s"
-                )
-            else:
-                self.console.info(_translate("MyAGV", "The AGV has finished moving right"))
-        elif direction_id == AgingDirectionFlag.CLOCKWISE_ROTATION:
-            if state == 0:
-                self.console.info(
-                    _translate("MyAGV", "The AGV starts to clockwise rotation, duration:") + f" {timeout}s"
-                )
-            else:
-                self.console.info(_translate("MyAGV", "The AGV has finished clockwise rotation"))
-        elif direction_id == AgingDirectionFlag.COUNTERCLOCKWISE_ROTATION:
-            if state == 0:
-                self.console.info(
-                    _translate("MyAGV", "The AGV starts to counterclockwise rotation, duration:") + f" {timeout}s"
-                )
-            else:
-                self.console.info(_translate("MyAGV", "The AGV has finished counterclockwise rotation"))
+    @classmethod
+    def get_aging_prompt_message(cls, direction_flag: AgingDirectionFlag, state_flag: AgingStateFlag):
+        aging_prompt_message_table = {
+            AgingDirectionFlag.FORWARD: {
+                # AGV开始向前移动
+                AgingStateFlag.STARTUP: _translate("MyAGV", "The AGV starts to move forward"),
+                # AGV停止向前移动
+                AgingStateFlag.STOPPED: _translate("MyAGV", "The AGV stops moving forward"),
+                # AGV完成向前移动
+                AgingStateFlag.FINISHED: _translate("MyAGV", "The AGV completes its forward movement"),
+            },
+            AgingDirectionFlag.BACKWARD: {
+                # AGV开始向后移动
+                AgingStateFlag.STARTUP: _translate("MyAGV", "The AGV starts to move backward"),
+                # AGV停止向后移动
+                AgingStateFlag.STOPPED: _translate("MyAGV", "The AGV stops moving backward"),
+                # AGV完成向后移动
+                AgingStateFlag.FINISHED: _translate("MyAGV", "The AGV completes its backward movement"),
+            },
+            AgingDirectionFlag.PAN_LEFT: {
+                # AGV开始向左移动
+                AgingStateFlag.STARTUP: _translate("MyAGV", "The AGV starts to move left"),
+                # AGV停止向左移动
+                AgingStateFlag.STOPPED: _translate("MyAGV", "The AGV stops moving left"),
+                # AGV完成向左移动
+                AgingStateFlag.FINISHED: _translate("MyAGV", "The AGV completes its movement to the left"),
+            },
+            AgingDirectionFlag.PAN_RIGHT: {
+                # AGV开始向右移动
+                AgingStateFlag.STARTUP: _translate("MyAGV", "The AGV starts to move right"),
+                # AGV停止向右移动
+                AgingStateFlag.STOPPED: _translate("MyAGV", "The AGV stops moving right"),
+                # AGV完成向右移动
+                AgingStateFlag.FINISHED: _translate("MyAGV", "The AGV completes its movement to the right"),
+            },
+            AgingDirectionFlag.CLOCKWISE_ROTATION: {
+                # AGV开始顺时针旋转
+                AgingStateFlag.STARTUP: _translate("MyAGV", "The AGV starts to clockwise rotation"),
+                # AGV停止顺时针旋转
+                AgingStateFlag.STOPPED: _translate("MyAGV", "The AGV stops moving clockwise rotation"),
+                # AGV完成顺时针旋转
+                AgingStateFlag.FINISHED: _translate("MyAGV", "The AGV completes the clockwise rotation"),
+            },
+            AgingDirectionFlag.COUNTERCLOCKWISE_ROTATION: {
+                # AGV开始逆时针旋转
+                AgingStateFlag.STARTUP: _translate("MyAGV", "The AGV starts to counterclockwise rotation"),
+                # AGV停止逆时针旋转
+                AgingStateFlag.STOPPED: _translate("MyAGV", "The AGV has stopped counterclockwise rotation"),
+                # AGV完成逆时针旋转
+                AgingStateFlag.FINISHED: _translate("MyAGV", "The AGV completes the counterclockwise rotation"),
+            }
+        }
 
-    def on_motor_persistent_aging_finished(self):
-        self.console.info(_translate("MyAGV", "Motor Persistent Aging Finished"))
+        direction_message_table = aging_prompt_message_table.get(direction_flag, None)
+        if direction_message_table is None:
+            return _translate("MyAGV", "Unknown direction")
+
+        return direction_message_table.get(state_flag, _translate("MyAGV", "Unknown state"))
+
+    def on_motor_persistent_aging_noticed(self, aging_state: AgingState):
+        if aging_state.state_flag == AgingStateFlag.RUNNING:
+            aging_duration_text = _translate('MyAGV', 'Aging duration: ')
+            aging_progress_text = _translate('MyAGV', 'Aging progress: ')
+            aging_speed_text = _translate('MyAGV', 'Aging speed: ')
+
+            self.console.info(f"{aging_progress_text}{aging_state.progress:.2f}%")
+            self.console.info(f"{aging_duration_text}{aging_state.duration:.2f}s")
+            self.console.info(f"{aging_speed_text}{aging_state.speed:.2f}m/s")
+            return
+
+        message = self.get_aging_prompt_message(aging_state.direction_flag, aging_state.state_flag)
+        self.console.info(message)
+        return
+
+    def on_motor_persistent_aging_finished(self, aging_state: bool):
+        if aging_state is True:
+            self.console.info(_translate("MyAGV", "Motor Persistent Aging Finished"))
+        else:
+            self.console.info(_translate("MyAGV", "Motor Persistent Aging Stopped"))
+
         if not self.ui.start_aging_btn.isEnabled():
             self.ui.start_aging_btn.setEnabled(True)
 
@@ -893,12 +1015,19 @@ class MyAGVMainWindow(QWidget):
 
     def closeEvent(self, event):
         GpioHandler.cleanup()
+        if System.RASPBERRYPI.equal(GlobalVar.system_device_model):
+            GpioHandler.setmode(GpioHandler.BCM)
+            GpioHandler.setup(GlobalVar.radar_control_pin, GpioHandler.OUT)
+            GpioHandler.output(GlobalVar.radar_control_pin, GpioHandler.HIGH)
+
         if self.agv_status_detector is not None:
             self.agv_status_detector.stop_detector()
 
         if self.agv_motor_persistent_aging is not None:
             self.agv_motor_persistent_aging.terminate()
             self.agv_handler.stop()
+
+        print(" # exit")
         event.accept()
 
 

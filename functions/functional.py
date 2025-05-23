@@ -29,8 +29,7 @@ class FunctionalBaseTesting(QThread):
         except Exception as e:
             print(e)
             print(traceback.format_exc())
-        finally:
-            self.finished.emit(self.test_name, False)
+        self.finished.emit(self.test_name, False)
 
 
 class AGVLEDTesting(FunctionalBaseTesting):
@@ -86,11 +85,14 @@ class AGVMotorTesting(FunctionalBaseTesting):
             Translate.Direction.CCRotation: lambda: self.agv.counterclockwise_rotation(100, 8),
         }
 
+    def terminate(self):
+        self.agv.stop()
+        super().terminate()
+
     def do_testing(self):
         for direction, movement in self.direction_movement_table.items():
             self.emit_process(direction=direction)
             movement()
-            time.sleep(1)
             self.agv.stop()
             time.sleep(1)
         self.agv.stop()

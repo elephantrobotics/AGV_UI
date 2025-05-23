@@ -8,37 +8,36 @@ class Command:
 
     @classmethod
     def check_output(cls, command) -> str:
-        output = ''
+
         try:
             output = subprocess.check_output(command, shell=True)
         except subprocess.CalledProcessError as e:
             print(f"Command execution failed: {e}")
             traceback.print_exc()
-        finally:
-            if output:
-                return output.decode("utf-8").strip()
-            else:
-                return output
+            output = b''
+        return output.decode("utf-8").strip()
+
+    @classmethod
+    def run(cls, command, shell=True, in_terminal: bool = False, keep: bool = False):
+        if in_terminal is False:
+            return subprocess.Popen(command, shell=shell)
+
+        if keep:
+            command = f'gnome-terminal -- bash -c "{command}; exec bash"'
+        else:
+            command = f'gnome-terminal -- bash -c "{command};"'
+
+        return subprocess.Popen(command, shell=True)
 
     @classmethod
     def cat(cls, filepath):
         return cls.check_output(f"cat {filepath}")
 
     @classmethod
-    def run_in_terminal(cls, command, keep: bool = False):
-        print(f" * Running command in terminal: \r\n\t{command}\r\n")
-        if keep:
-            subprocess.Popen(f'gnome-terminal -- bash -c "{command}; exec bash"', shell=True)
-        else:
-            subprocess.Popen(f'gnome-terminal -- bash -c \"{command};\"', shell=True)
-
-    @classmethod
     def kill(cls, command):
-        command = "ps -ef | grep -E %s | grep -v 'grep' | awk '{print $2}' | xargs kill -2" % command
-        subprocess.run(command, shell=True)
+        cls.run("ps -ef | grep -E %s | grep -v 'grep' | awk '{print $2}' | xargs kill -2" % command, shell=True)
 
     @classmethod
     def alive(cls, command):
-        command = "ps -ef | grep -E %s | grep -v 'grep' | wc -l" % command
-        return int(cls.check_output(command)) > 0
+        return int(cls.check_output("ps -ef | grep -E %s | grep -v 'grep' | wc -l" % command)) > 0
 

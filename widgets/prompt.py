@@ -18,3 +18,9 @@ class QPrompt(QObject):
 
     def question(self, title: str, message: str):
         return QMessageBox.question(self._parent, title, message, QMessageBox.Yes | QMessageBox.No) == QMessageBox.Yes
+
+    def error(self, title: str, message: str):
+        return QMessageBox.critical(self._parent, title, message, QMessageBox.Ok)
+
+    def info(self, title: str, message: str):
+        return QMessageBox.information(self._parent, title, message, QMessageBox.Ok)

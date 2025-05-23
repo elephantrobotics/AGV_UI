@@ -82,7 +82,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
          <property name="geometry">
           <rect>
            <x>0</x>
-           <y>-79</y>
+           <y>0</y>
            <width>410</width>
            <height>837</height>
           </rect>
@@ -625,17 +625,35 @@ QPushButton:disabled {
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_9">
              <item>
-              <widget class="QLabel" name="label_10">
-               <property name="styleSheet">
-                <string notr="true">font: 13pt &quot;Arial&quot;;</string>
+              <widget class="QWidget" name="led_control_header" native="true">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
                </property>
-               <property name="text">
-                <string>LED Control</string>
-               </property>
+               <layout class="QHBoxLayout" name="horizontalLayout_29">
+                <property name="topMargin">
+                 <number>0</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>0</number>
+                </property>
+                <item>
+                 <widget class="QLabel" name="label_10">
+                  <property name="styleSheet">
+                   <string notr="true">font: 13pt &quot;Arial&quot;;</string>
+                  </property>
+                  <property name="text">
+                   <string>LED Control</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
               </widget>
              </item>
              <item>
-              <widget class="QWidget" name="widget_16" native="true">
+              <widget class="QWidget" name="led_color_picker_panel" native="true">
                <layout class="QVBoxLayout" name="verticalLayout_10">
                 <item>
                  <layout class="QHBoxLayout" name="horizontalLayout_palette">

@@ -30,26 +30,28 @@ if System.RASPBERRYPI.equal(CURRENT_SYSTEM_MODEL):
     import RPi.GPIO as GPIO
 
     class GlobalVar:
+        debug = False
         comport = "/dev/ttyAMA2"
         baudrate = 115200
         suction_pump_pins = (2, 3)
         radar_control_pin = 20
-        debug = False
         camera2D_pipline = 0
         camera3D_pipline = 0
+        system_device_model = CURRENT_SYSTEM_MODEL
 
 
 elif System.JETSON_NANO.equal(CURRENT_SYSTEM_MODEL):
     import Jetson.GPIO as GPIO
 
     class GlobalVar:
+        debug = False
         comport = "/dev/ttyS0"
         baudrate = 115200
         suction_pump_pins = (19, 26)    # 电磁阀引脚/电机引脚
         radar_control_pin = 20
-        debug = False
         camera2D_pipline = gstreamer_pipeline(sensor_id=0, flip_method=2)
         camera3D_pipline = 0
+        system_device_model = CURRENT_SYSTEM_MODEL
 
 else:
     raise Exception(" * Current platform is not supported")

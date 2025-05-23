@@ -19,8 +19,7 @@ class ColorPickerWidget(QWidget):
         self.v = self.selected_color.valueF()
         self.margin = margin
 
-        qsp = QSizePolicy(QSizePolicy.Preferred,
-                          QSizePolicy.Preferred)
+        qsp = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
         qsp.setHeightForWidth(True)
         self.setSizePolicy(qsp)
 

@@ -34,40 +34,41 @@ class MyAGVStatusDetector(QThread):
         self.__agv_handler = agv_handler
         self.__detector = True
         self.__interval = interval
+        self.__version = None
 
     def stop_detector(self):
         self.__detector = False
         self.motor_stated.emit(AGVMotor())
         self.battery_stated.emit(AGVBattery())
-        self.quit()
 
     @classmethod
     def calculate_amount_of_power(cls, voltage):
         """计算电池电量"""
-        return round((voltage - 9) / (12 - 9) * 100, 2)
+        # return round((voltage - 9) / (12 - 9) * 100, 2)
+        return int(voltage / 12 * 100)
 
     def _get_status_info(self):
-        data = self.__agv_handler.get_mcu_info()
-        if not data:
+        agv_mcu_info = self.__agv_handler.get_mcu_info()
+        if not agv_mcu_info:
             return
 
         # 电机电流
-        currents = data[12:16]
+        currents = agv_mcu_info[12:16]
         self.motor_stated.emit(
             AGVMotor(
                 state=any(map(lambda c: c != 0, currents)),
                 currents=currents,
-                stall_states=data[20:24],
-                encoder_states=data[24:28]
+                stall_states=agv_mcu_info[21:25],
+                encoder_states=agv_mcu_info[25:29]
             ),
         )
-
+        print(f" # [{len(agv_mcu_info)}]{agv_mcu_info = }")
         # 电池状态 【电池2接入、电池1接入、适配器接入、充电桩接入、电池2充电灯， 电池1充电灯】
         # main_battery_state, backup_battery_state, *_ = tuple(map(lambda n: int(n) == 1, data[9]))
-        main_battery_state = data[9][1] == '1'
-        backup_battery_state = data[9][0] == '1'
-        main_battery_voltage = data[10]  # 主电池电压
-        sub_battery_voltage = data[11]  # 副电池电压
+        main_battery_state = agv_mcu_info[9][1] == '1'
+        backup_battery_state = agv_mcu_info[9][0] == '1'
+        main_battery_voltage = agv_mcu_info[10]  # 主电池电压
+        sub_battery_voltage = agv_mcu_info[11]  # 副电池电压
 
         main_battery_coulomb = 0.00  # 主电池电量
         sub_battery_coulomb = 0.00  # 副电池电量
@@ -89,12 +90,16 @@ class MyAGVStatusDetector(QThread):
         while self.__detector is True:
             try:
                 self._get_status_info()
-                version = self.__agv_handler.get_firmware_version()
-                if version:
+                if self.__version is None:
+                    version = self.__agv_handler.get_firmware_version()
+                    if not version:
+                        continue
                     self.versioned.emit(str(version))
+                    self.__version = version
             except serial.serialutil.SerialException:
                 pass
             except Exception as e:
                 print(f"@MyAGVStatusDetector::run exception: {e}")
+                traceback.print_exc()
             finally:
                 time.sleep(self.__interval)
