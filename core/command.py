@@ -18,16 +18,10 @@ class Command:
         return output.decode("utf-8").strip()
 
     @classmethod
-    def run(cls, command, shell=True, in_terminal: bool = False, keep: bool = False):
-        if in_terminal is False:
-            return subprocess.Popen(command, shell=shell)
-
-        if keep:
-            command = f'gnome-terminal -- bash -c "{command}; exec bash"'
-        else:
-            command = f'gnome-terminal -- bash -c "{command};"'
-
-        return subprocess.Popen(command, shell=True)
+    def run(cls, command, shell=True, in_terminal: bool = False):
+        if in_terminal is True:
+            command = f'gnome-terminal -- bash -c "{command} || exec bash"'
+        return subprocess.Popen(command, shell=shell)
 
     @classmethod
     def cat(cls, filepath):
