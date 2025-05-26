@@ -12,12 +12,12 @@ def roslaunch(*args, workspace: bool = False, terminal: bool = True):
     command = f"roslaunch {COMMAND_SEPARATOR.join(args)}"
     if workspace is True:
         command = f"source {ROS_SETUP_FILEPATH} && source {ROS_WORKSPACE_FILEPATH} && {command}"
-    Command.run(command=command, in_terminal=terminal, keep=False)
+    Command.run(command=command, in_terminal=terminal)
 
 
 def rosrun(*args, terminal=True):
     command = f"source {ROS_SETUP_FILEPATH} && source {ROS_WORKSPACE_FILEPATH} && rosrun {COMMAND_SEPARATOR.join(args)}"
-    Command.run(command=command, in_terminal=terminal, keep=False)
+    Command.run(command=command, in_terminal=terminal)
 
 
 class Functional:
@@ -125,14 +125,6 @@ class Functional:
     @classmethod
     def close_3d_navigation(cls):
         Command.kill("3d_navigation_active.launch")
-
-    @classmethod
-    def open_3d_camera(cls):
-        Command.run("roslaunch orbbec_camera astra_pro2.launch")
-
-    @classmethod
-    def close_3d_camera(cls):
-        Command.kill("astra_pro2.launch")
 
     @classmethod
     def camera_3d_alive(cls):

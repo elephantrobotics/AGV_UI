@@ -6,6 +6,8 @@ import traceback
 import typing as T
 import serial.serialutil
 from PyQt5.QtCore import pyqtSignal, QThread, QObject
+
+from core import utils
 from core.handler import AgvHandler
 
 
@@ -28,6 +30,7 @@ class MyAGVStatusDetector(QThread):
     battery_stated = pyqtSignal(AGVBattery)
     motor_stated = pyqtSignal(AGVMotor)
     versioned = pyqtSignal(str)
+    ip_stated = pyqtSignal(str)
 
     def __init__(self, agv_handler: AgvHandler, interval: float = 10, parent: QObject = None):
         super().__init__(parent=parent)
@@ -35,6 +38,7 @@ class MyAGVStatusDetector(QThread):
         self.__detector = True
         self.__interval = interval
         self.__version = None
+        self.__localhost = None
 
     def stop_detector(self):
         self.__detector = False
@@ -96,6 +100,12 @@ class MyAGVStatusDetector(QThread):
                         continue
                     self.versioned.emit(str(version))
                     self.__version = version
+
+                ipaddress = utils.get_localhost()
+                if self.__localhost != ipaddress:
+                    self.__localhost = ipaddress
+                    self.ip_stated.emit(ipaddress)
+
             except serial.serialutil.SerialException:
                 pass
             except Exception as e:

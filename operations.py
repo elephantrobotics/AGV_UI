@@ -54,7 +54,6 @@ class MyAGVMainWindow(QWidget):
         self.is_motor_stalled = False   # 电机堵转
         self.is_motor_encoder_abnormal = False  # 电机编码器异常
 
-        self._3d_camera_status = False
         self.camera_3d_flag = False
         self.in_function_testing = False  # 功能检测运行中
 
@@ -80,7 +79,6 @@ class MyAGVMainWindow(QWidget):
         self.file_resource = FileResource('assets')
         self.console = logging.getLogger("console")
         self.prompt = QPrompt()
-        self.timer = QTimer(self)
 
         # language
         self.current_language = Translate.Language.English
@@ -337,12 +335,9 @@ class MyAGVMainWindow(QWidget):
         self.ui.restore_btn.clicked.connect(self.servo_restore_handle)
         self.ui.build_map_selection.currentTextChanged.connect(self.build_map_change_handle)
         self.ui.navigation_selection.currentTextChanged.connect(self.navigation_change_handle)
-        self.ui.camera_3d_button.clicked.connect(self.camera_3D_handle)
         self.ui.start_aging_btn.clicked.connect(self.start_motor_persistent_aging)
         self.color_picker.currentColorChanged.connect(self.set_color_picker_handle)
         self.led_mode_toggle_btn.switched.connect(self.on_color_button_state_changed)
-        self.timer.timeout.connect(self.system_information_query)
-        self.timer.start(2000)
 
     def on_console_output(self, message):
         self.ui.loggerLabel.append(message)
@@ -421,7 +416,6 @@ class MyAGVMainWindow(QWidget):
             self.ui.navigation_3d_button,
             self.ui.radar_control_button,
             self.ui.open_build_map,
-            self.ui.camera_3d_button
         ]:
             button.setEnabled(status)
 
@@ -615,26 +609,6 @@ class MyAGVMainWindow(QWidget):
             self.console.info(_translate("myAGV", "Close 3D navigation"))
             Functional.close_3d_navigation()
             self.navigation_3d_flag = False
-
-    def camera_3D_handle(self):
-        if self.camera_3d_flag is False:
-            if self._3d_camera_status is False:
-                return self.prompt.warning(
-                    _translate("myAGV", "Warning"),
-                    _translate("myAGV", "3D camera not connected")
-                )
-
-            self.console.info(_translate("myAGV", "Open 3D camera"))
-            self.ui.camera_3d_button.setText(_translate("myAGV", "OFF"))
-            self.ui.camera_3d_button.setStyleSheet(Stylesheet.RedButtonStyle)
-            Functional.open_3d_camera()
-            self.camera_3d_flag = True
-        else:
-            self.console.info(_translate("myAGV", "Close 3D camera"))
-            self.ui.camera_3d_button.setText(_translate("myAGV", "ON"))
-            self.ui.camera_3d_button.setStyleSheet(Stylesheet.BlueButtonStyle)
-            Functional.close_3d_camera()
-            self.camera_3d_flag = False
 
     def navigation_2D_handle(self):
         navigation_2d_method = self.ui.navigation_selection.currentText()
@@ -868,14 +842,11 @@ class MyAGVMainWindow(QWidget):
         self.agv_status_detector.motor_stated.connect(self.on_motor_status_updated)
         self.agv_status_detector.battery_stated.connect(self.on_battery_status_updated)
         self.agv_status_detector.versioned.connect(self.on_version_updated)
+        self.agv_status_detector.ip_stated.connect(self.on_localhost_changer)
         self.agv_status_detector.start()
 
-    def system_information_query(self):
-        ipaddress = utils.get_localhost()
-        camera_status = utils.get_3d_camera_status()
-        self._3d_camera_status = camera_status
+    def on_localhost_changer(self, ipaddress: str):
         self.ui.ip_address_edit.setText(ipaddress)
-        self.ui.camera_3d_status.setEnabled(camera_status)
 
     def start_motor_persistent_aging(self):
         self.ui.start_aging_btn.setEnabled(False)
@@ -1014,11 +985,9 @@ class MyAGVMainWindow(QWidget):
         self.agv_motor_persistent_aging = None
 
     def closeEvent(self, event):
-        GpioHandler.cleanup()
-        if System.RASPBERRYPI.equal(GlobalVar.system_device_model):
-            GpioHandler.setmode(GpioHandler.BCM)
-            GpioHandler.setup(GlobalVar.radar_control_pin, GpioHandler.OUT)
-            GpioHandler.output(GlobalVar.radar_control_pin, GpioHandler.HIGH)
+        # setup lidar
+        GpioHandler.setup(GlobalVar.radar_control_pin, GpioHandler.OUT)
+        GpioHandler.output(GlobalVar.radar_control_pin, GpioHandler.HIGH)
 
         if self.agv_status_detector is not None:
             self.agv_status_detector.stop_detector()

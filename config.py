@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 import logging
 
-__version__ = "0.3.0"
+__version__ = "1.3.0"
 logging.basicConfig(
     level=logging.INFO,
     filename="logs/assets.log",

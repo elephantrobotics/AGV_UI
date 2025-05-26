@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1215</width>
-    <height>794</height>
+    <width>1211</width>
+    <height>785</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -83,14 +83,14 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>410</width>
-           <height>837</height>
+           <width>404</width>
+           <height>793</height>
           </rect>
          </property>
          <property name="styleSheet">
           <string notr="true"/>
          </property>
-         <layout class="QVBoxLayout" name="verticalLayout_4" stretch="0,0,0,0,0,0,0,0">
+         <layout class="QVBoxLayout" name="verticalLayout_4" stretch="0,0,0,0,0,0,0">
           <property name="spacing">
            <number>11</number>
           </property>
@@ -163,77 +163,6 @@ QPushButton:disabled {
                   </property>
                   <property name="checkable">
                    <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </widget>
-             </item>
-            </layout>
-           </widget>
-          </item>
-          <item>
-           <widget class="QWidget" name="camera_3d_panel" native="true">
-            <property name="styleSheet">
-             <string notr="true">background-color: rgb(236, 240, 241);</string>
-            </property>
-            <layout class="QHBoxLayout" name="horizontalLayout_27">
-             <item>
-              <widget class="QWidget" name="widget_25" native="true">
-               <layout class="QHBoxLayout" name="horizontalLayout_28">
-                <item>
-                 <widget class="QLabel" name="label_4">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="font">
-                   <font>
-                    <family>Arial</family>
-                    <pointsize>13</pointsize>
-                    <weight>50</weight>
-                    <bold>false</bold>
-                   </font>
-                  </property>
-                  <property name="text">
-                   <string>3D Camera</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="camera_3d_button">
-                  <property name="enabled">
-                   <bool>true</bool>
-                  </property>
-                  <property name="minimumSize">
-                   <size>
-                    <width>0</width>
-                    <height>30</height>
-                   </size>
-                  </property>
-                  <property name="styleSheet">
-                   <string notr="true">QPushButton {
-	background-color:rgb(41, 128, 185);
-	color: rgb(255, 255, 255);
-	border-radius: 10px;
-	border: 2px groove gray;
-	border-style: outset;
-	font: 75 9pt &quot;Arial&quot;;
-}
-QPushButton:disabled {
-	background-color:gray;
-	color: rgb(255, 255, 255);
-	border-radius: 7px;
-	border: 2px groove gray;
-	border-style: outset;
-	font: 75 9pt &quot;Arial&quot;;
-}
-</string>
-                  </property>
-                  <property name="text">
-                   <string>ON</string>
                   </property>
                  </widget>
                 </item>
@@ -397,11 +326,6 @@ QPushButton:disabled {
                   <item>
                    <property name="text">
                     <string>GMapping</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>Rtabmap</string>
                    </property>
                   </item>
                  </widget>
@@ -1246,189 +1170,6 @@ border-radius: 5px;</string>
             <property name="bottomMargin">
              <number>0</number>
             </property>
-            <item row="1" column="1">
-             <layout class="QHBoxLayout" name="horizontalLayout_32">
-              <item>
-               <widget class="QLabel" name="power_backup">
-                <property name="styleSheet">
-                 <string notr="true">font: 10pt &quot;Arial&quot;;</string>
-                </property>
-                <property name="text">
-                 <string>Power</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLabel" name="backup_battery_power">
-                <property name="styleSheet">
-                 <string notr="true"/>
-                </property>
-                <property name="text">
-                 <string>0.0</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-            <item row="0" column="1">
-             <layout class="QHBoxLayout" name="horizontalLayout_31">
-              <item>
-               <widget class="QLabel" name="backup_battery_state">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
-                <property name="minimumSize">
-                 <size>
-                  <width>18</width>
-                  <height>18</height>
-                 </size>
-                </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>18</width>
-                  <height>18</height>
-                 </size>
-                </property>
-                <property name="styleSheet">
-                 <string notr="true">QLabel {
-	background-color:green;
-	border-radius: 9px;
-	border: 1px solid lightgreen;
-}
-QLabel:disabled {
-	border-radius: 9px;
-	background-color:grey;
-	border: 1px solid
-}</string>
-                </property>
-                <property name="text">
-                 <string/>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLabel" name="backup_battery">
-                <property name="styleSheet">
-                 <string notr="true">font: 10pt &quot;Arial&quot;;</string>
-                </property>
-                <property name="text">
-                 <string>Backup Battery</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-            <item row="1" column="2">
-             <layout class="QHBoxLayout" name="horizontalLayout_7">
-              <item>
-               <widget class="QLabel" name="electricity_name1">
-                <property name="styleSheet">
-                 <string notr="true">font: 10pt &quot;Arial&quot;;</string>
-                </property>
-                <property name="text">
-                 <string>Electricity1</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLabel" name="electricity_motor1">
-                <property name="text">
-                 <string>0.0</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-            <item row="0" column="0">
-             <layout class="QHBoxLayout" name="horizontalLayout_21">
-              <item>
-               <widget class="QLabel" name="main_battery_state">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
-                <property name="minimumSize">
-                 <size>
-                  <width>18</width>
-                  <height>18</height>
-                 </size>
-                </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>18</width>
-                  <height>18</height>
-                 </size>
-                </property>
-                <property name="styleSheet">
-                 <string notr="true">QLabel {
-	background-color:green;
-	border-radius: 9px;
-	border: 1px solid lightgreen;
-}
-QLabel:disabled {
-	border-radius: 9px;
-	background-color:grey;
-	border: 1px solid
-}</string>
-                </property>
-                <property name="text">
-                 <string/>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLabel" name="main_battery">
-                <property name="styleSheet">
-                 <string notr="true">font: 10pt &quot;Arial&quot;;</string>
-                </property>
-                <property name="text">
-                 <string>Main Battery</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-            <item row="1" column="3">
-             <layout class="QHBoxLayout" name="horizontalLayout_16">
-              <item>
-               <widget class="QLabel" name="electricity_name_3">
-                <property name="styleSheet">
-                 <string notr="true">font: 10pt &quot;Arial&quot;;</string>
-                </property>
-                <property name="text">
-                 <string>Electricity3</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLabel" name="electricity_motor3">
-                <property name="text">
-                 <string>0.0</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-            <item row="2" column="2">
-             <layout class="QHBoxLayout" name="horizontalLayout_11">
-              <item>
-               <widget class="QLabel" name="electricity_name_2">
-                <property name="styleSheet">
-                 <string notr="true">font: 10pt &quot;Arial&quot;;</string>
-                </property>
-                <property name="text">
-                 <string>Electricity2</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLabel" name="electricity_motor2">
-                <property name="text">
-                 <string>0.0</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
             <item row="2" column="0">
              <layout class="QHBoxLayout" name="horizontalLayout_23">
               <item>
@@ -1501,44 +1242,20 @@ QLabel:disabled {
               </item>
              </layout>
             </item>
-            <item row="1" column="0">
-             <layout class="QHBoxLayout" name="horizontalLayout_22">
+            <item row="1" column="2">
+             <layout class="QHBoxLayout" name="horizontalLayout_7">
               <item>
-               <widget class="QLabel" name="electricity_main">
+               <widget class="QLabel" name="electricity_name1">
                 <property name="styleSheet">
                  <string notr="true">font: 10pt &quot;Arial&quot;;</string>
                 </property>
                 <property name="text">
-                 <string>Power</string>
+                 <string>Electricity1</string>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="main_battery_power">
-                <property name="styleSheet">
-                 <string notr="true"/>
-                </property>
-                <property name="text">
-                 <string>0.0</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-            <item row="2" column="3">
-             <layout class="QHBoxLayout" name="horizontalLayout_18">
-              <item>
-               <widget class="QLabel" name="electricity_name_4">
-                <property name="styleSheet">
-                 <string notr="true">font: 10pt &quot;Arial&quot;;</string>
-                </property>
-                <property name="text">
-                 <string>Electricity4</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLabel" name="electricity_motor4">
+               <widget class="QLabel" name="electricity_motor1">
                 <property name="text">
                  <string>0.0</string>
                 </property>
@@ -1618,29 +1335,89 @@ QLabel:disabled {
               </item>
              </layout>
             </item>
-            <item row="0" column="4">
-             <layout class="QHBoxLayout" name="horizontalLayout_3">
-              <property name="leftMargin">
-               <number>0</number>
-              </property>
-              <property name="rightMargin">
-               <number>0</number>
-              </property>
+            <item row="1" column="1">
+             <layout class="QHBoxLayout" name="horizontalLayout_32">
               <item>
-               <widget class="QLabel" name="camera_3d_status">
+               <widget class="QLabel" name="power_backup">
+                <property name="styleSheet">
+                 <string notr="true">font: 10pt &quot;Arial&quot;;</string>
+                </property>
+                <property name="text">
+                 <string>Power</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="backup_battery_power">
+                <property name="styleSheet">
+                 <string notr="true"/>
+                </property>
+                <property name="text">
+                 <string>0.0</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item row="2" column="3">
+             <layout class="QHBoxLayout" name="horizontalLayout_18">
+              <item>
+               <widget class="QLabel" name="electricity_name_4">
+                <property name="styleSheet">
+                 <string notr="true">font: 10pt &quot;Arial&quot;;</string>
+                </property>
+                <property name="text">
+                 <string>Electricity4</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="electricity_motor4">
+                <property name="text">
+                 <string>0.0</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item row="1" column="3">
+             <layout class="QHBoxLayout" name="horizontalLayout_16">
+              <item>
+               <widget class="QLabel" name="electricity_name_3">
+                <property name="styleSheet">
+                 <string notr="true">font: 10pt &quot;Arial&quot;;</string>
+                </property>
+                <property name="text">
+                 <string>Electricity3</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="electricity_motor3">
+                <property name="text">
+                 <string>0.0</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item row="0" column="1">
+             <layout class="QHBoxLayout" name="horizontalLayout_31">
+              <item>
+               <widget class="QLabel" name="backup_battery_state">
                 <property name="enabled">
                  <bool>false</bool>
                 </property>
                 <property name="minimumSize">
                  <size>
-                  <width>19</width>
-                  <height>19</height>
+                  <width>18</width>
+                  <height>18</height>
                  </size>
                 </property>
                 <property name="maximumSize">
                  <size>
-                  <width>19</width>
-                  <height>19</height>
+                  <width>18</width>
+                  <height>18</height>
                  </size>
                 </property>
                 <property name="styleSheet">
@@ -1661,14 +1438,105 @@ QLabel:disabled {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="label_5">
-                <property name="font">
-                 <font>
-                  <pointsize>10</pointsize>
-                 </font>
+               <widget class="QLabel" name="backup_battery">
+                <property name="styleSheet">
+                 <string notr="true">font: 10pt &quot;Arial&quot;;</string>
                 </property>
                 <property name="text">
-                 <string>3D Camera</string>
+                 <string>Backup Battery</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item row="0" column="0">
+             <layout class="QHBoxLayout" name="horizontalLayout_21">
+              <item>
+               <widget class="QLabel" name="main_battery_state">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>18</width>
+                  <height>18</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>18</width>
+                  <height>18</height>
+                 </size>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QLabel {
+	background-color:green;
+	border-radius: 9px;
+	border: 1px solid lightgreen;
+}
+QLabel:disabled {
+	border-radius: 9px;
+	background-color:grey;
+	border: 1px solid
+}</string>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="main_battery">
+                <property name="styleSheet">
+                 <string notr="true">font: 10pt &quot;Arial&quot;;</string>
+                </property>
+                <property name="text">
+                 <string>Main Battery</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item row="2" column="2">
+             <layout class="QHBoxLayout" name="horizontalLayout_11">
+              <item>
+               <widget class="QLabel" name="electricity_name_2">
+                <property name="styleSheet">
+                 <string notr="true">font: 10pt &quot;Arial&quot;;</string>
+                </property>
+                <property name="text">
+                 <string>Electricity2</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="electricity_motor2">
+                <property name="text">
+                 <string>0.0</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item row="1" column="0">
+             <layout class="QHBoxLayout" name="horizontalLayout_22">
+              <item>
+               <widget class="QLabel" name="electricity_main">
+                <property name="styleSheet">
+                 <string notr="true">font: 10pt &quot;Arial&quot;;</string>
+                </property>
+                <property name="text">
+                 <string>Power</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="main_battery_power">
+                <property name="styleSheet">
+                 <string notr="true"/>
+                </property>
+                <property name="text">
+                 <string>0.0</string>
                 </property>
                </widget>
               </item>
