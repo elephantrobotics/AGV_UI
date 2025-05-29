@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" autoUpload="Always" serverName="er@192.168.1.211:22 password (2)" remoteFilesAllowedToDisappearOnAutoupload="false">
+  <component name="PublishConfigData" autoUpload="Always" serverName="er@192.168.1.95:22 password" remoteFilesAllowedToDisappearOnAutoupload="false">
     <serverData>
       <paths name="elephant@192.168.1.141:22 password">
         <serverdata>
@@ -198,6 +198,13 @@
           </mappings>
         </serverdata>
       </paths>
+      <paths name="er@192.168.1.211:22 password (3)">
+        <serverdata>
+          <mappings>
+            <mapping local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
       <paths name="er@192.168.1.212:22 password">
         <serverdata>
           <mappings>
@@ -272,6 +279,13 @@
         <serverdata>
           <mappings>
             <mapping local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="er@192.168.1.95:22 password">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/home/er/AGV_UI_Testing" local="$PROJECT_DIR$" />
           </mappings>
         </serverdata>
       </paths>

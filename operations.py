@@ -131,6 +131,7 @@ class MyAGVMainWindow(QWidget):
 
     def on_color_button_state_changed(self, switch_state: bool):
         if not self.agv_handler.is_opened:
+            print(f" # agv handler not opened, switch button state: {switch_state}")
             return
         
         print(f" # switch button state changed: {switch_state}")
@@ -141,16 +142,16 @@ class MyAGVMainWindow(QWidget):
 
         if switch_state is False:
             print(f" # close diy mode")
-            self.color_picker.setValue(0.5)
+            self.color_picker.setValue(value=0.5, notify=False)
         else:
             print(f" # open diy mode")
             value = self.ui.color_brightness_slider.value()
-            self.color_picker.setValue(value / 510)
+            self.color_picker.setValue(value=value / 510, notify=True)
 
             if self.check_radar_running(running=True):
                 return
 
-            self.set_color_picker_handle()
+            # self.set_color_picker_handle()
 
     def setup_color_picker(self):
         label_policy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
@@ -246,15 +247,17 @@ class MyAGVMainWindow(QWidget):
             self.ui.radar_control_button.setText(_translate("myAGV", "OFF"))
             self.ui.radar_control_button.setStyleSheet(Stylesheet.RedButtonStyle)
 
+            self.led_mode_toggle_btn.switch_state(False, False)
+            self.on_color_button_state_changed(False)
+
             if self.agv_status_detector is not None:
                 self.agv_status_detector.stop_detector()
 
             if self.agv_handler is not None:
                 self.agv_handler.close()
 
-            self.led_mode_toggle_btn.switch_state(False)
-            self.led_mode_toggle_btn.setEnabled(False)
         else:
+            self.ui.radar_status.setEnabled(False)
             self.ui.restore_btn.setEnabled(True)
             self.ui.start_aging_btn.setEnabled(True)
             self.ui.start_detection_btn.setEnabled(True)
