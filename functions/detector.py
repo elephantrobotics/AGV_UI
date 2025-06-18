@@ -6,7 +6,17 @@ import traceback
 import typing as T
 import serial.serialutil
 from PyQt5.QtCore import pyqtSignal, QThread, QObject
+from PyQt5.QtWidgets import QApplication
+
 from core.handler import AgvHandler
+
+
+def wait_for_timeout(timeout: T.Union[float, int]):
+    base_time = 0.1
+    loop_counter = int(timeout / base_time)
+    for i in range(loop_counter):
+        QApplication.processEvents()
+        time.sleep(base_time)
 
 
 @dataclasses.dataclass
@@ -38,6 +48,7 @@ class MyAGVStatusDetector(QThread):
 
     def stop_detector(self):
         self.__detector = False
+        self.set_auto_report_state(0)
         self.motor_stated.emit(AGVMotor())
         self.battery_stated.emit(AGVBattery())
 
@@ -86,7 +97,17 @@ class MyAGVStatusDetector(QThread):
             )
         )
 
+    def set_auto_report_state(self, state: int):
+        for i in range(10):
+            auto_state = self.__agv_handler.get_auto_report_state()
+            print(f" # Set auto report state {state, auto_state}")
+            if auto_state == state:
+                break
+            self.__agv_handler.set_auto_report_state(state)
+            wait_for_timeout(1)
+
     def run(self):
+        self.set_auto_report_state(1)
         while self.__detector is True:
             try:
                 self._get_status_info()
@@ -103,3 +124,4 @@ class MyAGVStatusDetector(QThread):
                 traceback.print_exc()
             finally:
                 time.sleep(self.__interval)
+        self.set_auto_report_state(0)

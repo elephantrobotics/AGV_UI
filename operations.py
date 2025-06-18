@@ -1024,9 +1024,11 @@ class MyAGVMainWindow(QWidget):
             GpioHandler.output(GlobalVar.radar_control_pin, GpioHandler.HIGH)
 
         if self.agv_status_detector is not None:
+            print(f" # stop detector")
             self.agv_status_detector.stop_detector()
 
         if self.agv_motor_persistent_aging is not None:
+            print(f" # stop aging")
             self.agv_motor_persistent_aging.terminate()
             self.agv_handler.stop()
 
