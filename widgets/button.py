@@ -21,9 +21,10 @@ class SwitchButton(QCheckBox):
         # 状态变化时更新样式
         self.stateChanged.connect(self._on_state_change)
 
-    def switch_state(self, state: bool):
+    def switch_state(self, state: bool, notify: bool = True):
         self.setChecked(state)
-        self._on_state_change(state)
+        if notify is True:
+            self._on_state_change(state)
 
     def _on_state_change(self, state):
         self._set_stylesheet(state == Qt.Checked)

@@ -57,12 +57,13 @@ class ColorPickerWidget(QWidget):
         line.translate(self.rect().center())
         p.drawEllipse(line.p2(), 10, 10)
 
-    def recalc(self) -> None:
+    def recalc(self, notify: bool = True) -> None:
         self.selected_color.setHsvF(self.h, self.s, self.v)
-        self.currentColorChanged.emit(self.selected_color)
         self.repaint()
 
-    #
+        if notify is True:
+            self.currentColorChanged.emit(self.selected_color)
+
     def map_color(self, x: int, y: int) -> Tuple[Union[float, Any], float, Union[float, Any]]:
         line = QLineF(QPointF(self.rect().center()), QPointF(x, y))
         s = min(1.0, line.length() / self.radius)
@@ -98,10 +99,10 @@ class ColorPickerWidget(QWidget):
         else:
             raise TypeError("Value must be between 0.0 and 1.0")
 
-    def setValue(self, value: float) -> None:
+    def setValue(self, value: float, notify: bool = True) -> None:
         if 0 <= value <= 1:
             self.v = float(value)
-            self.recalc()
+            self.recalc(notify=notify)
         else:
             raise TypeError("Value must be between 0.0 and 1.0")
 

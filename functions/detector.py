@@ -37,7 +37,7 @@ class MyAGVStatusDetector(QThread):
         self.__agv_handler = agv_handler
         self.__detector = True
         self.__interval = interval
-        self.__version = None
+        self.__firmware_version = None
         self.__localhost = None
 
     def stop_detector(self):
@@ -51,7 +51,7 @@ class MyAGVStatusDetector(QThread):
         # return round((voltage - 9) / (12 - 9) * 100, 2)
         return int(voltage / 12 * 100)
 
-    def _get_status_info(self):
+    def get_status_info(self):
         agv_mcu_info = self.__agv_handler.get_mcu_info()
         if not agv_mcu_info:
             return
@@ -90,24 +90,27 @@ class MyAGVStatusDetector(QThread):
             )
         )
 
+    def get_firmware_version(self):
+        version = self.__agv_handler.get_firmware_version()
+        if version and version != self.__firmware_version:
+            self.__firmware_version = version
+            self.versioned.emit(str(version))
+
+    def get_localhost_address(self):
+        localhost_address = utils.get_localhost()
+        if localhost_address and localhost_address != self.__localhost:
+            self.__localhost = localhost_address
+            self.ip_stated.emit(localhost_address)
+
     def run(self):
         while self.__detector is True:
             try:
-                self._get_status_info()
-                if self.__version is None:
-                    version = self.__agv_handler.get_firmware_version()
-                    if not version:
-                        continue
-                    self.versioned.emit(str(version))
-                    self.__version = version
-
-                ipaddress = utils.get_localhost()
-                if self.__localhost != ipaddress:
-                    self.__localhost = ipaddress
-                    self.ip_stated.emit(ipaddress)
-
+                self.get_status_info()
+                self.get_firmware_version()
+                self.get_localhost_address()
             except serial.serialutil.SerialException:
                 pass
+
             except Exception as e:
                 print(f"@MyAGVStatusDetector::run exception: {e}")
                 traceback.print_exc()
