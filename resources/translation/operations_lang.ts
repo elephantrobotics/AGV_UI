@@ -450,227 +450,227 @@
 <context>
     <name>Operation</name>
     <message>
-        <location filename="../../widgets/operation_ui.py" line="962"/>
+        <location filename="../../components/operation_ui.py" line="962"/>
         <source>English</source>
         <translation>英语</translation>
     </message>
     <message>
-        <location filename="../../widgets/operation_ui.py" line="963"/>
+        <location filename="../../components/operation_ui.py" line="963"/>
         <source>Chinese</source>
         <translation>中文</translation>
     </message>
     <message>
-        <location filename="../../widgets/operation_ui.py" line="932"/>
+        <location filename="../../components/operation_ui.py" line="932"/>
         <source>Laser Radar</source>
         <translation>激光雷达</translation>
     </message>
     <message>
-        <location filename="../../widgets/operation_ui.py" line="940"/>
+        <location filename="../../components/operation_ui.py" line="940"/>
         <source>ON</source>
         <translation>打开</translation>
     </message>
     <message>
-        <location filename="../../widgets/operation_ui.py" line="936"/>
+        <location filename="../../components/operation_ui.py" line="936"/>
         <source>Basic Control</source>
         <translation>基本控制</translation>
     </message>
     <message>
-        <location filename="../../widgets/operation_ui.py" line="937"/>
+        <location filename="../../components/operation_ui.py" line="937"/>
         <source>Keyboard Control</source>
         <translation>键盘控制</translation>
     </message>
     <message>
-        <location filename="../../widgets/operation_ui.py" line="938"/>
+        <location filename="../../components/operation_ui.py" line="938"/>
         <source>Joystick-Alphabet</source>
         <translation>手柄控制(字母)</translation>
     </message>
     <message>
-        <location filename="../../widgets/operation_ui.py" line="939"/>
+        <location filename="../../components/operation_ui.py" line="939"/>
         <source>Joystick-Number</source>
         <translation>手柄控制(数字)</translation>
     </message>
     <message>
-        <location filename="../../widgets/operation_ui.py" line="945"/>
+        <location filename="../../components/operation_ui.py" line="945"/>
         <source>Save Map</source>
         <translation>保存建图</translation>
     </message>
     <message>
-        <location filename="../../widgets/operation_ui.py" line="944"/>
+        <location filename="../../components/operation_ui.py" line="944"/>
         <source>Open Build Map</source>
         <translation>打开建图</translation>
     </message>
     <message>
-        <location filename="../../widgets/operation_ui.py" line="950"/>
+        <location filename="../../components/operation_ui.py" line="950"/>
         <source>3D Navigation</source>
         <translation>3D导航</translation>
     </message>
     <message>
-        <location filename="../../widgets/operation_ui.py" line="951"/>
+        <location filename="../../components/operation_ui.py" line="951"/>
         <source>LED Control</source>
         <translation>LED控制</translation>
     </message>
     <message>
-        <location filename="../../widgets/operation_ui.py" line="952"/>
+        <location filename="../../components/operation_ui.py" line="952"/>
         <source>HEX</source>
         <translation>HEX</translation>
     </message>
     <message>
-        <location filename="../../widgets/operation_ui.py" line="953"/>
+        <location filename="../../components/operation_ui.py" line="953"/>
         <source>RGB</source>
         <translation>RGB</translation>
     </message>
     <message>
-        <location filename="../../widgets/operation_ui.py" line="954"/>
+        <location filename="../../components/operation_ui.py" line="954"/>
         <source>Luminance</source>
         <translation>亮度</translation>
     </message>
     <message>
-        <location filename="../../widgets/operation_ui.py" line="955"/>
+        <location filename="../../components/operation_ui.py" line="955"/>
         <source>value</source>
         <translation>值</translation>
     </message>
     <message>
-        <location filename="../../widgets/operation_ui.py" line="959"/>
+        <location filename="../../components/operation_ui.py" line="959"/>
         <source>Restore</source>
         <translation>堵转恢复</translation>
     </message>
     <message>
-        <location filename="../../widgets/operation_ui.py" line="960"/>
+        <location filename="../../components/operation_ui.py" line="960"/>
         <source>Start Detection</source>
         <translation>开始检测</translation>
     </message>
     <message>
-        <location filename="../../widgets/operation_ui.py" line="984"/>
+        <location filename="../../components/operation_ui.py" line="984"/>
         <source>Motor</source>
         <translation>电机</translation>
     </message>
     <message>
-        <location filename="../../widgets/operation_ui.py" line="965"/>
+        <location filename="../../components/operation_ui.py" line="965"/>
         <source>IP Address</source>
         <translation>IP地址</translation>
     </message>
     <message>
-        <location filename="../../widgets/operation_ui.py" line="966"/>
+        <location filename="../../components/operation_ui.py" line="966"/>
         <source>Firmware version</source>
         <translation>固件版本</translation>
     </message>
     <message>
-        <location filename="../../widgets/operation_ui.py" line="972"/>
+        <location filename="../../components/operation_ui.py" line="972"/>
         <source>Main Battery</source>
         <translation>主电池</translation>
     </message>
     <message>
-        <location filename="../../widgets/operation_ui.py" line="980"/>
+        <location filename="../../components/operation_ui.py" line="980"/>
         <source>Power</source>
         <translation>电量</translation>
     </message>
     <message>
-        <location filename="../../widgets/operation_ui.py" line="985"/>
+        <location filename="../../components/operation_ui.py" line="985"/>
         <source>Voltage</source>
         <translation>电压</translation>
     </message>
     <message>
-        <location filename="../../widgets/operation_ui.py" line="969"/>
+        <location filename="../../components/operation_ui.py" line="969"/>
         <source>Backup Battery</source>
         <translation>副电池</translation>
     </message>
     <message>
-        <location filename="../../widgets/operation_ui.py" line="970"/>
+        <location filename="../../components/operation_ui.py" line="970"/>
         <source>Electricity1</source>
         <translation>电流1</translation>
     </message>
     <message>
-        <location filename="../../widgets/operation_ui.py" line="975"/>
+        <location filename="../../components/operation_ui.py" line="975"/>
         <source>Electricity2</source>
         <translation>电流2</translation>
     </message>
     <message>
-        <location filename="../../widgets/operation_ui.py" line="979"/>
+        <location filename="../../components/operation_ui.py" line="979"/>
         <source>Radar</source>
         <translation>雷达</translation>
     </message>
     <message>
-        <location filename="../../widgets/operation_ui.py" line="973"/>
+        <location filename="../../components/operation_ui.py" line="973"/>
         <source>Electricity3</source>
         <translation>电流3</translation>
     </message>
     <message>
-        <location filename="../../widgets/operation_ui.py" line="982"/>
+        <location filename="../../components/operation_ui.py" line="982"/>
         <source>Electricity4</source>
         <translation>电流4</translation>
     </message>
     <message>
-        <location filename="../../widgets/operation_ui.py" line="964"/>
+        <location filename="../../components/operation_ui.py" line="964"/>
         <source>Clear Log</source>
         <translation>清除日志</translation>
     </message>
     <message>
-        <location filename="../../widgets/operation_ui.py" line="942"/>
+        <location filename="../../components/operation_ui.py" line="942"/>
         <source>GMapping</source>
         <translation>GMapping</translation>
     </message>
     <message>
-        <location filename="../../widgets/operation_ui.py" line="943"/>
+        <location filename="../../components/operation_ui.py" line="943"/>
         <source>Rtabmap</source>
         <translation>Rtabmap</translation>
     </message>
     <message>
-        <location filename="../../widgets/operation_ui.py" line="947"/>
+        <location filename="../../components/operation_ui.py" line="947"/>
         <source>Multi-point Navigation</source>
         <translation>多点导航</translation>
     </message>
     <message>
-        <location filename="../../widgets/operation_ui.py" line="948"/>
+        <location filename="../../components/operation_ui.py" line="948"/>
         <source>Single-point Navigation</source>
         <translation>单点导航</translation>
     </message>
     <message>
-        <location filename="../../widgets/operation_ui.py" line="949"/>
+        <location filename="../../components/operation_ui.py" line="949"/>
         <source>2D Navigation</source>
         <translation>2D导航</translation>
     </message>
     <message>
-        <location filename="../../widgets/operation_ui.py" line="958"/>
+        <location filename="../../components/operation_ui.py" line="958"/>
         <source>Functional testing</source>
         <translation>功能测试</translation>
     </message>
     <message>
-        <location filename="../../widgets/operation_ui.py" line="961"/>
+        <location filename="../../components/operation_ui.py" line="961"/>
         <source>Language</source>
         <translation>语言</translation>
     </message>
     <message>
-        <location filename="../../widgets/operation_ui.py" line="986"/>
+        <location filename="../../components/operation_ui.py" line="986"/>
         <source>0.0</source>
         <translation>0.0</translation>
     </message>
     <message>
-        <location filename="../../widgets/operation_ui.py" line="987"/>
+        <location filename="../../components/operation_ui.py" line="987"/>
         <source>3D Camera</source>
         <translation>3D相机</translation>
     </message>
     <message>
-        <location filename="../../widgets/operation_ui.py" line="946"/>
+        <location filename="../../components/operation_ui.py" line="946"/>
         <source>Map Navigation</source>
         <translation>地图导航</translation>
     </message>
     <message>
-        <location filename="../../widgets/operation_ui.py" line="941"/>
+        <location filename="../../components/operation_ui.py" line="941"/>
         <source>Slam Mapping</source>
         <translation>Slam建图</translation>
     </message>
     <message>
-        <location filename="../../widgets/operation_ui.py" line="931"/>
+        <location filename="../../components/operation_ui.py" line="931"/>
         <source>MyAGV</source>
         <translation>MyAGV</translation>
     </message>
     <message>
-        <location filename="../../widgets/operation_ui.py" line="956"/>
+        <location filename="../../components/operation_ui.py" line="956"/>
         <source>Motor Aging</source>
         <translation>电机老化</translation>
     </message>
     <message>
-        <location filename="../../widgets/operation_ui.py" line="957"/>
+        <location filename="../../components/operation_ui.py" line="957"/>
         <source>Start Aging</source>
         <translation>开始老化</translation>
     </message>

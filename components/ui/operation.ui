@@ -1619,7 +1619,7 @@ QLabel:disabled {
              </layout>
             </item>
             <item row="0" column="4">
-             <layout class="QHBoxLayout" name="horizontalLayout_3">
+             <layout class="QHBoxLayout" name="camera_3d_layout">
               <property name="leftMargin">
                <number>0</number>
               </property>

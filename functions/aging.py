@@ -3,7 +3,7 @@
 import dataclasses
 import time
 import enum
-from core.handler import AgvHandler
+from api.handler import AgvHandler
 from PyQt5.QtCore import QThread, pyqtSignal
 
 
@@ -56,7 +56,7 @@ class AgvMotorPersistentAging(QThread):
 
     def __init__(self, speed: int = 10, timeout=600, parent=None):
         super().__init__(parent=parent)
-        self.agv_handler = AgvHandler.get_instance()
+        self.agv_handler: AgvHandler = AgvHandler.get_instance()
         self.speed = speed
         self.timeout = timeout
         self.continued = False
@@ -110,6 +110,11 @@ class AgvMotorPersistentAging(QThread):
     def run(self):
         self.continued = True
         self.agv_handler.stop()
+        self.agv_handler.set_led(1, 255, 255, 0)
+
         aging_state = self.motor_movement_testing()
+
+        self.agv_handler.set_led(1, 0, 255, 0)
         self.agv_handler.stop()
+
         self.finished.emit(aging_state)

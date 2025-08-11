@@ -4,7 +4,7 @@ import time
 import traceback
 from PyQt5.QtCore import QThread, pyqtSignal
 from core.translate import Translate
-from core.handler import AgvHandler
+from api.handler import AgvHandler
 from . import Functional
 
 

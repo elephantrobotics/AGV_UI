@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 import logging
 
-__version__ = "0.3.1"
+__version__ = "1.0.0-b0"
 logging.basicConfig(
     level=logging.INFO,
     filename="logs/assets.log",
@@ -13,7 +13,7 @@ logging.basicConfig(
 
 class LoggingConfiger:
     class Console:
-        message_format = '[%(asctime)s] %(message)s'
+        message_format = '[%(asctime)s] %(message)s'    # docs
         timestamp_format = '%Y-%m-%d %H:%M:%S'
         level = logging.INFO
 
