@@ -4,6 +4,7 @@ import dataclasses
 import typing
 
 import pymycobot
+import serial
 from pymycobot import MyAgv
 from core.singleton import Singleton
 
@@ -128,6 +129,26 @@ class AgvHandler(MyAgv, metaclass=Singleton):
     def __init__(self, port: str, baudrate: int, debug=False):
         super().__init__(comport=port, baudrate=baudrate, debug=debug)
 
+    def read(self, size=1):
+        if self._serial_port.is_open is False:
+            return b''
+
+        try:
+            return self._serial_port.read(size)
+        except serial.SerialException:
+            return b''
+
+    def write(self, command):
+        if self._serial_port.is_open is False:
+            return
+        super().write(command)
+
+    def clear(self):
+        if self._serial_port.is_open is False:
+            return
+
+        super().clear()
+
     @property
     def is_opened(self):
         return self._serial_port.is_open
@@ -141,6 +162,12 @@ class AgvHandler(MyAgv, metaclass=Singleton):
             self._serial_port.open()
 
     def get_auto_report_message(self):
+        if self.is_opened is False:
+            return None
+
+        if self.get_auto_report_state() == 0:
+            self.set_auto_report_state(1)
+
         mcu_info = self.get_mcu_info()
         if not mcu_info:
             return None

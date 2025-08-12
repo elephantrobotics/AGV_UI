@@ -35,13 +35,16 @@ class MyAGVStatusDetector(QThread):
         self.__localhost = "127.0.0.1"
         self.__3d_camera_state = False
 
-    def stop_detector(self):
-        self.__detector = False
-        self.set_auto_report_state(0)
+    def emit_empty_data(self):
         self.motor_stated.emit([Motor(id=i, current=0.0, stall_state=False, encoder_state=False) for i in range(1, 5)])
         self.battery_stated.emit(BatteryGroup(state=True, adapter_access=False, charging_pile_access=False, batteries=[
-            Battery(id=1, voltage=0.0, plugged=False, LED=False)
+            Battery(id=1, voltage=0.0, plugged=False, LED=False),
+            Battery(id=2, voltage=0.0, plugged=False, LED=False),
         ]))
+
+    def stop_detector(self):
+        self.__detector = False
+        self.emit_empty_data()
 
     def get_status_info(self):
         report_message = self.__agv_handler.get_auto_report_message()
@@ -54,10 +57,10 @@ class MyAGVStatusDetector(QThread):
 
     def set_auto_report_state(self, state: int):
         for i in range(10):
-            auto_state = self.__agv_handler.get_auto_report_state()
-            print(f" # Set auto report state {state, auto_state}")
-            if auto_state == state:
-                break
+            # auto_state = self.__agv_handler.get_auto_report_state()
+            # print(f" # Set auto report state {state, auto_state}")
+            # if auto_state == state:
+            #     break
             self.__agv_handler.set_auto_report_state(state)
             wait_for_timeout(1)
 
@@ -80,7 +83,7 @@ class MyAGVStatusDetector(QThread):
             self.camera_changed.emit(state)
 
     def run(self):
-        self.set_auto_report_state(1)
+        # self.set_auto_report_state(1)
         while self.__detector is True:
             try:
                 self.get_status_info()

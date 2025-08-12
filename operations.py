@@ -187,6 +187,9 @@ class MyAGVMainWindow(QWidget):
                 item.widget().setParent(None)
                 item.widget().deleteLater()
 
+        self.ui.build_map_selection.clear()
+        self.ui.build_map_selection.addItem("GMapping")
+
     def retranslate_operation(self):
         Translate.reload()  # reload the translation file
         self.ui.functional_selection.clear()
@@ -267,7 +270,7 @@ class MyAGVMainWindow(QWidget):
             self.on_color_button_state_changed(False)
 
             if self.agv_status_detector is not None:
-                self.agv_status_detector.stop_detector()
+                self.agv_status_detector.emit_empty_data()
 
             if self.agv_handler is not None:
                 self.agv_handler.close()
@@ -316,7 +319,9 @@ class MyAGVMainWindow(QWidget):
             self.agv_handler = AgvHandler(port=GlobalVar.comport, baudrate=GlobalVar.baudrate, debug=GlobalVar.debug)
             self.agv_handler.stop()
         else:
+            print(f" # open agv serial port {self.agv_handler.is_opened}")
             self.agv_handler.open()
+            print(f" # open agv serial port {self.agv_handler.is_opened}")
 
     def initialization(self):
         self.prompt.set_parent(self)
@@ -1067,6 +1072,10 @@ class MyAGVMainWindow(QWidget):
             print(f" # stop aging")
             self.agv_motor_persistent_aging.terminate()
             self.agv_handler.stop()
+
+        if self.agv_handler.is_opened:
+            print(f" # close auto report state")
+            self.agv_handler.set_auto_report_state(0)
 
         print(" # exit")
         event.accept()
