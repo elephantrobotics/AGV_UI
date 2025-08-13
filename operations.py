@@ -144,13 +144,17 @@ class MyAGVMainWindow(QWidget):
             print(f" # agv handler not opened, switch button state: {switch_state}")
             return
 
-        if self.agv_motor_persistent_aging is not None and switch_state is False:
+        if self.agv_motor_persistent_aging is not None:
+            print(f" # aaaaaa led mode toggle button state: {switch_state} {self.led_mode_toggle_btn.isChecked()}")
+            if self.led_mode_toggle_btn.isChecked():
+                return
+
+            self.led_mode_toggle_btn.switch_state(True, False)
             self.prompt.warning(
                 _translate("myAGV", "Warning"),
                 # 老化正在运行，不允许关闭
                 _translate("myAGV", "Aging is running and cannot be shutdown!")
             )
-            self.led_mode_toggle_btn.switch_state(state=True, notify=False)
             return
 
         print(f" # switch button state changed: {switch_state}")
@@ -970,6 +974,7 @@ class MyAGVMainWindow(QWidget):
         # 提示开始进行老化
         self.ui.color_brightness_slider.setValue(510)
         self.ui.color_brightness_slider.setEnabled(False)
+        self.led_mode_toggle_btn.setEnabled(False)
         self.changer_picker(255, 255, 0)
         self.console.info(_translate("MyAGV", "Start Motor Persistent Aging"))
         self.agv_motor_persistent_aging = AgvMotorPersistentAging(parent=self)
@@ -1061,7 +1066,8 @@ class MyAGVMainWindow(QWidget):
         return
 
     def on_motor_persistent_aging_finished(self, aging_state: bool):
-        self.ui.color_brightness_slider.setEnabled(True)
+        self.ui.color_brightness_slider.setEnabled(True)    # 无法提前知道当前状态改变, 以及不能拒绝状态改变，所以直接禁用
+        self.led_mode_toggle_btn.setEnabled(True)
         self.agv_motor_persistent_aging = None
         self.agv_handler.stop()
 
