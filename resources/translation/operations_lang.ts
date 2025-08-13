@@ -202,247 +202,247 @@
 <context>
     <name>MyAGV</name>
     <message>
-        <location filename="../../operations.py" line="804"/>
+        <location filename="../../operations.py" line="849"/>
         <source>The upper left motor is blocked</source>
         <translation>左上角电机堵转</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="806"/>
+        <location filename="../../operations.py" line="851"/>
         <source>The upper right motor is blocked</source>
         <translation>右上角电机堵转</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="808"/>
+        <location filename="../../operations.py" line="853"/>
         <source>The lower left motor is blocked</source>
         <translation>左下角电机堵转</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="810"/>
+        <location filename="../../operations.py" line="855"/>
         <source>The lower right motor is blocked</source>
         <translation>右下角电机堵转</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="812"/>
+        <location filename="../../operations.py" line="857"/>
         <source>The motor is blocked</source>
         <translation>电机堵转</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="836"/>
+        <location filename="../../operations.py" line="870"/>
         <source>The encoder of the upper left motor is abnormal</source>
         <translation>左上角电机编码器异常</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="841"/>
+        <location filename="../../operations.py" line="875"/>
         <source>The encoder of the upper right motor is abnormal</source>
         <translation>右上角电机编码器异常</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="846"/>
+        <location filename="../../operations.py" line="880"/>
         <source>The encoder of the lower left motor is abnormal</source>
         <translation>左下角电机编码器异常</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="851"/>
+        <location filename="../../operations.py" line="885"/>
         <source>The encoder of the lower right motor is abnormal</source>
         <translation>右下角电机编码器异常</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="886"/>
+        <location filename="../../operations.py" line="938"/>
         <source>Motor persistent aging is running, do you want to stop it?</source>
         <translation>电机持续老化正在运行，是否要停止？</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="1007"/>
+        <location filename="../../operations.py" line="1074"/>
         <source>Motor Persistent Aging Stopped</source>
         <translation>运动持续老化停止</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="919"/>
+        <location filename="../../operations.py" line="974"/>
         <source>Start Motor Persistent Aging</source>
         <translation>启动电机持续老化</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="926"/>
+        <location filename="../../operations.py" line="981"/>
         <source>Stop Aging</source>
         <translation>停止老化</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="1005"/>
+        <location filename="../../operations.py" line="1072"/>
         <source>Motor Persistent Aging Finished</source>
         <translation>电机持续老化完成</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="1012"/>
+        <location filename="../../operations.py" line="1084"/>
         <source>Start Aging</source>
         <translation>开始老化</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="819"/>
+        <location filename="../../operations.py" line="864"/>
         <source>Please check whether the motor encoder is abnormal!</source>
         <translation>请检查电机编码器是否异常！</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="934"/>
+        <location filename="../../operations.py" line="994"/>
         <source>The AGV starts to move forward</source>
         <translation>AGV开始向前移动</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="942"/>
+        <location filename="../../operations.py" line="1002"/>
         <source>The AGV starts to move backward</source>
         <translation>AGV开始向后移动</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="950"/>
+        <location filename="../../operations.py" line="1010"/>
         <source>The AGV starts to move left</source>
         <translation>AGV开始向左移动</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="958"/>
+        <location filename="../../operations.py" line="1018"/>
         <source>The AGV starts to move right</source>
         <translation>AGV开始向右移动</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="966"/>
+        <location filename="../../operations.py" line="1026"/>
         <source>The AGV starts to clockwise rotation</source>
         <translation>AGV开始顺时针旋转</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="974"/>
+        <location filename="../../operations.py" line="1034"/>
         <source>The AGV starts to counterclockwise rotation</source>
         <translation>AGV开始逆时针旋转</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="976"/>
+        <location filename="../../operations.py" line="1036"/>
         <source>The AGV has stopped counterclockwise rotation</source>
         <translation>AGV开始逆时针旋转</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="984"/>
+        <location filename="../../operations.py" line="1044"/>
         <source>Unknown direction</source>
         <translation>未知运动方向</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="986"/>
+        <location filename="../../operations.py" line="1046"/>
         <source>Unknown state</source>
         <translation>未知运动状态</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="990"/>
+        <location filename="../../operations.py" line="1050"/>
         <source>Aging duration: </source>
         <translation>老化时长: </translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="991"/>
+        <location filename="../../operations.py" line="1051"/>
         <source>Aging progress: </source>
         <translation>老化进度: </translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="992"/>
+        <location filename="../../operations.py" line="1052"/>
         <source>Aging speed: </source>
         <translation>老化速度: </translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="895"/>
+        <location filename="../../operations.py" line="947"/>
         <source>Confirm that the stop motor continues to deteriorate</source>
         <translation>确认停止电机持续老化</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="899"/>
+        <location filename="../../operations.py" line="951"/>
         <source>Cancel the stop and the motor continues to age</source>
         <translation>取消停止电机持续老化</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="936"/>
+        <location filename="../../operations.py" line="996"/>
         <source>The AGV stops moving forward</source>
         <translation>AGV停止向前移动</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="938"/>
+        <location filename="../../operations.py" line="998"/>
         <source>The AGV completes its forward movement</source>
         <translation>AGV完成向前移动</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="944"/>
+        <location filename="../../operations.py" line="1004"/>
         <source>The AGV stops moving backward</source>
         <translation>AGV停止向后移动</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="946"/>
+        <location filename="../../operations.py" line="1006"/>
         <source>The AGV completes its backward movement</source>
         <translation>AGV完成向后移动</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="952"/>
+        <location filename="../../operations.py" line="1012"/>
         <source>The AGV stops moving left</source>
         <translation>AGV停止向左移动</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="954"/>
+        <location filename="../../operations.py" line="1014"/>
         <source>The AGV completes its movement to the left</source>
         <translation>AGV完成向左移动</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="960"/>
+        <location filename="../../operations.py" line="1020"/>
         <source>The AGV stops moving right</source>
         <translation>AGV停止向右移动</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="962"/>
+        <location filename="../../operations.py" line="1022"/>
         <source>The AGV completes its movement to the right</source>
         <translation>AGV完成向右移动</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="968"/>
+        <location filename="../../operations.py" line="1028"/>
         <source>The AGV stops moving clockwise rotation</source>
         <translation>AGV停止顺时针旋转</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="970"/>
+        <location filename="../../operations.py" line="1030"/>
         <source>The AGV completes the clockwise rotation</source>
         <translation>AGV完成顺时针旋转</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="978"/>
+        <location filename="../../operations.py" line="1038"/>
         <source>The AGV completes the counterclockwise rotation</source>
         <translation>AGV完成逆时针旋转</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="909"/>
+        <location filename="../../operations.py" line="961"/>
         <source>There is stalled rotor in the motor, please check whether the motor encoder is normal</source>
         <translation>电机存在堵转, 请检查电机编码器是否正常</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="816"/>
+        <location filename="../../operations.py" line="861"/>
         <source>Please try to recover!</source>
         <translation>请尝试恢复!</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="822"/>
+        <location filename="../../operations.py" line="892"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="824"/>
+        <location filename="../../operations.py" line="894"/>
         <source>AGV motor persistent aging test is stopped</source>
         <translation>AGV 电机持续老化测试停止</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="838"/>
+        <location filename="../../operations.py" line="872"/>
         <source>Please check whether the motor communication cable in the upper left corner is connected normally!</source>
         <translation>请检查左上角的电机通讯线是否连接正常！</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="843"/>
+        <location filename="../../operations.py" line="877"/>
         <source>Please check whether the motor communication cable in the upper right corner is connected normally!</source>
         <translation>请检查右上角的电机通讯线是否连接正常！</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="848"/>
+        <location filename="../../operations.py" line="882"/>
         <source>Please check whether the motor communication cable in the lower left corner is connected normally!</source>
         <translation>请检查左下角的电机通讯线是否连接正常！</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="853"/>
+        <location filename="../../operations.py" line="887"/>
         <source>Please check whether the motor communication cable in the lower right corner is connected normally!</source>
         <translation>请检查右下角的电机通讯线是否连接正常！</translation>
     </message>
@@ -678,294 +678,309 @@
 <context>
     <name>myAGV</name>
     <message>
-        <location filename="../../operations.py" line="630"/>
+        <location filename="../../operations.py" line="675"/>
         <source>OFF</source>
         <translation>关闭</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="914"/>
+        <location filename="../../operations.py" line="966"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="282"/>
+        <location filename="../../operations.py" line="321"/>
         <source>Please turn off the radar before using this function.</source>
         <translation>使用此功能前请关闭雷达.</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="411"/>
+        <location filename="../../operations.py" line="456"/>
         <source>Motor Restore</source>
         <translation>堵转恢复</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="774"/>
+        <location filename="../../operations.py" line="821"/>
         <source>Start Detection</source>
         <translation>开始检测</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="269"/>
+        <location filename="../../operations.py" line="308"/>
         <source>Please stop the detection before using the led.</source>
         <translation>请关闭检测功能后再调节led灯.</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="636"/>
+        <location filename="../../operations.py" line="681"/>
         <source>ON</source>
         <translation>打开</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="440"/>
+        <location filename="../../operations.py" line="485"/>
         <source>Radar open...</source>
         <translation>雷达打开中...</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="457"/>
+        <location filename="../../operations.py" line="502"/>
         <source>close radar</source>
         <translation>关闭雷达</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="289"/>
+        <location filename="../../operations.py" line="328"/>
         <source>Radar not open!</source>
         <translation>雷达未打开!</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="483"/>
+        <location filename="../../operations.py" line="528"/>
         <source>Close keyboard control</source>
         <translation>关闭键盘控制</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="534"/>
+        <location filename="../../operations.py" line="579"/>
         <source>Close Build Map</source>
         <translation>关闭建图</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="545"/>
+        <location filename="../../operations.py" line="590"/>
         <source>Open Gmapping...</source>
         <translation>打开建图...</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="554"/>
+        <location filename="../../operations.py" line="599"/>
         <source>Open Build Map</source>
         <translation>打开建图</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="568"/>
+        <location filename="../../operations.py" line="613"/>
         <source>Close Gmapping</source>
         <translation>关闭建图</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="597"/>
+        <location filename="../../operations.py" line="642"/>
         <source>Close 3D Navigation</source>
         <translation>关闭3D导航</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="600"/>
+        <location filename="../../operations.py" line="645"/>
         <source>Open 3D navigation</source>
         <translation>打开3D导航</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="614"/>
+        <location filename="../../operations.py" line="659"/>
         <source>3D Navigation</source>
         <translation>3D导航</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="617"/>
+        <location filename="../../operations.py" line="662"/>
         <source>Close 3D navigation</source>
         <translation>关闭3D导航</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="659"/>
+        <location filename="../../operations.py" line="704"/>
         <source>Close Navigation</source>
         <translation>关闭导航</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="730"/>
+        <location filename="../../operations.py" line="775"/>
         <source>Stop Detection</source>
         <translation>停止检测</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="312"/>
+        <location filename="../../operations.py" line="353"/>
         <source>Radar is running.</source>
         <translation>雷达已启动.</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="314"/>
+        <location filename="../../operations.py" line="355"/>
         <source>Radar is not running.</source>
         <translation>雷达未启动.</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="317"/>
+        <location filename="../../operations.py" line="358"/>
         <source>The topic of radar has been published.</source>
         <translation>雷达话题已发布.</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="319"/>
+        <location filename="../../operations.py" line="360"/>
         <source>The topic of radar has not been published.</source>
         <translation>雷达话题未发布.</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="478"/>
+        <location filename="../../operations.py" line="523"/>
         <source>Open keyboard control</source>
         <translation>打开键盘控制</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="488"/>
+        <location filename="../../operations.py" line="533"/>
         <source>Open joystick-alphabet control</source>
         <translation>打开字母手柄控制</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="498"/>
+        <location filename="../../operations.py" line="543"/>
         <source>Open joystick-number control...</source>
         <translation>打开数字手柄控制...</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="503"/>
+        <location filename="../../operations.py" line="548"/>
         <source>Close joystick number control</source>
         <translation>关闭数字手柄控制</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="511"/>
+        <location filename="../../operations.py" line="556"/>
         <source>Please open GMapping build map first</source>
         <translation>请先打开GMapping建图</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="516"/>
+        <location filename="../../operations.py" line="561"/>
         <source>Save map...</source>
         <translation>保存建图...</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="528"/>
+        <location filename="../../operations.py" line="573"/>
         <source>Please open basic control first</source>
         <translation>请先打开基础控制</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="549"/>
+        <location filename="../../operations.py" line="594"/>
         <source>Open Rtabmap...</source>
         <translation>打开Rtabmap建图...</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="572"/>
+        <location filename="../../operations.py" line="617"/>
         <source>Close Rtabmap</source>
         <translation>关闭Rtabmap建图</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="648"/>
+        <location filename="../../operations.py" line="693"/>
         <source>Build map not close!</source>
         <translation>建图未关闭，不能同时打开建图与导航!</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="493"/>
+        <location filename="../../operations.py" line="538"/>
         <source>Close joystick-alphabet control</source>
         <translation>关闭字母手柄控制</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="624"/>
+        <location filename="../../operations.py" line="669"/>
         <source>3D camera not connected</source>
         <translation>3D摄像头未连接</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="445"/>
+        <location filename="../../operations.py" line="490"/>
         <source>Basic control is running.</source>
         <translation>基本控制正在运行.</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="451"/>
+        <location filename="../../operations.py" line="496"/>
         <source>2D Navigation is running.</source>
         <translation>2D导航正在运行。</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="454"/>
+        <location filename="../../operations.py" line="499"/>
         <source>3D Navigation is running.</source>
         <translation>3D导航正在运行。</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="662"/>
+        <location filename="../../operations.py" line="707"/>
         <source>Open 2D navigation</source>
         <translation>打开2D导航</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="679"/>
+        <location filename="../../operations.py" line="724"/>
         <source>2D Navigation</source>
         <translation>2D导航</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="681"/>
+        <location filename="../../operations.py" line="726"/>
         <source>Close 2D navigation</source>
         <translation>关闭2D导航</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="694"/>
+        <location filename="../../operations.py" line="739"/>
         <source>navigation success</source>
         <translation>导航成功</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="697"/>
+        <location filename="../../operations.py" line="742"/>
         <source>navigation is preempted</source>
         <translation>导航被抢占</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="700"/>
+        <location filename="../../operations.py" line="745"/>
         <source>navigation failed</source>
         <translation>导航失败</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="703"/>
+        <location filename="../../operations.py" line="748"/>
         <source>navigation is denied</source>
         <translation>导航被拒绝</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="692"/>
+        <location filename="../../operations.py" line="737"/>
         <source>Target navigation point</source>
         <translation>目标导航点</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="448"/>
+        <location filename="../../operations.py" line="493"/>
         <source>Mapping is running.</source>
         <translation>建图正在运行。</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="706"/>
+        <location filename="../../operations.py" line="751"/>
         <source>navigation is being performed</source>
         <translation>导航正在执行</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="709"/>
+        <location filename="../../operations.py" line="754"/>
         <source>navigation awaits execution</source>
         <translation>导航等待执行</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="712"/>
+        <location filename="../../operations.py" line="757"/>
         <source>unknown navigation status</source>
         <translation>未知导航状态</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="587"/>
+        <location filename="../../operations.py" line="632"/>
         <source>Please open 3D camera first!</source>
         <translation>请先打开3D相机！</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="629"/>
+        <location filename="../../operations.py" line="674"/>
         <source>Open 3D camera</source>
         <translation>打开3D相机</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="635"/>
+        <location filename="../../operations.py" line="680"/>
         <source>Close 3D camera</source>
         <translation>关闭3D相机</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="721"/>
+        <location filename="../../operations.py" line="766"/>
         <source>Aging is running.</source>
         <translation>老化正在运行.</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="202"/>
+        <location filename="../../operations.py" line="235"/>
         <source>Stop Aging</source>
         <translation>停止老化</translation>
     </message>
     <message>
-        <location filename="../../operations.py" line="204"/>
+        <location filename="../../operations.py" line="237"/>
         <source>Start Aging</source>
         <translation>开始老化</translation>
+    </message>
+    <message>
+        <location filename="../../operations.py" line="148"/>
+        <source>Aging is running and cannot be shutdown!</source>
+        <translation>老化正在运行，不允许关闭！</translation>
+    </message>
+    <message>
+        <location filename="../../operations.py" line="440"/>
+        <source>Aging is running, setting color is not allowed!</source>
+        <translation>老化正在运行，不允许设置颜色！</translation>
+    </message>
+    <message>
+        <location filename="../../operations.py" line="134"/>
+        <source>Aging is running, brightness modification is not allowed!</source>
+        <translation>老化正在运行，不允许修改亮度！</translation>
     </message>
 </context>
 </TS>

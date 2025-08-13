@@ -129,11 +129,30 @@ class MyAGVMainWindow(QWidget):
         self.color_picker.setEnabled(True)
         self.led_mode_toggle_btn = switch_button
 
+    def on_brightness_slider_changed(self, value: int):
+        if self.agv_motor_persistent_aging is not None:
+            return self.prompt.warning(
+                _translate("myAGV", "Warning"),
+                # 老化正在运行，不允许修改亮度
+                _translate("myAGV", "Aging is running, brightness modification is not allowed!")
+            )
+        print(f" # brightness slider changed: {value}")
+        self.color_picker.setValue(value / 510)
+
     def on_color_button_state_changed(self, switch_state: bool):
         if not self.agv_handler.is_opened:
             print(f" # agv handler not opened, switch button state: {switch_state}")
             return
-        
+
+        if self.agv_motor_persistent_aging is not None and switch_state is False:
+            self.prompt.warning(
+                _translate("myAGV", "Warning"),
+                # 老化正在运行，不允许关闭
+                _translate("myAGV", "Aging is running and cannot be shutdown!")
+            )
+            self.led_mode_toggle_btn.switch_state(state=True, notify=False)
+            return
+
         print(f" # switch button state changed: {switch_state}")
         led_mode = int(switch_state)
         print(f" # toggle led mode: {led_mode}")
@@ -150,8 +169,6 @@ class MyAGVMainWindow(QWidget):
 
             if self.check_radar_running(running=True):
                 return
-
-            # self.set_color_picker_handle()
 
     def setup_color_picker(self):
         label_policy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
@@ -170,7 +187,6 @@ class MyAGVMainWindow(QWidget):
         self.ui.horizontalLayout_palette.setStretch(1, 0)
         self.ui.color_brightness_slider.setRange(0, 510)
         self.ui.color_brightness_slider.setValue(510)
-        self.ui.color_brightness_slider.valueChanged.connect((lambda x: color_picker.setValue(x / 510)))
 
         color = self.color_picker.getColor()
         self.ui.lineEdit_HEX.setText(color.name())
@@ -181,14 +197,15 @@ class MyAGVMainWindow(QWidget):
             return
 
         self.ui.camera_3d_panel.setHidden(True)
-        if self.ui.camera_3d_layout.count() > 0:    # PI系统 删除3D摄像头状态信息
-            item = self.ui.camera_3d_layout.takeAt(0)
+
+        for counter in range(self.ui.camera_3d_layout.count()):
+            item = self.ui.camera_3d_layout.itemAt(counter)
             if item.widget():
-                item.widget().setParent(None)
-                item.widget().deleteLater()
+                item.widget().setHidden(True)
 
         self.ui.build_map_selection.clear()
         self.ui.build_map_selection.addItem("GMapping")
+        self.ui.navigation_3d_button.setHidden(True)
 
     def retranslate_operation(self):
         Translate.reload()  # reload the translation file
@@ -365,6 +382,7 @@ class MyAGVMainWindow(QWidget):
         self.ui.start_aging_btn.clicked.connect(self.start_motor_persistent_aging)
         self.color_picker.currentColorChanged.connect(self.set_color_picker_handle)
         self.led_mode_toggle_btn.switched.connect(self.on_color_button_state_changed)
+        self.ui.color_brightness_slider.valueChanged.connect(self.on_brightness_slider_changed)
 
     def on_console_output(self, message):
         self.ui.loggerLabel.append(message)
@@ -414,7 +432,14 @@ class MyAGVMainWindow(QWidget):
             return
 
         if not self.led_mode_toggle_btn.isChecked():
-            print(f" # led diy mode already off")
+            return
+
+        if self.agv_motor_persistent_aging is not None:
+            # 老化正在运行，不允许设置颜色
+            title = _translate("myAGV", "Warning")
+            message = _translate("myAGV", "Aging is running, setting color is not allowed!")
+            self.prompt.warning(title, message)
+            self.console.warning(message)
             return
 
         red = color.red()
@@ -943,6 +968,8 @@ class MyAGVMainWindow(QWidget):
             return False
 
         # 提示开始进行老化
+        self.ui.color_brightness_slider.setValue(510)
+        self.ui.color_brightness_slider.setEnabled(False)
         self.changer_picker(255, 255, 0)
         self.console.info(_translate("MyAGV", "Start Motor Persistent Aging"))
         self.agv_motor_persistent_aging = AgvMotorPersistentAging(parent=self)
@@ -1034,6 +1061,9 @@ class MyAGVMainWindow(QWidget):
         return
 
     def on_motor_persistent_aging_finished(self, aging_state: bool):
+        self.ui.color_brightness_slider.setEnabled(True)
+        self.agv_motor_persistent_aging = None
+        self.agv_handler.stop()
 
         if aging_state is True:
             if self.is_motor_stalled is False and self.is_motor_encoder_abnormal is False:
@@ -1043,7 +1073,7 @@ class MyAGVMainWindow(QWidget):
         else:
             self.console.info(_translate("MyAGV", "Motor Persistent Aging Stopped"))
 
-            if self.is_motor_stalled is True or self.is_motor_encoder_abnormal is True:
+            if any((self.is_motor_stalled, self.is_motor_encoder_abnormal)):
                 self.changer_picker(255, 0, 0)
             else:
                 self.changer_picker(0, 0, 255)
@@ -1053,9 +1083,6 @@ class MyAGVMainWindow(QWidget):
 
         self.ui.start_aging_btn.setText(_translate("MyAGV", "Start Aging"))
         self.ui.start_aging_btn.setStyleSheet(Stylesheet.GreenButtonStyle)
-
-        self.agv_handler.stop()
-        self.agv_motor_persistent_aging = None
 
     def closeEvent(self, event):
         GpioHandler.cleanup()

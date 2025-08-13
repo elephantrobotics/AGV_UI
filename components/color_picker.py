@@ -106,11 +106,11 @@ class ColorPickerWidget(QWidget):
         else:
             raise TypeError("Value must be between 0.0 and 1.0")
 
-    def setColor(self, color: QColor) -> None:
+    def setColor(self, color: QColor, notify: bool = True) -> None:
         self.h = color.hueF()
         self.s = color.saturationF()
         self.v = color.valueF()
-        self.recalc()
+        self.recalc(notify=notify)
 
     def getHue(self) -> float:
         return self.h

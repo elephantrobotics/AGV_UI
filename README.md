@@ -22,7 +22,7 @@
 4. 翻译文件存放路径：`./assets/translation/operations_lang.ts`
 5. 使用`pylupdate5`命令生成`.ts`文件
    ```shell
-   pylupdate5 -noobsolete .\operations.py .\widgets\operation_ui.py .\core\translate.py -ts .\assets\translation\operations_lang.ts
+   pylupdate5 -noobsolete .\operations.py .\components\operation_ui.py .\core\translate.py -ts .\resources\translation\operations_lang.ts
    ```
 6. 使用`PyQT5-tools`自带的`QT Linguist`翻译`ts`文件
 7. 翻译完成之后点击`发布`即可完成翻译
